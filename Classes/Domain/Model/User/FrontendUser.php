@@ -24,6 +24,7 @@ namespace Mittwald\Typo3Forum\Domain\Model\User;
  *  This copyright notice MUST APPEAR in all copies of the script!      *
  *                                                                      */
 
+use Mittwald\Typo3Forum\Configuration\ConfigurationBuilder;
 use Mittwald\Typo3Forum\Domain\Model\AccessibleInterface;
 use Mittwald\Typo3Forum\Domain\Model\ConfigurableEntityTrait;
 use Mittwald\Typo3Forum\Domain\Model\ConfigurableInterface;
@@ -35,7 +36,6 @@ use Mittwald\Typo3Forum\Domain\Model\SubscribeableInterface;
 use TYPO3\CMS\Core\Resource\FileReference;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
-
 
 /**
  * A frontend user.
@@ -614,10 +614,10 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser implemen
 
 		switch ($this->gender) {
 			case self::GENDER_MALE:
-				$imageFilename = $this->getSettings()['images']['avatar']['dummyMale'];
+				$imageFilename = $this->settings['images']['avatar']['dummyMale'];
 				break;
 			case self::GENDER_FEMALE:
-				$imageFilename = $this->getSettings()['images']['avatar']['dummyFemale'];
+				$imageFilename = $this->settings['images']['avatar']['dummyFemale'];
 				break;
 		}
 
