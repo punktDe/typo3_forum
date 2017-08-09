@@ -31,6 +31,7 @@ use Mittwald\Typo3Forum\Domain\Model\SubscribeableInterface;
 use Mittwald\Typo3Forum\Domain\Model\User\FrontendUser;
 use Mittwald\Typo3Forum\Domain\Model\User\PrivateMessage;
 use Mittwald\Typo3Forum\Domain\Model\User\PrivateMessageText;
+use TYPO3\CMS\Core\FormProtection\FormProtectionFactory;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Extbase\Mvc\Exception\InvalidArgumentValueException;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
@@ -378,18 +379,28 @@ class UserController extends AbstractController {
 	 * @param Forum $forum The forum that is to be subscribed. Either this value or the $topic parameter must be != NULL.
 	 * @param Topic $topic The topic that is to be subscribed. Either this value or the $forum parameter must be != NULL.
 	 * @param bool $unsubscribe TRUE to unsubscribe the forum or topic instead.
+     * @param string $csrfToken
 	 *
 	 * @return void
 	 * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
 	 * @throws NotLoggedInException
 	 * @throws InvalidArgumentValueException
+     * @throws \Exception if csrf isn't valid
 	 */
-	public function subscribeAction(Forum $forum = NULL, Topic $topic = NULL, $unsubscribe = FALSE) {
+	public function subscribeAction(Forum $forum = NULL, Topic $topic = NULL, $unsubscribe = FALSE, $csrfToken = '') {
 
 		// Validate arguments
 		if ($forum === NULL && $topic === NULL) {
 			throw new InvalidArgumentValueException("You need to subscribe a Forum or Topic!", 1285059341);
 		}
+
+		if (
+		    !($forum !== NULL && FormProtectionFactory::get('frontend')->validateToken($csrfToken, 'forumMenu_' . $forum->getUid()))
+            && !($topic !== NULL && FormProtectionFactory::get('frontend')->validateToken($csrfToken, 'topicListMenu_' . $topic->getUid()))
+        ) {
+		    throw new \Exception('CSRF validation not valid', 1502285941);
+        }
+
 		$user = $this->getCurrentUser();
 		if (!is_object($user) || $user->isAnonymous()) {
 			throw new NotLoggedInException('You need to be logged in to subscribe or unsubscribe an object.', 1335121482);

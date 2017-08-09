@@ -22,7 +22,7 @@ $_EXTKEY = 'typo3_forum';
 	],
 	[
 		'Forum' => 'show, index, create, update, delete, markRead, showUnread',
-		'Topic' => 'create',
+		'Topic' => 'new, create',
 		'Post' => 'new, create, edit, update, delete',
 		'User' => 'showMyProfile, dashboard, subscribe, favSubscribe, listFavorites, listNotifications, listTopics, listMessages, createMessage,listPosts',
 		'Report' => 'newUserReport, newPostReport, createUserReport, createPostReport',

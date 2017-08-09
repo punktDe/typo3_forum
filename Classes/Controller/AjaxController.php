@@ -28,6 +28,7 @@ use Mittwald\Typo3Forum\Domain\Model\Forum\Post;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Fluid\View\StandaloneView;
+use TYPO3\CMS\Core\FormProtection\FormProtectionFactory;
 
 class AjaxController extends AbstractController {
 
@@ -194,6 +195,10 @@ class AjaxController extends AbstractController {
                 'forum' => $forum,
 				'user' => $this->getCurrentUser()
             ]);
+
+            $csrfToken = FormProtectionFactory::get('frontend')->generateToken('forumMenu_' . $forum->getUid());
+            $this->view->assign('csrfToken', $csrfToken);
+
 			$data[$counter]['uid'] = $forum->getUid();
 			$data[$counter]['html'] = $standaloneView->render();
 			$counter++;
@@ -273,6 +278,9 @@ class AjaxController extends AbstractController {
 		$topicIcons = $this->topicRepository->findByUids($displayedTopics);
 		$counter = 0;
 		foreach ($topicIcons as $topic) {
+            $csrfToken = FormProtectionFactory::get('frontend')->generateToken('topicListMenu_' . $topic->getUid());
+            $this->view->assign('csrfToken', $csrfToken);
+
             $standaloneView->assign('topic', $topic);
 			$data[$counter]['uid'] = $topic->getUid();
 			$data[$counter]['replyCount'] = $topic->getReplyCount();

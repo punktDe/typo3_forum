@@ -28,6 +28,7 @@ use Mittwald\Typo3Forum\Domain\Model\Forum\Post;
 use Mittwald\Typo3Forum\Domain\Model\Forum\Topic;
 use Mittwald\Typo3Forum\Domain\Model\User\FrontendUser;
 use Mittwald\Typo3Forum\Utility\Localization;
+use TYPO3\CMS\Core\FormProtection\FormProtectionFactory;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 
 class PostController extends AbstractController {
@@ -194,6 +195,8 @@ class PostController extends AbstractController {
 	 * @return void
 	 */
 	public function newAction(Topic $topic, Post $post = NULL, Post $quote = NULL) {
+	    $csrfToken = FormProtectionFactory::get('frontend')->generateToken('post_new');
+
 		// Assert authorization
 		$this->authenticationService->assertNewPostAuthorization($topic);
 
@@ -208,7 +211,8 @@ class PostController extends AbstractController {
 		$this->view->assignMultiple([
 			'topic' => $topic,
 			'post' => $post,
-			'currentUser' => $this->frontendUserRepository->findCurrent()
+			'currentUser' => $this->frontendUserRepository->findCurrent(),
+            'csrfToken' => $csrfToken
 		]);
 	}
 
@@ -217,12 +221,20 @@ class PostController extends AbstractController {
 	 *
 	 * @param Topic $topic The topic in which the new post is to be created.
 	 * @param Post $post The new post.
+     * @param string $csrfToken
 	 * @param array $attachments File attachments for the post.
 	 *
 	 * @validate $post \Mittwald\Typo3Forum\Domain\Validator\Forum\PostValidator
 	 * @validate $attachments \Mittwald\Typo3Forum\Domain\Validator\Forum\AttachmentPlainValidator
+     *
+     * @throws \Exception if csrf token isn't valid
 	 */
-	public function createAction(Topic $topic, Post $post, array $attachments = []) {
+
+	public function createAction(Topic $topic, Post $post, $csrfToken = '', array $attachments = []) {
+	    if (!FormProtectionFactory::get('frontend')->validateToken($csrfToken, 'post_new')) {
+	        throw new \Exception('CSRF validation not valid', 1502281334);
+        }
+
 		// Assert authorization
 		$this->authenticationService->assertNewPostAuthorization($topic);
 
@@ -262,22 +274,32 @@ class PostController extends AbstractController {
 	 * @return void
 	 */
 	public function editAction(Post $post) {
+	    $csrfToken = FormProtectionFactory::get('frontend')->generateToken('post_edit');
+
 		if ($post->getAuthor() != $this->authenticationService->getUser() || $post->getTopic()->getLastPost()->getAuthor() != $post->getAuthor()) {
 			// Assert authorization
 			$this->authenticationService->assertModerationAuthorization($post->getTopic()->getForum());
 		}
 		$this->view->assign('post', $post);
+        $this->view->assign('csrfToken', $csrfToken);
 	}
 
 	/**
 	 * Updates a post.
 	 *
 	 * @param Post $post The post that is to be updated.
+     * @param string $csrfToken
 	 * @param array $attachments File attachments for the post.
 	 *
-	 * @return void
+     * @throws \Exception if csrf token didn't match
+	 *
+     * @return void
 	 */
-	public function updateAction(Post $post, array $attachments = []) {
+	public function updateAction(Post $post, $csrfToken = '', array $attachments = []) {
+	    if (!FormProtectionFactory::get('frontend')->validateToken($csrfToken, 'post_edit')) {
+            throw new \Exception('CSRF validation not valid', 1502281357);
+        }
+
 		if ($post->getAuthor() != $this->authenticationService->getUser() || $post->getTopic()->getLastPost()->getAuthor() != $post->getAuthor()) {
 			// Assert authorization
 			$this->authenticationService->assertModerationAuthorization($post->getTopic()->getForum());
@@ -307,17 +329,27 @@ class PostController extends AbstractController {
 	 * @return void
 	 */
 	public function confirmDeleteAction(Post $post) {
+	    $csrfToken = FormProtectionFactory::get('frontend')->generateToken('post_delete');
+
 		$this->authenticationService->assertDeletePostAuthorization($post);
 		$this->view->assign('post', $post);
-	}
+        $this->view->assign('csrfToken', $csrfToken);
+    }
 
 	/**
 	 * Deletes a post.
 	 *
 	 * @param Post $post The post that is to be deleted.
+     * @param string $csrfToken
+     *
+     * @throws \Exception if csrf token didn't match
 	 * @return void
 	 */
-	public function deleteAction(Post $post) {
+	public function deleteAction(Post $post, $csrfToken = '') {
+	    if (!FormProtectionFactory::get('frontend')->validateToken($csrfToken, 'post_delete')) {
+            throw new \Exception('CSRF validation not valid', 1502281538);
+        }
+
 		// Assert authorization
 		$this->authenticationService->assertDeletePostAuthorization($post);
 
