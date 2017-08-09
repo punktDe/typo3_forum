@@ -21,13 +21,13 @@
 		<li>
 			<mmf:user.ifSubscribed object="{topic}">
 				<f:then>
-					<f:link.action controller="User" action="subscribe" arguments="{topic: topic, unsubscribe: 1}">
+					<f:link.action controller="User" action="subscribe" arguments="{topic: topic, unsubscribe: 1, csrfToken: csrfToken}">
 						<i class="tx-typo3forum-icon-16-unsubscribe"></i>
 						<f:translate key="Button_Unsubscribe" />
 					</f:link.action>
 				</f:then>
 				<f:else>
-					<f:link.action controller="User" action="subscribe" arguments="{topic: topic}">
+					<f:link.action controller="User" action="subscribe" arguments="{topic: topic, csrfToken: csrfToken}">
 						<i class="tx-typo3forum-icon-16-subscribe"></i>
 						<f:translate key="Button_Subscribe" />
 					</f:link.action>
