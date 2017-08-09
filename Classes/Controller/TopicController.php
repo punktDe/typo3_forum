@@ -28,6 +28,7 @@ use Mittwald\Typo3Forum\Domain\Exception\Authentication\NoAccessException;
 use Mittwald\Typo3Forum\Domain\Model\Forum\Forum;
 use Mittwald\Typo3Forum\Domain\Model\Forum\Post;
 use Mittwald\Typo3Forum\Domain\Model\Forum\Topic;
+use TYPO3\CMS\Core\FormProtection\FormProtectionFactory;
 
 class TopicController extends AbstractController {
 
@@ -200,12 +201,16 @@ class TopicController extends AbstractController {
 	 */
 	public function newAction(Forum $forum, Post $post = NULL, $subject = NULL) {
 		$this->authenticationService->assertNewTopicAuthorization($forum);
+
+		$csrfToken = FormProtectionFactory::get('frontend')->generateToken('topic_new');
+
 		$this->view->assignMultiple([
 			'criteria' => $forum->getCriteria(),
 			'currentUser' => $this->frontendUserRepository->findCurrent(),
 			'forum' => $forum,
 			'post' => $post,
 			'subject' => $subject,
+            'csrfToken' => $csrfToken,
 		]);
 	}
 
@@ -215,6 +220,7 @@ class TopicController extends AbstractController {
 	 * @param Forum $forum The forum in which the new topic is to be created.
 	 * @param Post $post The first post of the new topic.
 	 * @param string $subject The subject of the new topic
+     * @param string $csrfToken The CSRF token to make sure we are coming from newAction
 	 * @param array $attachments File attachments for the post.
 	 * @param string $question The flag if the new topic is declared as question
 	 * @param array $criteria All submitted criteria with option.
@@ -224,8 +230,14 @@ class TopicController extends AbstractController {
 	 * @validate $post \Mittwald\Typo3Forum\Domain\Validator\Forum\PostValidator
 	 * @validate $attachments \Mittwald\Typo3Forum\Domain\Validator\Forum\AttachmentPlainValidator
 	 * @validate $subject NotEmpty
+     *
+     * @throws \Exception if CSRF validation was not valid
 	 */
-	public function createAction(Forum $forum, Post $post, $subject, $attachments = [], $question = '', $criteria = [], $tags = '', $subscribe = '') {
+	public function createAction(Forum $forum, Post $post, $subject, $csrfToken = '', $attachments = [], $question = '', $criteria = [], $tags = '', $subscribe = '') {
+
+	    if (!FormProtectionFactory::get('frontend')->validateToken($csrfToken, 'topic_new')) {
+	        throw new \Exception('CSRF validation not valid', 1502269952);
+        }
 
 		// Assert authorization
 		$this->authenticationService->assertNewTopicAuthorization($forum);

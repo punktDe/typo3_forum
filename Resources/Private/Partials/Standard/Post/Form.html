@@ -39,6 +39,7 @@
         </b:form.row>
         <div>
             <f:form.hidden name="topic" value="{topic}"/>
+            <f:form.hidden name="csrfToken" value="{csrfToken}"/>
             <f:form.submit value="{f:translate(key: 'Post_New_Submit')}"/>
             <b:button controller="Topic" action="show" arguments="{topic:topic}" label="Button_Back"/>
         </div>
