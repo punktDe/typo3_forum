@@ -32,7 +32,9 @@ use Mittwald\Typo3Forum\Domain\Model\NotifiableInterface;
 use Mittwald\Typo3Forum\Domain\Model\ReadableInterface;
 use Mittwald\Typo3Forum\Domain\Model\SubscribeableInterface;
 use Mittwald\Typo3Forum\Domain\Model\User\FrontendUser;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 
 /**
