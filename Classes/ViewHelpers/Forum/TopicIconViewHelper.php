@@ -36,6 +36,11 @@ class TopicIconViewHelper extends AbstractViewHelper
 {
 
     /**
+     * @var bool
+     */
+    protected $escapeOutput = false;
+
+    /**
      * The frontend user repository.
      * @var \Mittwald\Typo3Forum\Domain\Repository\User\FrontendUserRepository
      * @inject
@@ -66,11 +71,15 @@ class TopicIconViewHelper extends AbstractViewHelper
     {
         $data = $this->getDataArray($topic);
 
+        $cObjectViewHelper = $this->getCObjectViewHelper();
+
         if ($data['new']) {
-            return $this->getCObjectViewHelper()->render('plugin.tx_typo3forum.renderer.icons.topic_new', $data);
+            $cObjectViewHelper->setArguments(['typoscriptObjectPath' => 'plugin.tx_typo3forum.renderer.icons.topic_new', 'data' => $data]);
         } else {
-            return $this->getCObjectViewHelper()->render('plugin.tx_typo3forum.renderer.icons.topic', $data);
+            $cObjectViewHelper->setArguments(['typoscriptObjectPath' => 'plugin.tx_typo3forum.renderer.icons.topic', 'data' => $data]);
         }
+
+        return $cObjectViewHelper->render();
 
     }
 

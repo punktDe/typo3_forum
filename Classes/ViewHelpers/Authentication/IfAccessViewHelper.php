@@ -34,6 +34,11 @@ use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
  */
 class IfAccessViewHelper extends AbstractViewHelper {
 
+    /**
+     * @var bool
+     */
+    protected $escapeOutput = false;
+
 	/**
 	 * The frontend user repository.
 	 *

@@ -34,6 +34,11 @@ class ForumIconViewHelper extends AbstractViewHelper
 {
 
     /**
+     * @var bool
+     */
+    protected $escapeOutput = false;
+
+    /**
      * The frontend user repository.
      * @var \Mittwald\Typo3Forum\Domain\Repository\User\FrontendUserRepository
      * @inject
@@ -65,11 +70,15 @@ class ForumIconViewHelper extends AbstractViewHelper
     {
         $data = $this->getDataArray($forum);
 
+        $cObjectViewHelper = $this->getCObjectViewHelper();
+
         if ($data['new']) {
-            return $this->getCObjectViewHelper()->render('plugin.tx_typo3forum.renderer.icons.forum_new', $data);
+            $cObjectViewHelper->setArguments(['typoscriptObjectPath' => 'plugin.tx_typo3forum.renderer.icons.forum_new', 'data' => $data]);
         } else {
-            return $this->getCObjectViewHelper()->render('plugin.tx_typo3forum.renderer.icons.forum', $data);
+            $cObjectViewHelper->setArguments(['typoscriptObjectPath' => 'plugin.tx_typo3forum.renderer.icons.forum', 'data' => $data]);
         }
+
+        return $cObjectViewHelper->render();
 
     }
 

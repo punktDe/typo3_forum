@@ -30,6 +30,11 @@ use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
  */
 class TextParserViewHelper extends AbstractViewHelper {
 
+    /**
+     * @var bool
+     */
+    protected $escapeOutput = false;
+
 	/**
 	 * The text parser service
 	 * @var \Mittwald\Typo3Forum\TextParser\TextParserService

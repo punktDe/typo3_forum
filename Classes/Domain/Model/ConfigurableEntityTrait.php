@@ -53,7 +53,9 @@ trait ConfigurableEntityTrait
      */
     public function injectSettings(ConfigurationBuilder $configurationBuilder)
     {
-        $this->settings = $configurationBuilder->getSettings();
+        if (empty($this->settings)) {
+            $this->settings = $this->configurationBuilder->getSettings();
+        }
     }
 
     /**

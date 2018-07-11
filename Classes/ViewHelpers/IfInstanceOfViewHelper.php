@@ -24,13 +24,13 @@ namespace Mittwald\Typo3Forum\ViewHelpers;
  *  This copyright notice MUST APPEAR in all copies of the script!      *
  *                                                                      */
 
-use TYPO3\CMS\Fluid\ViewHelpers\IfViewHelper;
+use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractConditionViewHelper;
 
 /**
  * ViewHelper that renders its contents if a certain object is an instance
  * of a specific class.
  */
-class IfInstanceOfViewHelper extends IfViewHelper
+class IfInstanceOfViewHelper extends AbstractConditionViewHelper
 {
 
 
@@ -44,16 +44,13 @@ class IfInstanceOfViewHelper extends IfViewHelper
         $this->registerArgument('className', 'string', 'className which object has to be', true);
     }
 
-    /**
-     * Check if object is instance of className
-     *
-     * @return string
-     */
-    public function render()
+    protected static function evaluateCondition($arguments = null)
     {
-        $object = $this->arguments['object'];
-        $className = $this->arguments['className'];
+        $object = $arguments['object'];
+        $className = $arguments['className'];
 
-        return $object instanceof $className ? $this->renderThenChild() : $this->renderElseChild();
+        return $object instanceof $className;
+
     }
+
 }
