@@ -35,13 +35,6 @@ class TextParserViewHelper extends AbstractViewHelper
 {
 
     /**
-     * The text parser service
-     * @var \Mittwald\Typo3Forum\TextParser\TextParserService
-     * @inject
-     */
-    protected $textParserService;
-
-    /**
      * An instance of the post repository class. The repository is needed
      * only when a rendered post text has to be persisted in the database.
      * @var \Mittwald\Typo3Forum\Domain\Repository\Forum\PostRepository
@@ -53,6 +46,13 @@ class TextParserViewHelper extends AbstractViewHelper
      * @var bool
      */
     protected $escapeOutput = false;
+
+	/**
+	 * The text parser service
+	 * @var \Mittwald\Typo3Forum\TextParser\TextParserService
+	 * @inject
+	 */
+	protected $textParserService;
 
     /**
      * Initialize arguments.

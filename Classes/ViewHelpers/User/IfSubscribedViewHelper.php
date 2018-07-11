@@ -43,7 +43,7 @@ class IfSubscribedViewHelper extends AbstractConditionViewHelper
     /**
      * @var \Mittwald\Typo3Forum\Domain\Repository\User\FrontendUserRepository
      */
-    protected $frontendUserRepository;
+    protected $escapeOutput = false;
 
 
     /**
