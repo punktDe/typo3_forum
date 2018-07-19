@@ -32,6 +32,11 @@ use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 class IfLoggedInViewHelper extends AbstractViewHelper {
 
+    /**
+     * @var bool
+     */
+    protected $escapeOutput = false;
+
 	/**
 	 * Renders the ViewHelper contents if there is a user logged in.
 	 *
