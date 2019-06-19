@@ -143,9 +143,7 @@ class AjaxController extends AbstractController {
 			$content['ads'] = $this->_getAds($displayedAds);
 		}
 
-		$content = json_encode($content);
-
-		$this->view->assign('content', $content);
+		$this->view->assign('content', json_encode($content));
 		return $this->view->render('Main');
 	}
 
