@@ -25,12 +25,14 @@ namespace Mittwald\Typo3Forum\Controller;
  *                                                                      */
 
 use Mittwald\Typo3Forum\Domain\Model\Forum\Forum;
+use Mittwald\Typo3Forum\Domain\Model\Forum\Post;
 use Mittwald\Typo3Forum\Domain\Model\Forum\Topic;
 use Mittwald\Typo3Forum\Domain\Model\Moderation\PostReport;
 use Mittwald\Typo3Forum\Domain\Model\Moderation\Report;
 use Mittwald\Typo3Forum\Domain\Model\Moderation\ReportComment;
 use Mittwald\Typo3Forum\Domain\Model\Moderation\ReportWorkflowStatus;
 use Mittwald\Typo3Forum\Domain\Model\Moderation\UserReport;
+use Mittwald\Typo3Forum\Domain\Model\User\FrontendUser;
 use Mittwald\Typo3Forum\Utility\Localization;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -90,6 +92,26 @@ class ModerationController extends AbstractController {
 	 * @return void
 	 */
 	public function indexReportAction() {
+	    $postReports = $this->postReportRepository->findAll();
+	    
+	    foreach($postReports as $postKey => $postReport) {
+	        /** @var $postReport PostReport */
+	        if (!$postReport->getPost() instanceof Post) {
+	            $this->postReportRepository->remove($postReport);
+	            unset($postReports[$postKey]);
+            }
+        }
+
+        foreach($userReports as $userKey => $userReport) {
+            /** @var $userReport UserReport */
+            if (!$userReport->getUser() instanceof FrontendUser) {
+                $this->userReportRepository->remove($userReport);
+                unset($userReports[$userKey]);
+            }
+        }
+
+        $this->persistenceManager->persistAll();
+
 		$this->view->assign('postReports', $this->postReportRepository->findAll());
 		$this->view->assign('userReports', $this->userReportRepository->findAll());
 	}

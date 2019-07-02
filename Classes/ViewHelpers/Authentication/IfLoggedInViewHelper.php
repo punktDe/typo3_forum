@@ -35,11 +35,6 @@ class IfLoggedInViewHelper extends AbstractViewHelper {
     protected $escapeOutput = false;
     protected $escapeChildren = false;
 
-    /**
-     * @var bool
-     */
-    protected $escapeOutput = false;
-
 	/**
 	 * Renders the ViewHelper contents if there is a user logged in.
 	 *

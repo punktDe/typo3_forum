@@ -395,8 +395,7 @@ class UserController extends AbstractController {
 		}
 
 		if (
-		    !($forum !== NULL && FormProtectionFactory::get('frontend')->validateToken($csrfToken, 'forumMenu_' . $forum->getUid()))
-            && !($topic !== NULL && FormProtectionFactory::get('frontend')->validateToken($csrfToken, 'topicListMenu_' . $topic->getUid()))
+		    !FormProtectionFactory::get('frontend')->validateToken($csrfToken, 'User', 'subscribe')
         ) {
 		    throw new \Exception('CSRF validation not valid', 1502285941);
         }
