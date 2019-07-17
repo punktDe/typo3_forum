@@ -102,6 +102,8 @@ class ModerationController extends AbstractController {
             }
         }
 
+        $userReports = $this->userReportRepository->findAll();
+
         foreach($userReports as $userKey => $userReport) {
             /** @var $userReport UserReport */
             if (!$userReport->getUser() instanceof FrontendUser) {
