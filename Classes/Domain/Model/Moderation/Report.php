@@ -27,7 +27,9 @@ namespace Mittwald\Typo3Forum\Domain\Model\Moderation;
 use Mittwald\Typo3Forum\Domain\Exception\InvalidOperationException;
 use Mittwald\Typo3Forum\Domain\Model\User\AnonymousFrontendUser;
 use Mittwald\Typo3Forum\Domain\Model\User\FrontendUser;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
@@ -88,7 +90,7 @@ class Report extends AbstractEntity {
 			$this->reporter->_loadRealInstance();
 		}
 		if ($this->reporter === NULL) {
-			$this->reporter = new AnonymousFrontendUser();
+			$this->reporter = GeneralUtility::makeInstance(ObjectManager::class)->get(AnonymousFrontendUser::class);
 		}
 
 		return $this->reporter;
@@ -113,7 +115,7 @@ class Report extends AbstractEntity {
 			$this->moderator->_loadRealInstance();
 		}
 		if ($this->moderator === NULL) {
-			$this->moderator = new AnonymousFrontendUser();
+			$this->moderator = GeneralUtility::makeInstance(ObjectManager::class)->get(AnonymousFrontendUser::class);
 		}
 
 		return $this->moderator;

@@ -24,6 +24,10 @@ namespace Mittwald\Typo3Forum\Domain\Model\Moderation;
  *  This copyright notice MUST APPEAR in all copies of the script!      *
  *                                                                      */
 
+use Mittwald\Typo3Forum\Domain\Model\User\AnonymousFrontendUser;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
+
 /**
  * Models a post report. Reports are the central object of the moderation
  * component of the typo3_forum extension. Each user can report a forum post
@@ -50,7 +54,7 @@ class UserReport extends Report {
 			$this->feuser->_loadRealInstance();
 		}
 		if ($this->feuser === NULL) {
-			$this->feuser = new \Mittwald\Typo3Forum\Domain\Model\User\AnonymousFrontendUser();
+			$this->feuser = GeneralUtility::makeInstance(ObjectManager::class)->get(AnonymousFrontendUser::class);
 		}
 
 		return $this->feuser;

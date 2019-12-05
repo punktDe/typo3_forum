@@ -31,6 +31,7 @@ use Mittwald\Typo3Forum\Domain\Model\ConfigurableInterface;
 use Mittwald\Typo3Forum\Domain\Model\NotifiableInterface;
 use Mittwald\Typo3Forum\Domain\Model\ReadableInterface;
 use Mittwald\Typo3Forum\Domain\Model\SubscribeableInterface;
+use Mittwald\Typo3Forum\Domain\Model\User\AnonymousFrontendUser;
 use Mittwald\Typo3Forum\Domain\Model\User\FrontendUser;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
@@ -241,7 +242,7 @@ class Topic extends AbstractEntity implements AccessibleInterface, Subscribeable
 				$posts = $this->posts->toArray();
 				$this->author = $posts[0]->getAuthor();
 			} else {
-				$this->author = new \Mittwald\Typo3Forum\Domain\Model\User\AnonymousFrontendUser();
+				$this->author = GeneralUtility::makeInstance(ObjectManager::class)->get(AnonymousFrontendUser::class);
 			}
 		}
 

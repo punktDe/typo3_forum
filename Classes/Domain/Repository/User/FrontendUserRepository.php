@@ -26,7 +26,9 @@ namespace Mittwald\Typo3Forum\Domain\Repository\User;
 use Mittwald\Typo3Forum\Domain\Model\User\AnonymousFrontendUser;
 use Mittwald\Typo3Forum\Domain\Model\User\FrontendUser;
 use Mittwald\Typo3Forum\Domain\Repository\AbstractRepository;
-use TYPO3\CMS\Extbase\Persistence\QueryInterface;
+	use TYPO3\CMS\Core\Utility\GeneralUtility;
+	use TYPO3\CMS\Extbase\Object\ObjectManager;
+	use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 
 
 /**
@@ -60,7 +62,7 @@ class FrontendUserRepository extends AbstractRepository  {
 	 */
 	public function findCurrent() {
 		$currentUserUid = (int) $GLOBALS['TSFE']->fe_user->user['uid'];
-		return $currentUserUid ? $this->findByUid($currentUserUid) : new AnonymousFrontendUser();
+		return $currentUserUid ? $this->findByUid($currentUserUid) : GeneralUtility::makeInstance(ObjectManager::class)->get(AnonymousFrontendUser::class);
 	}
 
 	/**
@@ -115,7 +117,7 @@ class FrontendUserRepository extends AbstractRepository  {
 	 * @return AnonymousFrontendUser An anonymous frontend user.
 	 */
 	public function findAnonymous() {
-		return new AnonymousFrontendUser();
+		return GeneralUtility::makeInstance(ObjectManager::class)->get(AnonymousFrontendUser::class);
 	}
 
 

@@ -28,7 +28,9 @@ use Mittwald\Typo3Forum\Domain\Model\AccessibleInterface;
 use Mittwald\Typo3Forum\Domain\Model\NotifiableInterface;
 use Mittwald\Typo3Forum\Domain\Model\User\AnonymousFrontendUser;
 use Mittwald\Typo3Forum\Domain\Model\User\FrontendUser;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
@@ -163,7 +165,7 @@ class Post extends AbstractEntity implements AccessibleInterface, NotifiableInte
 			$this->author->_loadRealInstance();
 		}
 		if ($this->author === NULL) {
-			$this->author = new AnonymousFrontendUser();
+			$this->author = GeneralUtility::makeInstance(ObjectManager::class)->get(AnonymousFrontendUser::class);
 			if ($this->authorName) {
 				$this->author->setUsername($this->authorName);
 			}

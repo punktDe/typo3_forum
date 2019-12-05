@@ -26,7 +26,9 @@ namespace Mittwald\Typo3Forum\Domain\Model\User;
 
 use Mittwald\Typo3Forum\Domain\Model\Forum\Post;
 use Mittwald\Typo3Forum\Domain\Model\Forum\Tag;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy;
 
 class Notification extends AbstractEntity {
@@ -105,7 +107,7 @@ class Notification extends AbstractEntity {
 			$this->feuser->_loadRealInstance();
 		}
 		if ($this->feuser === NULL) {
-			$this->feuser = new AnonymousFrontendUser();
+			$this->feuser = GeneralUtility::makeInstance(ObjectManager::class)->get(AnonymousFrontendUser::class);
 		}
 
 		return $this->feuser;

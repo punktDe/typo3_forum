@@ -24,7 +24,10 @@ namespace Mittwald\Typo3Forum\Domain\Model\Moderation;
  *  This copyright notice MUST APPEAR in all copies of the script!      *
  *                                                                      */
 
+use Mittwald\Typo3Forum\Domain\Model\User\AnonymousFrontendUser;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 /**
  * A report comment. Each moderation report consists of a set -- and at least one --
@@ -74,7 +77,7 @@ class ReportComment extends AbstractEntity {
 			$this->author->_loadRealInstance();
 		}
 		if ($this->author === NULL) {
-			$this->author = new \Mittwald\Typo3Forum\Domain\Model\User\AnonymousFrontendUser();
+			$this->author = GeneralUtility::makeInstance(ObjectManager::class)->get(AnonymousFrontendUser::class);
 		}
 
 		return $this->author;

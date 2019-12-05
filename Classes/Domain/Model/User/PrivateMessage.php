@@ -24,7 +24,9 @@ namespace Mittwald\Typo3Forum\Domain\Model\User;
  *  This copyright notice MUST APPEAR in all copies of the script!      *
  *                                                                      */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy;
 
 class PrivateMessage extends AbstractEntity {
@@ -121,7 +123,7 @@ class PrivateMessage extends AbstractEntity {
 			$this->feuser->_loadRealInstance();
 		}
 		if ($this->feuser === NULL) {
-			$this->feuser = new AnonymousFrontendUser();
+			$this->feuser = GeneralUtility::makeInstance(ObjectManager::class)->get(AnonymousFrontendUser::class);
 		}
 
 		return $this->feuser;
@@ -152,7 +154,7 @@ class PrivateMessage extends AbstractEntity {
 			$this->opponent->_loadRealInstance();
 		}
 		if ($this->opponent === NULL) {
-			$this->opponent = new AnonymousFrontendUser();
+			$this->opponent = GeneralUtility::makeInstance(ObjectManager::class)->get(AnonymousFrontendUser::class);
 		}
 
 		return $this->opponent;
