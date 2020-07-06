@@ -198,9 +198,12 @@ class AuthenticationService extends AbstractService implements AuthenticationSer
 	 * @access private
 	 */
 	protected function getCacheIdentifier(AccessibleInterface $object, $action) {
-		$className = array_pop(explode('\\', get_class($object)));
+		$objectName = explode('\\', get_class($object));
+		$className = array_pop($objectName);
 		/** @noinspection PhpUndefinedMethodInspection */
-		return 'acl-' . $className . '-' . $object->getUid() . '-' . $this->getUserGroupIdentifier() . '-' . $action;
+		$cacheIdentifier = 'acl-' . $className . '-' . $object->getUid() . '-' . $this->getUserGroupIdentifier() . '-' . $action;
+
+		return $cacheIdentifier;
 	}
 
 
@@ -215,6 +218,8 @@ class AuthenticationService extends AbstractService implements AuthenticationSer
 			$user = $this->getUser();
 			if ($user === NULL) {
 				$this->userGroupIdentifier = 'n';
+			} elseif ($user->isAnonymous()) {
+				$this->userGroupIdentifier = 'a';
 			} else {
 				$groupUids = GeneralUtility::trimExplode(',', $this->typoScriptFrontendController->gr_list);
 
