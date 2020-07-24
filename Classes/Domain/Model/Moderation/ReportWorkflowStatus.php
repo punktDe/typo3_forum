@@ -24,6 +24,7 @@ namespace Mittwald\Typo3Forum\Domain\Model\Moderation;
  *  This copyright notice MUST APPEAR in all copies of the script!      *
  *                                                                      */
 
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Extbase\DomainObject\AbstractValueObject;
 
 /**
@@ -147,12 +148,12 @@ class ReportWorkflowStatus extends AbstractValueObject {
 		$imageDirectoryName = $TCA[strtolower(__CLASS__)]['columns']['icon']['config']['uploadfolder'];
 		$imageFilename = rtrim($imageDirectoryName, '/') . '/' . $this->icon;
 
-		if (!file_exists(PATH_site . '/' . $imageFilename)) {
+		if (!file_exists(Environment::getPublicPath() . '/' . $imageFilename)) {
 			$imageDirectoryName = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::siteRelPath('typo3_forum') . 'Resources/Public/Images/Icons/Moderation';
 			$imageFilename = "$imageDirectoryName/{$this->icon}";
 		}
 
-		return file_exists(PATH_site . '/' . $imageFilename) ? $imageFilename : NULL;
+		return file_exists(Environment::getPublicPath() . '/' . $imageFilename) ? $imageFilename : NULL;
 	}
 
 	/**
