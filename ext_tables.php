@@ -1,22 +1,40 @@
 <?php
 
-if (!defined('TYPO3_MODE'))
-	die('Access denied.');
+defined('TYPO3_MODE') or die();
 
-\TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
-	'Mittwald.Typo3Forum', 'Pi1', 'typo3_forum'
-);
-\TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
-	'Mittwald.Typo3Forum', 'Widget', 'typo3_forum Widgets'
-);
+(function () {
 
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile($_EXTKEY, 'Configuration/TypoScript', 'typo3_forum');
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile($_EXTKEY, 'Configuration/TypoScript/Bootstrap', 'typo3_forum Bootstrap Template');
+	\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr(
+		'tx_typo3forum_domain_model_format_textparser',
+		'EXT:typo3_forum/Resources/Private/Language/locallang_csh_format_textparser.xml'
+	);
+	\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr(
+		'tx_typo3forum_domain_model_forum_access',
+		'EXT:typo3_forum/Resources/Private/Language/locallang_csh_forum_access.xml'
+	);
+	\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr(
+		'tx_typo3forum_domain_model_forum_attachment',
+		'EXT:typo3_forum/Resources/Private/Language/locallang_csh_forum_attachment.xml'
+	);
+	\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr(
+		'tx_typo3forum_domain_model_forum_forum',
+		'EXT:typo3_forum/Resources/Private/Language/locallang_csh_forum_forum.xml'
+	);
+	\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr(
+		'tx_typo3forum_domain_model_forum_post',
+		'EXT:typo3_forum/Resources/Private/Language/locallang_csh_forum_post.xml'
+	);
+	\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr(
+		'tx_typo3forum_domain_model_forum_topic',
+		'EXT:typo3_forum/Resources/Private/Language/locallang_csh_forum_topic.xml'
+	);
+	\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr(
+		'tx_typo3forum_domain_model_user_userfield_userfield',
+		'EXT:typo3_forum/Resources/Private/Language/locallang_csh_user_userfield_userfield.xml'
+	);
+	\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr(
+		'tx_typo3forum_domain_model_user_userfield_value',
+		'EXT:typo3_forum/Resources/Private/Language/locallang_csh_user_userfield_value.xml'
+	);
 
-$pluginSignature = strtolower(\TYPO3\CMS\Core\Utility\GeneralUtility::underscoredToUpperCamelCase($_EXTKEY)) . '_pi1';
-$TCA['tt_content']['types']['list']['subtypes_addlist'][$pluginSignature] = 'pi_flexform';
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue($pluginSignature, 'FILE:EXT:' . $_EXTKEY . '/Configuration/FlexForms/Pi1.xml');
-
-$pluginSignature = strtolower(\TYPO3\CMS\Core\Utility\GeneralUtility::underscoredToUpperCamelCase($_EXTKEY)) . '_widget';
-$TCA['tt_content']['types']['list']['subtypes_addlist'][$pluginSignature] = 'pi_flexform';
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue($pluginSignature, 'FILE:EXT:' . $_EXTKEY . '/Configuration/FlexForms/Widgets.xml');
+})();

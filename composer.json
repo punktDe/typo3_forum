@@ -1,26 +1,27 @@
 {
-	"name": "mittwald/typo3-forum",
+	"name": "mittwald/typo3_forum",
 	"description": "Forum extension",
 	"license": "GPL-2",
 	"type": "typo3-cms-extension",
 	"repositories": [
 		{
 			"type": "composer",
-			"url": "http://composer.typo3.org/"
+			"url": "https://composer.typo3.org/"
 		}
 	],
 	"require": {
-		"typo3/cms-core": "^6.2|| ^7.6 || ^8.0",
-		"typo3-ter/static-info-tables": "6.3.*"
+		"typo3/cms-core": "^8.7 || ^9.5",
+		"typo3-ter/static-info-tables": "^6.4.0"
 	},
 	"require-dev": {
 		"namelesscoder/typo3-repository-client": "^1.2",
 		"mikey179/vfsStream": "^1.4",
-		"phpunit/phpunit": "^4.7 || ^5.0"
+		"phpunit/phpunit": "^5.0 || ^6.5"
 	},
 	"replace": {
-		"typo3-forum": "self.version",
-		"typo3-ter/typo3-forum": "self.version"
+		"typo3_forum": "self.version",
+		"typo3-ter/typo3-forum": "self.version",
+		"typo3-ter/typo3_forum": "self.version"
 	},
 	"config": {
 		"vendor-dir": ".Build/vendor",

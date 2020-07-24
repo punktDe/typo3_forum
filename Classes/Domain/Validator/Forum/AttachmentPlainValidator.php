@@ -24,6 +24,7 @@ namespace Mittwald\Typo3Forum\Domain\Validator\Forum;
 *  This copyright notice MUST APPEAR in all copies of the script!      *
 *                                                                      */
 
+use Mittwald\Typo3Forum\Domain\Model\Forum\Attachment;
 use TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator;
 
 class AttachmentPlainValidator extends AbstractValidator {
@@ -45,15 +46,15 @@ class AttachmentPlainValidator extends AbstractValidator {
 	 */
 	public function isValid($value) {
 		$result = TRUE;
-		$attachmentObj = $this->objectManager->get('Mittwald\\Typo3Forum\\Domain\\Model\\Forum\\Attachment');
+		$attachmentObj = $this->objectManager->get(Attachment::class);
 		foreach ($value as $attachment) {
 			if (empty($attachment['name']))
 				continue;
-			if (array_search($attachment['type'], $attachmentObj->getAllowedMimeTypes()) == false) {
+			if (!in_array($attachment['type'], $attachmentObj->getAllowedMimeTypes())) {
 				$this->addError('The submitted mime-type is not allowed!.', 1371041777);
 				$result = FALSE;
 			}
-			if ($attachment->$attachment['size'] > $attachmentObj->getAllowedMaxSize) {
+			if ($attachment['size'] > $attachmentObj->getAllowedMaxSize()) {
 				$this->addError('The submitted file is to big!.', 1371041888);
 				$result = FALSE;
 			}

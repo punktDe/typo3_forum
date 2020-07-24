@@ -209,13 +209,12 @@ plugin.tx_typo3forum.settings {
     debug {
         disableACLs = 0
     }
-	
+
     cutUsernameOnChar = {$plugin.tx_typo3forum.settings.cutUsernameOnChar}
     cutBreadcrumbOnChar = {$plugin.tx_typo3forum.settings.cutBreadcrumbOnChar}
-    useSqlStatementsOnCriticalFunctions = {$plugin.tx_typo3forum.settings.useSqlStatementsOnCriticalFunctions}
 
     images {
-        avatar.uploadDir = uploads/tx_srfeuserregister
+        avatar.uploadDir = uploads/pics
         # use following definitions to have different Default avatars for male and female
         #avatar.dummyMale = /uploads/path_to_male_avatar.jpg
         #avatar.dummyFemale = /uploads/path_to_female_avatar.jpg
@@ -225,7 +224,7 @@ plugin.tx_typo3forum.settings {
         Forum = {$plugin.tx_typo3forum.settings.pids.Forum}
         UserShow = {$plugin.tx_typo3forum.settings.pids.UserShow}
         UserList = {$plugin.tx_typo3forum.settings.pids.UserList}
-        UserEdit = {$plugin.tx_typo3forum.settings.pids.QuestionEdit}
+        UserEdit = {$plugin.tx_typo3forum.settings.pids.UserEdit}
         Dashboard = {$plugin.tx_typo3forum.settings.pids.Dashboard}
         AllQuestions = {$plugin.tx_typo3forum.settings.pids.AllQuestions}
     }
@@ -236,7 +235,7 @@ plugin.tx_typo3forum.settings {
     }
 
     attachment {
-        allowedMimeTypes = image/gif,image/jpeg,image/png,application/pdf,application/xml,text/plain
+        allowedMimeTypes = image/gif,image/jpeg,image/png,application/pdf,application/xml,text/xml,text/plain
         allowedSizeInByte = 4096
         #uploadfolder can be found in the Attachment TCA
     }
@@ -247,6 +246,7 @@ plugin.tx_typo3forum.settings {
                 iconClass = iconset-22-helpful
                 eID = typo3_forum
             }
+			showImagesInline = {$plugin.tx_typo3forum.settings.showPostImagesInline}
         }
     }
 
@@ -278,7 +278,7 @@ plugin.tx_typo3forum.settings {
             inactiveLinkWrap = <li>|</li>
         }
 
-        topicShow < default
+        topicShow < .default
         topicShow {
             insertAbove = 1
             itemsPerPage = 10
@@ -308,6 +308,9 @@ plugin.tx_typo3forum.settings {
         dateFormat = d. m. Y
         dateTimeFormat = d. m. Y, H:i
     }
+
+	# Use HTTP-"PURGE" to clear cache of a forum on creating a new topic - for use with a caching proxy like varnish
+	purgeCache = 1
 
     widgets {
         newestPosts.limit = 6
@@ -392,9 +395,7 @@ plugin.tx_typo3forum.settings {
 }
 
 plugin.tx_typo3forum.view {
-    widget.Tx_Fluid_ViewHelpers_Widget_PaginateViewHelper.templateRootPaths {
-        10 = {$plugin.tx_typo3forum.view.templateRootPath}
-    }
+    widget.TYPO3\CMS\Fluid\ViewHelpers\Widget\PaginateViewHelper.templateRootPath = {$plugin.tx_typo3forum.view.templateRootPath}
 
     templateRootPaths {
         10 = {$plugin.tx_typo3forum.view.templateRootPath}
@@ -540,7 +541,7 @@ plugin.tx_typo3forum.renderer.icons {
 
         22 = IMG_RESOURCE
         22.file = EXT:typo3_forum/Resources/Public/Images/Icons/Topic/OverlayLocked.png
-        22.stdWrap.wrap = <div class="tx-typo3forum-icon-overlay-bl" style="background-image: url(|)" title="closed & new"></div>
+        22.stdWrap.wrap = <div class="tx-typo3forum-icon-overlay-bl" style="background-image: url(|)" title="closed &amp; new"></div>
         22.stdWrap.if.isTrue.field = closed
 
         26 = IMG_RESOURCE
@@ -588,23 +589,22 @@ plugin.tx_typo3forum.userfields {
     }
 }
 
-page.includeCSS {
-    typo3_forum = EXT:typo3_forum/Resources/Public/Stylesheets/typo3_forum.css
-    bootstrap = EXT:typo3_forum/Resources/Public/Bootstrap/css/bootstrap.css
-    markitup_bb = EXT:typo3_forum/Resources/Public/Javascript/markitup/sets/typo3_forum/style.css
-}
+[globalVar = LIT:1 = {$plugin.tx_typo3forum.settings.useDefaultCSS}]
+    page.includeCSS {
+        typo3_forum = EXT:typo3_forum/Resources/Public/Stylesheets/typo3_forum.css
+        bootstrap = EXT:typo3_forum/Resources/Public/Bootstrap/css/bootstrap.min.css
+        markitup_bb = EXT:typo3_forum/Resources/Public/Javascript/markitup/sets/typo3_forum/style.css
+    }
+[global]
 
 page.includeJSLibs {
-    typo3forum_jquery = https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js
+    typo3forum_jquery = https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js
     typo3forum_jquery.external = 1
-    typo3forum_bootstrap = https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js
-    typo3forum_bootstrap.external = 1
+    typo3forum_popperjs = https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js
+    typo3forum_popperjs.external = 1
+    typo3forum_bootstrap = EXT:typo3_forum/Resources/Public/Bootstrap/js/bootstrap.min.js
     typo3forum_markitup = EXT:typo3_forum/Resources/Public/Javascript/markitup/jquery.markitup.js
 }
-# add typo3 6.2 compatibility
-page.includeJSlibs.typo3forum_jquery < page.includeJSLibs.typo3forum_jquery
-page.includeJSlibs.typo3forum_bootstrap < page.includeJSLibs.typo3forum_bootstrap
-page.includeJSlibs.typo3forum_markitup < page.includeJSLibs.typo3forum_markitup
 
 page.includeJSFooter {
     typo3forum_main = EXT:typo3_forum/Resources/Public/Javascript/forum.js
@@ -620,3 +620,51 @@ plugin.tx_typo3forum.persistence {
 
 lib.pageUid = TEXT
 lib.pageUid.data = page:uid
+
+plugin.tx_typo3forum_ajax = USER
+plugin.tx_typo3forum_ajax {
+    userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
+    pluginName = Pi1
+    extensionName = Typo3Forum
+    vendorName = Mittwald
+    action = list
+    controller = Forum
+    htmlSpecialChars = 1
+    switchableControllerActions {
+        Ajax {
+            1 = preview
+        }
+    }
+
+    view =< plugin.tx_typo3forum.view
+    persistence =< plugin.tx_typo3forum.persistence
+}
+
+ajaxCall = PAGE
+ajaxCall {
+    typeNum = 43568275
+    config {
+        disableAllHeaderCode = 1
+        debug = 0
+        no_cache = 1
+    }
+
+    10 = USER
+    10 {
+        userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
+        pluginName = Ajax
+        extensionName = Typo3Forum
+        vendorName = Mittwald
+        action = preview
+        controller = Ajax
+        htmlSpecialChars = 1
+        switchableControllerActions {
+            Ajax {
+                1 = preview
+            }
+        }
+
+        view =< plugin.tx_typo3forum.view
+        persistence =< plugin.tx_typo3forum.persistence
+    }
+}

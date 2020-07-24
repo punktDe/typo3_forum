@@ -1,7 +1,7 @@
 <?php
 namespace Mittwald\Typo3Forum\Domain\Model\User;
 
-/*                                                                    - *
+/*                                                                      *
  *  COPYRIGHT NOTICE                                                    *
  *                                                                      *
  *  (c) 2015 Mittwald CM Service GmbH & Co KG                           *
@@ -25,6 +25,8 @@ namespace Mittwald\Typo3Forum\Domain\Model\User;
  *                                                                      */
 
 use Mittwald\Typo3Forum\Domain\Model\AccessibleInterface;
+use Mittwald\Typo3Forum\Domain\Model\ConfigurableEntityTrait;
+use Mittwald\Typo3Forum\Domain\Model\ConfigurableInterface;
 use Mittwald\Typo3Forum\Domain\Model\Forum\Access;
 use Mittwald\Typo3Forum\Domain\Model\Forum\Forum;
 use Mittwald\Typo3Forum\Domain\Model\Forum\Topic;
@@ -37,17 +39,13 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 /**
  * A frontend user.
  */
-class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser implements AccessibleInterface {
+class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser implements AccessibleInterface, ConfigurableInterface {
 
 	const GENDER_MALE = 0;
 	const GENDER_FEMALE = 1;
 	const GENDER_PRIVATE = 99;
 
-	/**
-	 * @var \TYPO3\CMS\Extbase\Configuration\FrontendConfigurationManager
-	 * @inject
-	 */
-	protected $frontendConfigurationManager;
+	use ConfigurableEntityTrait;
 
 	/**
 	 * The rank repository
@@ -285,20 +283,7 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser implemen
 	 */
 	protected $usergroup;
 
-	/**
-	 * Whole TypoScript typo3_forum settings
-	 *
-	 * @var array
-	 */
-	protected $settings = NULL;
-
-	/**
-	 * @var \TYPO3\CMS\Extbase\Service\TypoScriptService
-	 * @inject
-	 */
-	protected $typoScriptService;
-
-	/**
+    /**
 	 * Constructor.
 	 *
 	 * @param string $username The user's username.
@@ -308,17 +293,6 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser implemen
 		parent::__construct($username, $password);
 		$this->readTopics = new ObjectStorage();
 		$this->readForum = new ObjectStorage();
-	}
-
-	/**
-	 * @return array
-	 */
-	protected function getSettings() {
-		if ($this->settings === NULL) {
-			$ts = $this->typoScriptService->convertTypoScriptArrayToPlainArray($this->frontendConfigurationManager->getTypoScriptSetup());
-			$this->settings = $ts['plugin']['tx_typo3forum']['settings'];
-		}
-		return $this->settings;
 	}
 
 	/**
@@ -513,16 +487,13 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser implemen
 	 * @return boolean
 	 */
 	public function checkAccess(FrontendUser $user = NULL, $accessType = Access::TYPE_MODERATE) {
-		// @todo: the $accessType and the switch statement are useless here
-		switch ($accessType) {
-			default:
-				foreach ($user->getUsergroup() as $group) {
-					if ($group->getUserMod()) {
-						return TRUE;
-					}
-				}
-				return FALSE;
+		foreach ($user->getUsergroup() as $group) {
+			if ($group->getUserMod()) {
+				return TRUE;
+			}
 		}
+
+		return FALSE;
 	}
 
 	/**
@@ -615,10 +586,11 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser implemen
 	public function getImagePath() {
 
 		if ($this->image) {
-			$imageDirectoryName = $this->getSettings()['images']['avatar']['uploadDir'];
-			$imageFilename = rtrim($imageDirectoryName, '/') . '/' . $this->image;
-
-			return file_exists($imageFilename) ? $imageFilename : NULL;
+            foreach ($this->image as $image) {
+                /* @var \TYPO3\CMS\Extbase\Domain\Model\FileReference $image */
+                $singleImage = $image->getOriginalResource();
+                return $singleImage->getPublicUrl();
+			}
 		}
 
 		// If the user enabled the use of "Gravatars", then load this user's

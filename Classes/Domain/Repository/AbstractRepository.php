@@ -25,10 +25,8 @@ namespace Mittwald\Typo3Forum\Domain\Repository;
  *                                                                      */
 
 use TYPO3\CMS\Extbase\Persistence\Generic\QuerySettingsInterface;
-use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\Repository;
-use TYPO3\CMS\Extbase\Service\TypoScriptService;
 
 /**
  *
@@ -50,11 +48,10 @@ abstract class AbstractRepository extends Repository
 {
 
     /**
-     * @var \TYPO3\CMS\Extbase\Service\TypoScriptService
+     * @var \Mittwald\Typo3Forum\Configuration\ConfigurationBuilder
      * @inject
-     *
      */
-    protected $typoScriptService;
+    protected $configurationBuilder;
 
     /**
      * @var array
@@ -71,9 +68,8 @@ abstract class AbstractRepository extends Repository
      */
     public function initializeObject()
     {
-        $ts = $this->getTypoScriptService()->convertTypoScriptArrayToPlainArray($GLOBALS['TSFE']->tmpl->setup);
-        $this->settings = $ts['plugin']['tx_typo3forum']['settings'];
-        $this->persistenceSettings = $ts['plugin']['tx_typo3forum']['persistence'];
+        $this->settings = $this->configurationBuilder->getSettings();
+        $this->persistenceSettings = $this->configurationBuilder->getPersistenceSettings();
 
         if (isset($this->persistenceSettings['storagePid'])) {
             $this->setDefaultQuerySettings(
@@ -98,25 +94,12 @@ abstract class AbstractRepository extends Repository
         return $query;
     }
 
-
-    /**
-     * @return TypoScriptService
-     */
-    protected function getTypoScriptService()
-    {
-        if (is_null($this->typoScriptService)) {
-            $this->typoScriptService = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Service\\TypoScriptService');
-        }
-
-        return $this->typoScriptService;
-    }
-
     /**
      * @return QuerySettingsInterface
      */
     private function getQuerySettings()
     {
-        return $this->objectManager->get('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\QuerySettingsInterface');
+        return $this->objectManager->get(QuerySettingsInterface::class);
     }
 
 }

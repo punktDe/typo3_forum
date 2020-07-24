@@ -25,6 +25,9 @@ namespace Mittwald\Typo3Forum\Controller;
  *                                                                      */
 
 use Mittwald\Typo3Forum\Domain\Model\Forum\Post;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
+use TYPO3\CMS\Fluid\View\StandaloneView;
 
 class AjaxController extends AbstractController {
 
@@ -46,11 +49,11 @@ class AjaxController extends AbstractController {
 	 */
 	protected $forumRepository;
 
-	/**
-	 * @var \TYPO3\CMS\Extbase\Configuration\FrontendConfigurationManager
-	 * @inject
-	 */
-	protected $frontendConfigurationManager;
+    /**
+     * @var \Mittwald\Typo3Forum\Configuration\ConfigurationBuilder
+     * @inject
+     */
+    protected $configurationBuilder;
 
 	/**
 	 * @var \Mittwald\Typo3Forum\Domain\Factory\Forum\PostFactory
@@ -77,29 +80,22 @@ class AjaxController extends AbstractController {
 	protected $topicRepository;
 
 	/**
-	 * @var \TYPO3\CMS\Extbase\Service\TypoScriptService
+	 * @var \Mittwald\Typo3Forum\Service\SessionHandlingService
 	 * @inject
 	 */
-	protected $typoScriptService = NULL;
+	protected $sessionHandlingService;
 
-    /**
-     * @var \Mittwald\Typo3Forum\Service\SessionHandlingService
-     * @inject
-     */
-    protected $sessionHandlingService;
-
-    /**
-     * @var \Mittwald\Typo3Forum\Service\AttachmentService
-     * @inject
-     */
-    protected $attachmentService = NULL;
+	/**
+	 * @var \Mittwald\Typo3Forum\Service\AttachmentService
+	 * @inject
+	 */
+	protected $attachmentService = NULL;
 
 	/**
 	 *
 	 */
 	public function initializeObject() {
-		$ts = $this->typoScriptService->convertTypoScriptArrayToPlainArray($this->frontendConfigurationManager->getTypoScriptSetup());
-		$this->settings = $ts['plugin']['tx_typo3forum']['settings'];
+		$this->settings = $this->configurationBuilder->getSettings();
 	}
 
 	/**
@@ -134,9 +130,6 @@ class AjaxController extends AbstractController {
 		}
 		if (!empty($displayedTopics)) {
 			$content['topics'] = $this->_getTopics($displayedTopics);
-		}
-		if (!empty($displayedPosts)) {
-			$content['posts'] = $this->_getPosts($displayedPosts);
 		}
 		if (!empty($displayedPosts)) {
 			$content['posts'] = $this->_getPosts($displayedPosts);
@@ -182,17 +175,29 @@ class AjaxController extends AbstractController {
 		$data = [];
 		$displayedForumMenus = json_decode($displayedForumMenus);
 		if (count($displayedForumMenus) < 1) return $data;
-		$this->request->setFormat('html');
+
+        $extbaseSettings = $this->configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK, 'Typo3Forum');
+        $templateRootPaths = $extbaseSettings['view']['templateRootPaths'];
+
+        /* @var StandaloneView $standaloneView */
+        $standaloneView = GeneralUtility::makeInstance(StandaloneView::class);
+        $standaloneView->setControllerContext($this->controllerContext);
+        $standaloneView->setTemplateRootPaths($templateRootPaths);
+        $standaloneView->getRenderingContext()->setControllerName('Ajax');
+        $standaloneView->setTemplate('forumMenu');
+        $standaloneView->setFormat('html');
+
 		$foren = $this->forumRepository->findByUids($displayedForumMenus);
 		$counter = 0;
 		foreach ($foren as $forum) {
-			$this->view->assign('forum', $forum)
-				->assign('user', $this->getCurrentUser());
+            $standaloneView->assignMultiple([
+                'forum' => $forum,
+				'user' => $this->getCurrentUser()
+            ]);
 			$data[$counter]['uid'] = $forum->getUid();
-			$data[$counter]['html'] = $this->view->render('ForumMenu');
+			$data[$counter]['html'] = $standaloneView->render();
 			$counter++;
 		}
-		$this->request->setFormat('json');
 		return $data;
 	}
 
@@ -207,19 +212,41 @@ class AjaxController extends AbstractController {
 		$this->request->setFormat('html');
 		$posts = $this->postRepository->findByUids($displayedPosts);
 		$counter = 0;
-		foreach ($posts as $post) {
+
+        $extbaseSettings = $this->configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK, 'Typo3Forum');
+        $templateRootPaths = $extbaseSettings['view']['templateRootPaths'];
+
+        foreach ($posts as $post) {
+            /* @var StandaloneView $standaloneView */
+            $standaloneView = GeneralUtility::makeInstance(StandaloneView::class);
+            $standaloneView->setControllerContext($this->controllerContext);
+            $standaloneView->setTemplateRootPaths($templateRootPaths);
+            $standaloneView->getRenderingContext()->setControllerName('Ajax');
+            $standaloneView->setTemplate('PostHelpfulButton');
+            $standaloneView->setFormat('html');
 			/** @var Post $post */
-			$this->view->assign('post', $post)
+			$standaloneView->assign('settings',$extbaseSettings['settings'])->assign('post', $post)
 				->assign('user', $this->getCurrentUser());
-			$data[$counter]['uid'] = $post->getUid();
-			$data[$counter]['postHelpfulButton'] = $this->view->render('PostHelpfulButton');
+
+            $data[$counter]['uid'] = $post->getUid();
+			$data[$counter]['postHelpfulButton'] = $standaloneView->render();
 			$data[$counter]['postHelpfulCount'] = $post->getHelpfulCount();
 			$data[$counter]['postUserHelpfulCount'] = $post->getAuthor()->getHelpfulCount();
 			$data[$counter]['author']['uid'] = $post->getAuthor()->getUid();
-			$data[$counter]['postEditLink'] = $this->view->render('PostEditLink');
+
+            /* @var StandaloneView $standaloneView */
+            $standaloneView = GeneralUtility::makeInstance(StandaloneView::class);
+            $standaloneView->setControllerContext($this->controllerContext);
+            $standaloneView->setTemplateRootPaths($templateRootPaths);
+            $standaloneView->getRenderingContext()->setControllerName('Ajax');
+            $standaloneView->setTemplate('PostEditLink');
+            $standaloneView->setFormat('html');
+            $standaloneView->assign('settings',$extbaseSettings['settings'])->assign('post', $post)
+                ->assign('user', $this->getCurrentUser());
+			$data[$counter]['postEditLink'] = $standaloneView->render();
 			$counter++;
 		}
-		$this->request->setFormat('json');
+		#$this->request->setFormat('json');
 		return $data;
 	}
 
@@ -231,17 +258,27 @@ class AjaxController extends AbstractController {
 		$data = [];
 		$displayedTopics = json_decode($displayedTopics);
 		if (count($displayedTopics) < 1) return $data;
-		$this->request->setFormat('html');
+
+        $extbaseSettings = $this->configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK, 'Typo3Forum');
+        $templateRootPaths = $extbaseSettings['view']['templateRootPaths'];
+
+        /* @var StandaloneView $standaloneView */
+        $standaloneView = GeneralUtility::makeInstance(StandaloneView::class);
+        $standaloneView->setControllerContext($this->controllerContext);
+        $standaloneView->setTemplateRootPaths($templateRootPaths);
+        $standaloneView->getRenderingContext()->setControllerName('Ajax');
+        $standaloneView->setTemplate('topicListMenu');
+        $standaloneView->setFormat('html');
+
 		$topicIcons = $this->topicRepository->findByUids($displayedTopics);
 		$counter = 0;
 		foreach ($topicIcons as $topic) {
-			$this->view->assign('topic', $topic);
+            $standaloneView->assign('topic', $topic);
 			$data[$counter]['uid'] = $topic->getUid();
 			$data[$counter]['replyCount'] = $topic->getReplyCount();
-			$data[$counter]['topicListMenu'] = $this->view->render('topicListMenu');
+			$data[$counter]['topicListMenu'] = $standaloneView->render();
 			$counter++;
 		}
-		$this->request->setFormat('json');
 		return $data;
 	}
 
@@ -337,7 +374,6 @@ class AjaxController extends AbstractController {
 		if (!empty($output)) return $output;
 	}
 
-
 	/**
 	 * @param \stdClass $meta
 	 * @return array
@@ -370,5 +406,18 @@ class AjaxController extends AbstractController {
 		$this->request->setFormat('json');
 		return $result;
 	}
+
+    /**
+     * previewAction.
+     */
+    public function previewAction()
+    {
+        $text = '';
+        if (($this->request->hasArgument('text'))) {
+            $text = $this->request->getArgument('text');
+        }
+
+        $this->view->assign('text', $text);
+    }
 
 }

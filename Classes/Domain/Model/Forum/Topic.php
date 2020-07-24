@@ -25,6 +25,8 @@ namespace Mittwald\Typo3Forum\Domain\Model\Forum;
  *                                                                      */
 
 use Mittwald\Typo3Forum\Domain\Model\AccessibleInterface;
+use Mittwald\Typo3Forum\Domain\Model\ConfigurableEntityTrait;
+use Mittwald\Typo3Forum\Domain\Model\ConfigurableInterface;
 use Mittwald\Typo3Forum\Domain\Model\NotifiableInterface;
 use Mittwald\Typo3Forum\Domain\Model\ReadableInterface;
 use Mittwald\Typo3Forum\Domain\Model\SubscribeableInterface;
@@ -37,7 +39,9 @@ use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
  * posts. Topic are submitted to the access control mechanism and
  * can be subscribed by users.
  */
-class Topic extends AbstractEntity implements AccessibleInterface, SubscribeableInterface, NotifiableInterface, ReadableInterface {
+class Topic extends AbstractEntity implements AccessibleInterface, SubscribeableInterface, NotifiableInterface, ReadableInterface, ConfigurableInterface {
+
+    use ConfigurableEntityTrait;
 
 	/**
 	 * The subject
@@ -175,32 +179,6 @@ class Topic extends AbstractEntity implements AccessibleInterface, Subscribeable
 	protected $topicRepository;
 
 	/**
-	 * An instance of the typo3_forum authentication service.
-	 * @var \TYPO3\CMS\Extbase\Service\TypoScriptService
-	 * @inject
-	 */
-	protected $typoScriptService = NULL;
-
-	/**
-	 * Whole TypoScript typo3_forum settings
-	 * @var array
-	 */
-	protected $settings;
-
-	/**
-	 * Injects an instance of the \TYPO3\CMS\Extbase\Service\TypoScriptService.
-	 *
-	 * @param \TYPO3\CMS\Extbase\Service\TypoScriptService $typoScriptService
-	 */
-	public function injectTyposcriptService(\TYPO3\CMS\Extbase\Service\TypoScriptService $typoScriptService) {
-		$this->typoScriptService = $typoScriptService;
-		$fc = new \TYPO3\CMS\Extbase\Configuration\FrontendConfigurationManager;
-		$ts = $this->typoScriptService->convertTypoScriptArrayToPlainArray($fc->getTypoScriptSetup());
-
-		$this->settings = $ts['plugin']['tx_typo3forum']['settings'];
-	}
-
-	/**
 	 * Constructor. Initializes all \TYPO3\CMS\Extbase\Persistence\ObjectStorage instances.
 	 *
 	 * @param string $subject The topic's subject.
@@ -312,7 +290,7 @@ class Topic extends AbstractEntity implements AccessibleInterface, Subscribeable
 	 * @return integer Page count
 	 */
 	public function getPageCount() {
-		return ceil($this->postCount / (int)$this->settings['pagebrowser']['topicShow']['itemsPerPage']);
+		return ceil($this->postCount / (int)$this->getSettings()['pagebrowser']['topicShow']['itemsPerPage']);
 	}
 
 	/**

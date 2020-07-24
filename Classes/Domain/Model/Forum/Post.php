@@ -279,6 +279,10 @@ class Post extends AbstractEntity implements AccessibleInterface, NotifiableInte
 		if ($user === NULL || $user->isAnonymous()) {
 			return FALSE;
 		} else {
+			if ($user->checkAccess($user, Access::TYPE_MODERATE)) {
+				return TRUE;
+			}
+
 			if ($this->getForum()->checkModerationAccess($user)) {
 				return TRUE;
 			}
@@ -349,7 +353,6 @@ class Post extends AbstractEntity implements AccessibleInterface, NotifiableInte
 	 * Sets the attachments.
 	 *
 	 * @param ObjectStorage $attachments The attachments.
-	 * @validate $attachments Tx_Typo3Forum_Domain_Validator_Forum_AttachmentValidator
 	 *
 	 * @return void
 	 */

@@ -39,8 +39,8 @@ class CacheManager {
 	 */
 	public function clearAll() {
 		/** @var ObjectManager $objectManager */
-		$objectManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
-		$cache = $objectManager->get('Mittwald\\Typo3Forum\\Cache\\Cache');
+		$objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+		$cache = $objectManager->get(Cache::class);
 		$cache->flush();
 		$this->deleteTemporaryFiles();
 	}
@@ -51,6 +51,12 @@ class CacheManager {
 	protected function deleteTemporaryFiles() {
 		foreach ($this->fileCachePaths as $fileCachePath) {
 			$files = glob(PATH_site . $fileCachePath . '/*');
+
+			if(!is_array($files)) {
+				// skip
+				continue;
+			}
+
 			foreach ($files as $file) {
 				if (is_file($file)) {
 					unlink($file);
@@ -58,5 +64,4 @@ class CacheManager {
 			}
 		}
 	}
-
 }
