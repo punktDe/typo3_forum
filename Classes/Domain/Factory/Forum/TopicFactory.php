@@ -30,46 +30,105 @@ use Mittwald\Typo3Forum\Domain\Model\Forum\Forum;
 use Mittwald\Typo3Forum\Domain\Model\Forum\Post;
 use Mittwald\Typo3Forum\Domain\Model\Forum\ShadowTopic;
 use Mittwald\Typo3Forum\Domain\Model\Forum\Topic;
+use Mittwald\Typo3Forum\Domain\Repository\Forum\CriteriaOptionRepository;
+use Mittwald\Typo3Forum\Domain\Repository\Forum\ForumRepository;
+use Mittwald\Typo3Forum\Domain\Repository\Forum\PostRepository;
+use Mittwald\Typo3Forum\Domain\Repository\Forum\TopicRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\InvalidClassException;
+use TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface;
 
 class TopicFactory extends AbstractFactory {
 
 	/**
-	 * @var \Mittwald\Typo3Forum\Domain\Repository\Forum\CriteriaOptionRepository
-	 * @inject
+	 * @var CriteriaOptionRepository
 	 */
 	protected $criteriaOptionRepository = NULL;
 
 	/**
-	 * @var \Mittwald\Typo3Forum\Domain\Repository\Forum\ForumRepository
-	 * @inject
+	 * @var ForumRepository
 	 */
 	protected $forumRepository = NULL;
 
 	/**
-	 * @var \Mittwald\Typo3Forum\Domain\Factory\Forum\PostFactory
-	 * @inject
+	 * @var PostFactory
 	 */
 	protected $postFactory = NULL;
 
 	/**
-	 * @var \Mittwald\Typo3Forum\Domain\Repository\Forum\PostRepository
-	 * @inject
+	 * @var PostRepository
 	 */
 	protected $postRepository = NULL;
 
 	/**
-	 * @var \Mittwald\Typo3Forum\Domain\Repository\Forum\TopicRepository
-	 * @inject
+	 * @var TopicRepository
 	 */
 	protected $topicRepository = NULL;
 
 	/**
-	 * @var \TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface
-	 * @inject
+	 * @var PersistenceManagerInterface
 	 */
 	protected $persistenceManager;
+
+
+
+	/**
+	 * @param CriteriaOptionRepository $criteriaOptionRepository
+	 */
+	public function injectCriteriaOptionRepository(CriteriaOptionRepository $criteriaOptionRepository): void
+	{
+		$this->criteriaOptionRepository = $criteriaOptionRepository;
+	}
+
+
+
+	/**
+	 * @param ForumRepository $forumRepository
+	 */
+	public function injectForumRepository(ForumRepository $forumRepository): void
+	{
+		$this->forumRepository = $forumRepository;
+	}
+
+
+
+	/**
+	 * @param PostFactory $postFactory
+	 */
+	public function injectPostFactory(PostFactory $postFactory): void
+	{
+		$this->postFactory = $postFactory;
+	}
+
+
+
+	/**
+	 * @param PostRepository $postRepository
+	 */
+	public function injectPostRepository(PostRepository $postRepository): void
+	{
+		$this->postRepository = $postRepository;
+	}
+
+
+	/**
+	 * @param TopicRepository $topicRepository
+	 */
+	public function injectTopicRepository(TopicRepository $topicRepository): void
+	{
+		$this->topicRepository = $topicRepository;
+	}
+
+
+	/**
+	 * @param PersistenceManagerInterface $persistenceManager
+	 */
+	public function injectPersistenceManagerInterface(PersistenceManagerInterface $persistenceManager): void
+	{
+		$this->persistenceManager = $persistenceManager;
+	}
+
+
 
 	/**
 	 * Creates a new topic.

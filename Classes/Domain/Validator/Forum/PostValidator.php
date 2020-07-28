@@ -24,15 +24,25 @@ namespace Mittwald\Typo3Forum\Domain\Validator\Forum;
  *  This copyright notice MUST APPEAR in all copies of the script!      *
  *                                                                      */
 
+use Mittwald\Typo3Forum\Domain\Repository\User\FrontendUserRepository;
 use TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator;
 
 class PostValidator extends AbstractValidator {
 
 	/**
-	 * @var \Mittwald\Typo3Forum\Domain\Repository\User\FrontendUserRepository
-	 * @inject
+	 * @var FrontendUserRepository
 	 */
 	protected $userRepository = NULL;
+
+
+
+	/**
+	 * @param FrontendUserRepository $userRepository
+	 */
+	public function injectUserRepository(FrontendUserRepository $userRepository): void
+	{
+		$this->userRepository = $userRepository;
+	}
 
 	/**
 	 * Check if $value is valid. If it is not valid, needs to add an error

@@ -27,7 +27,9 @@ namespace Mittwald\Typo3Forum\Domain\Model\Forum;
 use Mittwald\Typo3Forum\Domain\Model\AccessibleInterface;
 use Mittwald\Typo3Forum\Domain\Model\SubscribeableInterface;
 use Mittwald\Typo3Forum\Domain\Model\User\FrontendUser;
+use Mittwald\Typo3Forum\Service\Authentication\AuthenticationServiceInterface;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
+use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 
@@ -87,8 +89,7 @@ class Forum extends AbstractEntity implements AccessibleInterface, Subscribeable
 
 	/**
 	 * An instance of the Extbase object manager.
-	 * @var \TYPO3\CMS\Extbase\Object\ObjectManagerInterface
-	 * @inject
+	 * @var ObjectManagerInterface
 	 */
 	protected $objectManager;
 
@@ -143,8 +144,7 @@ class Forum extends AbstractEntity implements AccessibleInterface, Subscribeable
 
 	/**
 	 * An instance of the typo3_forum authentication service.
-	 * @var \Mittwald\Typo3Forum\Service\Authentication\AuthenticationServiceInterface
-	 * @inject
+	 * @var AuthenticationServiceInterface
 	 */
 	protected $authenticationService;
 
@@ -153,6 +153,26 @@ class Forum extends AbstractEntity implements AccessibleInterface, Subscribeable
 	 * @var int
 	 */
 	protected $sorting;
+
+
+	/**
+	 * @param ObjectManagerInterface $objectManager
+	 */
+	public function injectObjectManager(ObjectManagerInterface $objectManager): void
+	{
+		$this->objectManager = $objectManager;
+	}
+
+
+	/**
+	 * @param AuthenticationServiceInterface $authenticationService
+	 */
+	public function injectAuthenticationService(AuthenticationServiceInterface $authenticationService): void
+	{
+		$this->authenticationService = $authenticationService;
+	}
+
+
 
 	/**
 	 * Constructor. Initializes all \TYPO3\CMS\Extbase\Persistence\ObjectStorage instances.

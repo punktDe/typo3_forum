@@ -25,12 +25,19 @@ namespace Mittwald\Typo3Forum\Controller;
  *                                                                      */
 
 use Mittwald\Typo3Forum\Domain\Exception\Authentication\NotLoggedInException;
+use Mittwald\Typo3Forum\Domain\Factory\User\PrivateMessageFactory;
 use Mittwald\Typo3Forum\Domain\Model\Forum\Forum;
 use Mittwald\Typo3Forum\Domain\Model\Forum\Topic;
 use Mittwald\Typo3Forum\Domain\Model\SubscribeableInterface;
 use Mittwald\Typo3Forum\Domain\Model\User\FrontendUser;
 use Mittwald\Typo3Forum\Domain\Model\User\PrivateMessage;
 use Mittwald\Typo3Forum\Domain\Model\User\PrivateMessageText;
+use Mittwald\Typo3Forum\Domain\Repository\Forum\ForumRepository;
+use Mittwald\Typo3Forum\Domain\Repository\Forum\TopicRepository;
+use Mittwald\Typo3Forum\Domain\Repository\User\NotificationRepository;
+use Mittwald\Typo3Forum\Domain\Repository\User\PrivateMessageRepository;
+use Mittwald\Typo3Forum\Domain\Repository\User\RankRepository;
+use Mittwald\Typo3Forum\Domain\Repository\User\UserfieldRepository;
 use TYPO3\CMS\Core\FormProtection\FormProtectionFactory;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Extbase\Mvc\Exception\InvalidArgumentValueException;
@@ -39,46 +46,105 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 class UserController extends AbstractController {
 
 	/**
-	 * @var \Mittwald\Typo3Forum\Domain\Repository\Forum\ForumRepository
-	 * @inject
+	 * @var ForumRepository
 	 */
 	protected $forumRepository = NULL;
 
 	/**
-	 * @var \Mittwald\Typo3Forum\Domain\Repository\User\PrivateMessageRepository
-	 * @inject
+	 * @var PrivateMessageRepository
 	 */
 	protected $privateMessageRepository = NULL;
 
 	/**
-	 * @var \Mittwald\Typo3Forum\Domain\Repository\User\NotificationRepository
-	 * @inject
+	 * @var NotificationRepository
 	 */
 	protected $notificationRepository = NULL;
 
 	/**
-	 * @var \Mittwald\Typo3Forum\Domain\Factory\User\PrivateMessageFactory
-	 * @inject
+	 * @var PrivateMessageFactory
 	 */
 	protected $privateMessageFactory;
 
 	/**
-	 * @var \Mittwald\Typo3Forum\Domain\Repository\User\RankRepository
-	 * @inject
+	 * @var RankRepository
 	 */
 	protected $rankRepository = NULL;
 
 	/**
-	 * @var \Mittwald\Typo3Forum\Domain\Repository\Forum\TopicRepository
-	 * @inject
+	 * @var TopicRepository
 	 */
 	protected $topicRepository = NULL;
 
 	/**
-	 * @var \Mittwald\Typo3Forum\Domain\Repository\User\UserfieldRepository
-	 * @inject
+	 * @var UserfieldRepository
 	 */
 	protected $userfieldRepository = NULL;
+
+
+
+	/**
+	 * @param ForumRepository $forumRepository
+	 */
+	public function injectForumRepository(ForumRepository $forumRepository): void
+	{
+		$this->forumRepository = $forumRepository;
+	}
+
+
+	/**
+	 * @param PrivateMessageRepository $privateMessageRepository
+	 */
+	public function injectPrivateMessageRepository(PrivateMessageRepository $privateMessageRepository): void
+	{
+		$this->privateMessageRepository = $privateMessageRepository;
+	}
+
+
+	/**
+	 * @param NotificationRepository $notificationRepository
+	 */
+	public function injectNotificationRepository(NotificationRepository $notificationRepository): void
+	{
+		$this->notificationRepository = $notificationRepository;
+	}
+
+
+	/**
+	 * @param PrivateMessageFactory $privateMessageFactory
+	 */
+	public function injectPrivateMessageFactory(PrivateMessageFactory $privateMessageFactory): void
+	{
+		$this->privateMessageFactory = $privateMessageFactory;
+	}
+
+
+	/**
+	 * @param RankRepository $rankRepository
+	 */
+	public function injectRankRepository(RankRepository $rankRepository): void
+	{
+		$this->rankRepository = $rankRepository;
+	}
+
+
+	/**
+	 * @param TopicRepository $topicRepository
+	 */
+	public function injectTopicRepository(TopicRepository $topicRepository): void
+	{
+		$this->topicRepository = $topicRepository;
+	}
+
+
+	/**
+	 * @param UserfieldRepository $userfieldRepository
+	 */
+	public function injectUserfieldRepository(UserfieldRepository $userfieldRepository): void
+	{
+		$this->userfieldRepository = $userfieldRepository;
+	}
+
+
 
 	/**
 	 * Displays a list of all existing users.

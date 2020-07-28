@@ -23,13 +23,14 @@ namespace Mittwald\Typo3Forum\ViewHelpers\Ext;
  *  This copyright notice MUST APPEAR in all copies of the script!      *
  *                                                                      */
 
+use Mittwald\Typo3Forum\Configuration\ConfigurationBuilder;
+use Mittwald\Typo3Forum\Service\Authentication\AuthenticationServiceInterface;
 use TYPO3\CMS\Fluid\ViewHelpers\CObjectViewHelper;
 
 class UserLinkViewHelper extends CObjectViewHelper {
 
     /**
-     * @var \Mittwald\Typo3Forum\Configuration\ConfigurationBuilder
-     * @inject
+     * @var ConfigurationBuilder
      */
     protected $configurationBuilder;
 
@@ -42,10 +43,30 @@ class UserLinkViewHelper extends CObjectViewHelper {
 	/**
 	 * An authentication service. Handles the authentication mechanism.
 	 *
-	 * @var \Mittwald\Typo3Forum\Service\Authentication\AuthenticationServiceInterface
-	 * @inject
+	 * @var AuthenticationServiceInterface
 	 */
 	protected $authenticationService = NULL;
+
+
+	/**
+	 * @param ConfigurationBuilder $configurationBuilder
+	 */
+	public function injectConfigurationBuilder(ConfigurationBuilder $configurationBuilder): void
+	{
+		$this->configurationBuilder = $configurationBuilder;
+	}
+
+
+
+	/**
+	 * @param AuthenticationServiceInterface $authenticationService
+	 */
+	public function injectAuthenticationService(AuthenticationServiceInterface $authenticationService): void
+	{
+		$this->authenticationService = $authenticationService;
+	}
+
+
 
 	public function initializeObject() {
 		$this->settings = $this->configurationBuilder->getSettings();

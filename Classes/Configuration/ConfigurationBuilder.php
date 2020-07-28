@@ -29,8 +29,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class ConfigurationBuilder implements SingletonInterface {
 
     /**
-     * @var \TYPO3\CMS\Core\TypoScript\TypoScriptService
-     * @inject
+     * @var TypoScriptService
      */
     protected $typoScriptService;
 
@@ -43,6 +42,15 @@ class ConfigurationBuilder implements SingletonInterface {
      * @var array
      */
     protected $persistenceSettings = [];
+
+
+	/**
+	 * @param TypoScriptService $typoScriptService
+	 */
+    public function injectTypoScriptService(TypoScriptService $typoScriptService): void
+	{
+		$this->typoScriptService = $typoScriptService;
+	}
 
 	/**
 	 * @return array

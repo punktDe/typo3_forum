@@ -27,6 +27,7 @@ namespace Mittwald\Typo3Forum\ViewHelpers\User;
 use Mittwald\Typo3Forum\Domain\Model\User\AnonymousFrontendUser;
 use Mittwald\Typo3Forum\Domain\Model\User\FrontendUser;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Extbase\SignalSlot\Dispatcher;
 use TYPO3\CMS\Fluid\ViewHelpers\CObjectViewHelper;
 
 /**
@@ -36,10 +37,19 @@ class AvatarUrlViewHelper extends CObjectViewHelper {
 
 	/**
 	 * An instance of the Extbase Signal-/Slot-Dispatcher.
-	 * @var \TYPO3\CMS\Extbase\SignalSlot\Dispatcher
-	 * @inject
+	 * @var Dispatcher
 	 */
 	protected $slots;
+
+
+
+	/**
+	 * @param Dispatcher $slots
+	 */
+	public function injectSlots(Dispatcher $slots): void
+	{
+		$this->slots = $slots;
+	}
 
 	/**
 	 *

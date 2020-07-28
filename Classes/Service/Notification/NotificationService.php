@@ -24,13 +24,16 @@
 
 namespace Mittwald\Typo3Forum\Service\Notification;
 
+use Mittwald\Typo3Forum\Configuration\ConfigurationBuilder;
 use Mittwald\Typo3Forum\Domain\Model\Forum\Forum;
 use Mittwald\Typo3Forum\Domain\Model\Forum\Post;
 use Mittwald\Typo3Forum\Domain\Model\Forum\Topic;
 use Mittwald\Typo3Forum\Domain\Model\NotifiableInterface;
 use Mittwald\Typo3Forum\Domain\Model\SubscribeableInterface;
 use Mittwald\Typo3Forum\Service\AbstractService;
+use Mittwald\Typo3Forum\Service\Mailing\HTMLMailingService;
 use Mittwald\Typo3Forum\Utility\Localization;
+use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 
 /**
  * Service class for notifications. This service notifies subscribers of
@@ -39,20 +42,17 @@ use Mittwald\Typo3Forum\Utility\Localization;
 class NotificationService extends AbstractService implements NotificationServiceInterface {
 
 	/**
-	 * @var \Mittwald\Typo3Forum\Service\Mailing\HTMLMailingService
-	 * @inject
+	 * @var HTMLMailingService
 	 */
 	protected $htmlMailingService;
 
 	/**
-	 * @var \TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder
-	 * @inject
+	 * @var UriBuilder
 	 */
 	protected $uriBuilder;
 
 	/**
-	 * @var \Mittwald\Typo3Forum\Configuration\ConfigurationBuilder
-	 * @inject
+	 * @var ConfigurationBuilder
 	 */
 	protected $configurationBuilder;
 
@@ -62,6 +62,36 @@ class NotificationService extends AbstractService implements NotificationService
 	 * @var array
 	 */
 	protected $settings;
+
+
+
+	/**
+	 * @param HTMLMailingService $htmlMailingService
+	 */
+	public function injectHtmlMailingService(HTMLMailingService $htmlMailingService): void
+	{
+		$this->htmlMailingService = $htmlMailingService;
+	}
+
+
+
+	/**
+	 * @param UriBuilder $uriBuilder
+	 */
+	public function injectUriBuilder(UriBuilder $uriBuilder): void
+	{
+		$this->uriBuilder = $uriBuilder;
+	}
+
+
+
+	/**
+	 * @param ConfigurationBuilder $configurationBuilder
+	 */
+	public function injectConfigurationBuilder(ConfigurationBuilder $configurationBuilder): void
+	{
+		$this->configurationBuilder = $configurationBuilder;
+	}
 
 	public function initializeObject() {
 		$this->settings = $this->configurationBuilder->getSettings();

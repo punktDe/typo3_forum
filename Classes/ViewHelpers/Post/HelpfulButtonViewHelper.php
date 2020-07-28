@@ -26,6 +26,7 @@ namespace Mittwald\Typo3Forum\ViewHelpers\Post;
  *                                                                      */
 
 use Mittwald\Typo3Forum\Domain\Model\Forum\Post;
+use Mittwald\Typo3Forum\Service\Authentication\AuthenticationServiceInterface;
 use TYPO3\CMS\Fluid\ViewHelpers\CObjectViewHelper;
 
 class HelpfulButtonViewHelper extends CObjectViewHelper
@@ -45,10 +46,19 @@ class HelpfulButtonViewHelper extends CObjectViewHelper
     /**
      * An authentication service. Handles the authentication mechanism.
      *
-     * @var \Mittwald\Typo3Forum\Service\Authentication\AuthenticationServiceInterface
-     * @inject
+     * @var AuthenticationServiceInterface
      */
     protected $authenticationService;
+
+
+	/**
+	 * @param AuthenticationServiceInterface $authenticationService
+	 */
+	public function injectAuthenticationService(AuthenticationServiceInterface $authenticationService): void
+	{
+		$this->authenticationService = $authenticationService;
+	}
+
 
     public function initialize()
     {

@@ -33,6 +33,7 @@ use Mittwald\Typo3Forum\Domain\Model\Forum\Forum;
 use Mittwald\Typo3Forum\Domain\Model\Forum\Topic;
 use Mittwald\Typo3Forum\Domain\Model\ReadableInterface;
 use Mittwald\Typo3Forum\Domain\Model\SubscribeableInterface;
+use Mittwald\Typo3Forum\Domain\Repository\User\RankRepository;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
@@ -51,10 +52,18 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser implemen
 	/**
 	 * The rank repository
 	 *
-	 * @var \Mittwald\Typo3Forum\Domain\Repository\User\RankRepository
-	 * @inject
+	 * @var RankRepository
 	 */
 	protected $rankRepository = NULL;
+
+
+	/**
+	 * @param RankRepository $rankRepository
+	 */
+	public function injectRankRepository(RankRepository $rankRepository): void
+	{
+		$this->rankRepository = $rankRepository;
+	}
 
 	/**
 	 * Forum post count

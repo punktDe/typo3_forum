@@ -26,9 +26,10 @@ namespace Mittwald\Typo3Forum\Domain\Repository\User;
 use Mittwald\Typo3Forum\Domain\Model\User\AnonymousFrontendUser;
 use Mittwald\Typo3Forum\Domain\Model\User\FrontendUser;
 use Mittwald\Typo3Forum\Domain\Repository\AbstractRepository;
-	use TYPO3\CMS\Core\Utility\GeneralUtility;
-	use TYPO3\CMS\Extbase\Object\ObjectManager;
-	use TYPO3\CMS\Extbase\Persistence\QueryInterface;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Configuration\FrontendConfigurationManager;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 
 
 /**
@@ -50,10 +51,19 @@ use Mittwald\Typo3Forum\Domain\Repository\AbstractRepository;
 class FrontendUserRepository extends AbstractRepository  {
 
 	/**
-	 * @var \TYPO3\CMS\Extbase\Configuration\FrontendConfigurationManager
-	 * @inject
+	 * @var FrontendConfigurationManager
 	 */
 	protected $frontendConfigurationManager;
+
+
+
+	/**
+	 * @param FrontendConfigurationManager $frontendConfigurationManager
+	 */
+	public function injectFrontendConfigurationManager(FrontendConfigurationManager $frontendConfigurationManager): void
+	{
+		$this->frontendConfigurationManager = $frontendConfigurationManager;
+	}
 
 	/**
 	 * Finds the user that is currently logged in, or NULL if no user is logged in.

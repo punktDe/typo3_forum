@@ -25,16 +25,26 @@ namespace Mittwald\Typo3Forum\Domain\Validator\Forum;
 *                                                                      */
 
 use Mittwald\Typo3Forum\Domain\Model\Forum\Attachment;
+use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 use TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator;
 
 class AttachmentPlainValidator extends AbstractValidator {
 
 	/**
 	 * An instance of the extbase object manager.
-	 * @var \TYPO3\CMS\Extbase\Object\ObjectManagerInterface
-	 * @inject
+	 * @var ObjectManagerInterface
 	 */
 	protected $objectManager = NULL;
+
+
+
+	/**
+	 * @param ObjectManagerInterface $objectManager
+	 */
+	public function injectObjectManager(ObjectManagerInterface $objectManager): void
+	{
+		$this->objectManager = $objectManager;
+	}
 
 	/**
 	 * Check if $value is valid. If it is not valid, needs to add an error

@@ -25,83 +25,199 @@ namespace Mittwald\Typo3Forum\Controller;
  *                                                                      */
 
 use Mittwald\Typo3Forum\Domain\Exception\Authentication\NoAccessException;
+use Mittwald\Typo3Forum\Domain\Factory\Forum\PostFactory;
+use Mittwald\Typo3Forum\Domain\Factory\Forum\TopicFactory;
 use Mittwald\Typo3Forum\Domain\Model\Forum\Forum;
 use Mittwald\Typo3Forum\Domain\Model\Forum\Post;
 use Mittwald\Typo3Forum\Domain\Model\Forum\Topic;
+use Mittwald\Typo3Forum\Domain\Repository\Forum\AdRepository;
+use Mittwald\Typo3Forum\Domain\Repository\Forum\CriteriaRepository;
+use Mittwald\Typo3Forum\Domain\Repository\Forum\ForumRepository;
+use Mittwald\Typo3Forum\Domain\Repository\Forum\PostRepository;
+use Mittwald\Typo3Forum\Domain\Repository\Forum\TagRepository;
+use Mittwald\Typo3Forum\Domain\Repository\Forum\TopicRepository;
+use Mittwald\Typo3Forum\Service\AttachmentService;
+use Mittwald\Typo3Forum\Service\SessionHandlingService;
+use Mittwald\Typo3Forum\Service\TagService;
+use TYPO3\CMS\Core\Database\DatabaseConnection;
 use TYPO3\CMS\Core\FormProtection\FormProtectionFactory;
 
 class TopicController extends AbstractController {
 
 	/**
-	 * @var \Mittwald\Typo3Forum\Domain\Repository\Forum\AdRepository
-	 * @inject
+	 * @var AdRepository
 	 */
 	protected $adRepository;
 
 	/**
-	 * @var \Mittwald\Typo3Forum\Service\AttachmentService
-	 * @inject
+	 * @var AttachmentService
 	 */
 	protected $attachmentService;
 
 	/**
-	 * @var \Mittwald\Typo3Forum\Domain\Repository\Forum\CriteriaRepository
-	 * @inject
+	 * @var CriteriaRepository
 	 */
 	protected $criteraRepository;
 
+
 	/**
-	 * @var \TYPO3\CMS\Core\Database\DatabaseConnection
+	 * @var DatabaseConnection
 	 */
 	protected $databaseConnection;
 
 	/**
-	 * @var \Mittwald\Typo3Forum\Domain\Repository\Forum\ForumRepository
-	 * @inject
+	 * @var ForumRepository
 	 */
 	protected $forumRepository;
 
 	/**
-	 * @var \Mittwald\Typo3Forum\Domain\Factory\Forum\PostFactory
-	 * @inject
+	 * @var PostFactory
 	 */
 	protected $postFactory;
 
 	/**
-	 * @var \Mittwald\Typo3Forum\Domain\Repository\Forum\PostRepository
-	 * @inject
+	 * @var PostRepository
 	 */
 	protected $postRepository;
 
 	/**
-	 * @var \Mittwald\Typo3Forum\Service\SessionHandlingService
-	 * @inject
+	 * @var SessionHandlingService
 	 */
 	protected $sessionHandling;
 
 	/**
-	 * @var \Mittwald\Typo3Forum\Domain\Repository\Forum\TagRepository
-	 * @inject
+	 * @var TagRepository
 	 */
 	protected $tagRepository;
 
 	/**
-	 * @var \Mittwald\Typo3Forum\Service\TagService
-	 * @inject
+	 * @var TagService
 	 */
 	protected $tagService = NULL;
 
 	/**
-	 * @var \Mittwald\Typo3Forum\Domain\Factory\Forum\TopicFactory
-	 * @inject
+	 * @var TopicFactory
 	 */
 	protected $topicFactory;
 
 	/**
-	 * @var \Mittwald\Typo3Forum\Domain\Repository\Forum\TopicRepository
-	 * @inject
+	 * @var TopicRepository
 	 */
 	protected $topicRepository;
+
+
+
+	/**
+	 * @param AdRepository $adRepository
+	 */
+	public function injectAdRepository(AdRepository $adRepository): void
+	{
+		$this->adRepository = $adRepository;
+	}
+
+
+	/**
+	 * @param AttachmentService $attachmentService
+	 */
+	public function injectAttachmentService(AttachmentService $attachmentService): void
+	{
+		$this->attachmentService = $attachmentService;
+	}
+
+
+
+	/**
+	 * @param CriteriaRepository $criteraRepository
+	 */
+	public function injectCriteraRepository(CriteriaRepository $criteraRepository): void
+	{
+		$this->criteraRepository = $criteraRepository;
+	}
+
+
+	/**
+	 * @param DatabaseConnection $databaseConnection
+	 */
+	public function injectDatabaseConnection(DatabaseConnection $databaseConnection): void
+	{
+		$this->databaseConnection = $databaseConnection;
+	}
+
+
+	/**
+	 * @param ForumRepository $forumRepository
+	 */
+	public function injectForumRepository(ForumRepository $forumRepository): void
+	{
+		$this->forumRepository = $forumRepository;
+	}
+
+
+	/**
+	 * @param PostFactory $postFactory
+	 */
+	public function injectPostFactory(PostFactory $postFactory): void
+	{
+		$this->postFactory = $postFactory;
+	}
+
+
+
+	/**
+	 * @param PostRepository $postRepository
+	 */
+	public function injectPostRepository(PostRepository $postRepository): void
+	{
+		$this->postRepository = $postRepository;
+	}
+
+
+	/**
+	 * @param SessionHandlingService $sessionHandling
+	 */
+	public function injectSessionHandling(SessionHandlingService $sessionHandling): void
+	{
+		$this->sessionHandling = $sessionHandling;
+	}
+
+
+	/**
+	 * @param TagRepository $tagRepository
+	 */
+	public function injectTagRepository(TagRepository $tagRepository): void
+	{
+		$this->tagRepository = $tagRepository;
+	}
+
+
+
+	/**
+	 * @param TagService $tagService
+	 */
+	public function injectTagService(TagService $tagService): void
+	{
+		$this->tagService = $tagService;
+	}
+
+
+	/**
+	 * @param TopicFactory $topicFactory
+	 */
+	public function injectTopicFactory(TopicFactory $topicFactory): void
+	{
+		$this->topicFactory = $topicFactory;
+	}
+
+
+	/**
+	 * @param TopicRepository $topicRepository
+	 */
+	public function injectTopicRepository(TopicRepository $topicRepository): void
+	{
+		$this->topicRepository = $topicRepository;
+	}
+
+
 
 	/**
 	 *

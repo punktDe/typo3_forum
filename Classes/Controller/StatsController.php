@@ -24,13 +24,21 @@ namespace Mittwald\Typo3Forum\Controller;
  *  This copyright notice MUST APPEAR in all copies of the script!      *
  *                                                                      */
 
+use Mittwald\Typo3Forum\Domain\Repository\Stats\SummaryRepository;
+
 class StatsController extends AbstractController {
 
 	/**
-	 * @var \Mittwald\Typo3Forum\Domain\Repository\Stats\SummaryRepository
-	 * @inject
+	 * @var SummaryRepository
+	 *
 	 */
 	protected $summaryRepository;
+
+
+	public function injectSummaryRepository(SummaryRepository $summaryRepository):void
+	{
+		$this->summaryRepository = $summaryRepository;
+	}
 
 	/**
 	 * Listing Action.
@@ -47,5 +55,4 @@ class StatsController extends AbstractController {
 		$this->view->assign('partial', $partial);
 		$this->view->assign('dataset', $dataset);
 	}
-
 }

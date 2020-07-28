@@ -37,10 +37,19 @@ final class SubscriptionListener {
 
 	/**
 	 * An instance of the notification service.
-	 * @var \Mittwald\Typo3Forum\Service\Notification\NotificationServiceInterface
-	 * @inject
+	 * @var NotificationServiceInterface
 	 */
 	protected $notificationService = NULL;
+
+
+
+	/**
+	 * @param NotificationServiceInterface $notificationService
+	 */
+	public function injectNotificationService(NotificationServiceInterface $notificationService): void
+	{
+		$this->notificationService = $notificationService;
+	}
 
 	/**
 	 * Is fired when a new post is created.

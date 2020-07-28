@@ -5,6 +5,7 @@ namespace Mittwald\Typo3Forum\Service;
 use Mittwald\Typo3Forum\Domain\Model\Forum\Attachment;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 use TYPO3\CMS\Core\Type\File\FileInfo;
 
@@ -12,10 +13,19 @@ class AttachmentService implements SingletonInterface
 {
     /**
      * An instance of the Extbase object manager.
-     * @var \TYPO3\CMS\Extbase\Object\ObjectManagerInterface
-     * @inject
+     * @var ObjectManagerInterface
      */
     protected $objectManager = null;
+
+
+
+	/**
+	 * @param ObjectManagerInterface $objectManager
+	 */
+    public function injectObjectManager(ObjectManagerInterface $objectManager): void
+	{
+		$this->objectManager = $objectManager;
+	}
 
     /**
      * Converts HTML-array to an object

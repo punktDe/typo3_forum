@@ -24,27 +24,27 @@ namespace Mittwald\Typo3Forum\Domain\Factory;
  *  This copyright notice MUST APPEAR in all copies of the script!      *
  *                                                                      */
 
+use Mittwald\Typo3Forum\Configuration\ConfigurationBuilder;
 use Mittwald\Typo3Forum\Domain\Model\User\FrontendUser;
+use Mittwald\Typo3Forum\Domain\Repository\User\FrontendUserRepository;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Extbase\DomainObject\AbstractDomainObject;
+use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 
 abstract class AbstractFactory implements SingletonInterface {
 
 	/**
-	 * @var \Mittwald\Typo3Forum\Domain\Repository\User\FrontendUserRepository
-	 * @inject
+	 * @var FrontendUserRepository
 	 */
 	protected $frontendUserRepository = NULL;
 
 	/**
-	 * @var \TYPO3\CMS\Extbase\Object\ObjectManagerInterface
-	 * @inject
+	 * @var ObjectManagerInterface
 	 */
 	protected $objectManager = NULL;
 
     /**
-     * @var \Mittwald\Typo3Forum\Configuration\ConfigurationBuilder
-     * @inject
+     * @var ConfigurationBuilder
      */
     protected $configurationBuilder;
 
@@ -53,6 +53,36 @@ abstract class AbstractFactory implements SingletonInterface {
 	 * @var array
 	 */
 	protected $settings;
+
+
+
+	/**
+	 * @param FrontendUserRepository $frontendUserRepository
+	 */
+	public function injectFrontendUserRepository(FrontendUserRepository $frontendUserRepository): void
+	{
+		$this->frontendUserRepository = $frontendUserRepository;
+	}
+
+
+
+	/**
+	 * @param ConfigurationBuilder $configurationBuilder
+	 */
+    public function injectConfigurationBuilder(ConfigurationBuilder $configurationBuilder): void
+	{
+		$this->configurationBuilder = $configurationBuilder;
+	}
+
+
+
+	/**
+	 * @param ObjectManagerInterface $objectManager
+	 */
+	public function injectObjectManager(ObjectManagerInterface $objectManager): void
+	{
+		$this->objectManager = $objectManager;
+	}
 
 	/**
 	 *

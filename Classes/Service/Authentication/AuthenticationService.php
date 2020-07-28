@@ -24,12 +24,14 @@ namespace Mittwald\Typo3Forum\Service\Authentication;
  *  This copyright notice MUST APPEAR in all copies of the script!      *
  *                                                                      */
 
+use Mittwald\Typo3Forum\Cache\Cache;
 use Mittwald\Typo3Forum\Domain\Exception\Authentication\NoAccessException;
 use Mittwald\Typo3Forum\Domain\Model\AccessibleInterface;
 use Mittwald\Typo3Forum\Domain\Model\Forum\Access;
 use Mittwald\Typo3Forum\Domain\Model\Forum\Forum;
 use Mittwald\Typo3Forum\Domain\Model\Forum\Post;
 use Mittwald\Typo3Forum\Domain\Model\Forum\Topic;
+use Mittwald\Typo3Forum\Domain\Repository\User\FrontendUserRepository;
 use Mittwald\Typo3Forum\Service\AbstractService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
@@ -40,15 +42,13 @@ use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 class AuthenticationService extends AbstractService implements AuthenticationServiceInterface {
 
 	/**
-	 * @var \Mittwald\Typo3Forum\Domain\Repository\User\FrontendUserRepository
-	 * @inject
+	 * @var FrontendUserRepository
 	 */
 	protected $frontendUserRepository = NULL;
 
 	/**
 	 * An instance of the typo3_forum cache class.
-	 * @var \Mittwald\Typo3Forum\Cache\Cache
-	 * @inject
+	 * @var Cache
 	 */
 	protected $cache = NULL;
 
@@ -70,6 +70,26 @@ class AuthenticationService extends AbstractService implements AuthenticationSer
 	 * @var TypoScriptFrontendController
 	 */
 	protected $typoScriptFrontendController;
+
+
+
+	/**
+	 * @param FrontendUserRepository $frontendUserRepository
+	 */
+	public function injectFrontendUserRepository(FrontendUserRepository $frontendUserRepository): void
+	{
+		$this->frontendUserRepository = $frontendUserRepository;
+	}
+
+
+
+	/**
+	 * @param Cache $cache
+	 */
+	public function injectCache(Cache $cache): void
+	{
+		$this->cache = $cache;
+	}
 
 
 	public function __construct()

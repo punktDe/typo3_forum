@@ -26,20 +26,39 @@ namespace Mittwald\Typo3Forum\Controller;
 
 use Mittwald\Typo3Forum\Domain\Exception\Authentication\NotLoggedInException;
 use Mittwald\Typo3Forum\Domain\Model\Forum\Tag;
+use Mittwald\Typo3Forum\Domain\Repository\Forum\TagRepository;
+use Mittwald\Typo3Forum\Domain\Repository\Forum\TopicRepository;
 
 class TagController extends AbstractController {
 
 	/**
-	 * @var \Mittwald\Typo3Forum\Domain\Repository\Forum\TagRepository
-	 * @inject
+	 * @var TagRepository
 	 */
 	protected $tagRepository;
 
+
 	/**
-	 * @var \Mittwald\Typo3Forum\Domain\Repository\Forum\TopicRepository
-	 * @inject
+	 * @var TopicRepository
 	 */
 	protected $topicRepository;
+
+
+	/**
+	 * @param TagRepository $tagRepository
+	 */
+	public function injectTagRepository(TagRepository $tagRepository): void
+	{
+		$this->tagRepository = $tagRepository;
+	}
+
+
+	/**
+	 * @param TopicRepository $topicRepository
+	 */
+	public function injectTopicRepository(TopicRepository $topicRepository): void
+	{
+		$this->topicRepository = $topicRepository;
+	}
 
 	/**
 	 * Listing all tags of this forum.
