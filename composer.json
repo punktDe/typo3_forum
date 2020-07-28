@@ -33,7 +33,10 @@
 	"autoload": {
 		"psr-4": {
 			"Mittwald\\Typo3Forum\\": "Classes/"
-		}
+		},
+		"classmap": [
+			"web/typo3conf/ext/typo3_forum/Resources/Private/Libraries"
+		]
 	},
 	"autoload-dev": {
 		"psr-4": {
