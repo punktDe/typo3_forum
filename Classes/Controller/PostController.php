@@ -234,7 +234,7 @@ class PostController extends AbstractController {
 	/**
 	 * Displays the form for creating a new post.
 	 *
-	 * @ignorevalidation $post
+	 * @TYPO3\CMS\Extbase\Annotation\IgnoreValidation("post")
 	 *
 	 * @param Topic $topic The topic in which the new post is to be created.
 	 * @param Post $post The new post.
@@ -316,7 +316,8 @@ class PostController extends AbstractController {
 	/**
 	 * Displays a form for editing a post.
 	 *
-	 * @ignorevalidation $post
+	 * @TYPO3\CMS\Extbase\Annotation\IgnoreValidation("post")
+	 *
 	 * @param Post $post The post that is to be edited.
 	 * @return void
 	 */

@@ -102,7 +102,7 @@ class ReportController extends AbstractController {
 	 * @param FrontendUser $user
 	 * @param ReportComment $firstComment
 	 *
-	 * @ignorevalidation $firstComment
+	 * @TYPO3\CMS\Extbase\Annotation\IgnoreValidation("firstComment")
 	 */
 	public function newUserReportAction(FrontendUser $user, ReportComment $firstComment = NULL) {
 		$this->view->assignMultiple([
@@ -117,7 +117,7 @@ class ReportController extends AbstractController {
 	 * @param Post $post
 	 * @param ReportComment $firstComment
 	 *
-	 * @ignorevalidation $firstComment
+	 * @TYPO3\CMS\Extbase\Annotation\IgnoreValidation("firstComment")
 	 */
 	public function newPostReportAction(Post $post, ReportComment $firstComment = NULL) {
 		$this->authenticationService->assertReadAuthorization($post);

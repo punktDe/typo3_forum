@@ -223,7 +223,7 @@ class ModerationController extends AbstractController {
 	 * @param Report $report
 	 * @param ReportComment $comment
 	 *
-	 * @ignorevalidation $comment
+	 * @TYPO3\CMS\Extbase\Annotation\IgnoreValidation("comment")
 	 */
 	public function newReportCommentAction(Report $report, ReportComment $comment = NULL) {
 		$this->view->assignMultiple([

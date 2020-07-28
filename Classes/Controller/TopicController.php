@@ -313,7 +313,7 @@ class TopicController extends AbstractController {
 	 * @param Post $post The first post of the new topic.
 	 * @param string $subject The subject of the new topic
 	 *
-	 * @ignorevalidation $post
+	 * @TYPO3\CMS\Extbase\Annotation\IgnoreValidation("post")
 	 */
 	public function newAction(Forum $forum, Post $post = NULL, $subject = NULL) {
 		$this->authenticationService->assertNewTopicAuthorization($forum);
