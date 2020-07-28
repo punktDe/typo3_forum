@@ -33,6 +33,7 @@ use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
+use TYPO3\CMS\Extbase\Annotation\ORM\Lazy;
 
 /**
  * A forum post. Forum posts are submitted to the access control mechanism and can be
@@ -86,14 +87,14 @@ class Post extends AbstractEntity implements AccessibleInterface, NotifiableInte
 	/**
 	 * All subscribers of this forum.
 	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Mittwald\Typo3Forum\Domain\Model\User\FrontendUser>
-	 * @lazy
+	 * @Lazy()
 	 */
 	protected $supporters;
 
 	/**
 	 * Attachments.
 	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Mittwald\Typo3Forum\Domain\Model\Forum\Attachment>
-	 * @lazy
+	 * @Lazy()
 	 */
 	protected $attachments;
 

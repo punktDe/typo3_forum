@@ -28,6 +28,7 @@ use Mittwald\Typo3Forum\Configuration\ConfigurationBuilder;
 use Mittwald\Typo3Forum\Domain\Model\ConfigurableEntityTrait;
 use Mittwald\Typo3Forum\Domain\Model\ConfigurableInterface;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
+use TYPO3\CMS\Extbase\Annotation\ORM\Lazy;
 
 class Attachment extends AbstractEntity implements ConfigurableInterface {
 
@@ -35,7 +36,7 @@ class Attachment extends AbstractEntity implements ConfigurableInterface {
 	/**
 	 * The attachment file name.
 	 * @var \Mittwald\Typo3Forum\Domain\Model\Forum\Post
-	 * @lazy
+	 * @Lazy()
 	 */
 	protected $post;
 
