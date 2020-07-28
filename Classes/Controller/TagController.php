@@ -28,6 +28,7 @@ use Mittwald\Typo3Forum\Domain\Exception\Authentication\NotLoggedInException;
 use Mittwald\Typo3Forum\Domain\Model\Forum\Tag;
 use Mittwald\Typo3Forum\Domain\Repository\Forum\TagRepository;
 use Mittwald\Typo3Forum\Domain\Repository\Forum\TopicRepository;
+use TYPO3\CMS\Extbase\Annotation as Extbase;
 
 class TagController extends AbstractController {
 
@@ -101,7 +102,7 @@ class TagController extends AbstractController {
 	 * @param string $name
 	 * @param string $subscribe
 	 *
-	 * @validate $name \Mittwald\Typo3Forum\Domain\Validator\Forum\TagValidator
+	 * @Extbase\Validate("Mittwald\Typo3Forum\Domain\Validator\Forum\TagValidator", param="name")
 	 * @throws NotLoggedInException
 	 */
 	public function createAction($name = '', $subscribe = '') {

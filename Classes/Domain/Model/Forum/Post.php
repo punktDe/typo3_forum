@@ -34,6 +34,7 @@ use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 use TYPO3\CMS\Extbase\Annotation\ORM\Lazy;
+use TYPO3\CMS\Extbase\Annotation as Extbase;
 
 /**
  * A forum post. Forum posts are submitted to the access control mechanism and can be
@@ -45,7 +46,7 @@ class Post extends AbstractEntity implements AccessibleInterface, NotifiableInte
 	 * The post text.
 	 *
 	 * @var string
-	 * @validate NotEmpty
+	 * @Extbase\Validate("NotEmpty")
 	 */
 	protected $text;
 

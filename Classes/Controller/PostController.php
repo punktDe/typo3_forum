@@ -37,6 +37,7 @@ use Mittwald\Typo3Forum\Service\AttachmentService;
 use Mittwald\Typo3Forum\Utility\Localization;
 use TYPO3\CMS\Core\FormProtection\FormProtectionFactory;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Extbase\Annotation as Extbase;
 
 class PostController extends AbstractController {
 
@@ -271,8 +272,8 @@ class PostController extends AbstractController {
      * @param string $csrfToken
 	 * @param array $attachments File attachments for the post.
 	 *
-	 * @validate $post \Mittwald\Typo3Forum\Domain\Validator\Forum\PostValidator
-	 * @validate $attachments \Mittwald\Typo3Forum\Domain\Validator\Forum\AttachmentPlainValidator
+	 * @Extbase\Validate("Mittwald\Typo3Forum\Domain\Validator\Forum\PostValidator", param="post")
+	 * @Extbase\Validate("Mittwald\Typo3Forum\Domain\Validator\Forum\AttachmentPlainValidator", param="attachments")
      *
      * @throws \Exception if csrf token isn't valid
 	 */

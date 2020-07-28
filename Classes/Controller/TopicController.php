@@ -41,6 +41,7 @@ use Mittwald\Typo3Forum\Service\SessionHandlingService;
 use Mittwald\Typo3Forum\Service\TagService;
 use TYPO3\CMS\Core\Database\DatabaseConnection;
 use TYPO3\CMS\Core\FormProtection\FormProtectionFactory;
+use TYPO3\CMS\Extbase\Annotation as Extbase;
 
 class TopicController extends AbstractController {
 
@@ -343,9 +344,9 @@ class TopicController extends AbstractController {
 	 * @param string $tags All defined tags for this topic
 	 * @param string $subscribe The flag if the new topic is subscribed by author
 	 *
-	 * @validate $post \Mittwald\Typo3Forum\Domain\Validator\Forum\PostValidator
-	 * @validate $attachments \Mittwald\Typo3Forum\Domain\Validator\Forum\AttachmentPlainValidator
-	 * @validate $subject NotEmpty
+	 * @Extbase\Validate("Mittwald\Typo3Forum\Domain\Validator\Forum\PostValidator", param="post")
+	 * @Extbase\Validate("Mittwald\Typo3Forum\Domain\Validator\Forum\AttachmentPlainValidator", param="attachments")
+	 * @Extbase\Validate("NotEmpty", param="subject")
      *
      * @throws \Exception if CSRF validation was not valid
 	 */

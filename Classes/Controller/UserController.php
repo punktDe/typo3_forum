@@ -42,6 +42,7 @@ use TYPO3\CMS\Core\FormProtection\FormProtectionFactory;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Extbase\Mvc\Exception\InvalidArgumentValueException;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use TYPO3\CMS\Extbase\Annotation as Extbase;
 
 class UserController extends AbstractController {
 
@@ -340,8 +341,9 @@ class UserController extends AbstractController {
 	 * @param string $recipient
 	 * @param string $text
 	 *
+	 * @Extbase\Validate("Mittwald\Typo3Forum\Domain\Validator\User\PrivateMessageRecipientValidator", param="recipient")
+	 *
 	 * @throws NotLoggedInException
-	 * @validate $recipient \Mittwald\Typo3Forum\Domain\Validator\User\PrivateMessageRecipientValidator
 	 */
 	public function createMessageAction($recipient, $text) {
 		$user = $this->getCurrentUser();
