@@ -26,6 +26,7 @@ namespace Mittwald\Typo3Forum\TextParser;
 
 use Mittwald\Typo3Forum\Service\AbstractService;
 use Mittwald\Typo3Forum\Utility\TypoScript;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ControllerContext;
 use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\ViewHelperVariableContainer;
@@ -93,11 +94,11 @@ class TextParserService extends AbstractService {
 
 
 	/**
-	 * @param ViewHelperVariableContainer $viewHelperVariableContainer
+	 * 
 	 */
-	public function injectViewHelperVariableContainer(ViewHelperVariableContainer $viewHelperVariableContainer): void
+	public function initializeObject(): void
 	{
-		$this->viewHelperVariableContainer = $viewHelperVariableContainer;
+		$this->viewHelperVariableContainer = GeneralUtility::makeInstance(ViewHelperVariableContainer::class);
 	}
 
 	/**
