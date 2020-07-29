@@ -27,6 +27,7 @@ namespace Mittwald\Typo3Forum\ViewHelpers\User;
 use Mittwald\Typo3Forum\Domain\Model\User\AnonymousFrontendUser;
 use Mittwald\Typo3Forum\Domain\Model\User\FrontendUser;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\Extbase\SignalSlot\Dispatcher;
 use TYPO3\CMS\Fluid\ViewHelpers\CObjectViewHelper;
 
@@ -75,7 +76,7 @@ class AvatarUrlViewHelper extends CObjectViewHelper {
 		}
 
 		if ($avatarFilename === NULL) {
-			$avatarFilename = ExtensionManagementUtility::siteRelPath('typo3_forum') . 'Resources/Public/Images/Icons/AvatarEmpty.png';
+			$avatarFilename = PathUtility::stripPathSitePrefix(ExtensionManagementUtility::extPath('typo3_forum')) . 'Resources/Public/Images/Icons/AvatarEmpty.png';
 		}
 		return $avatarFilename;
 	}
