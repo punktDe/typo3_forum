@@ -39,7 +39,6 @@ use Mittwald\Typo3Forum\Domain\Repository\Forum\TopicRepository;
 use Mittwald\Typo3Forum\Service\AttachmentService;
 use Mittwald\Typo3Forum\Service\SessionHandlingService;
 use Mittwald\Typo3Forum\Service\TagService;
-use TYPO3\CMS\Core\Database\DatabaseConnection;
 use TYPO3\CMS\Core\FormProtection\FormProtectionFactory;
 use TYPO3\CMS\Extbase\Annotation as Extbase;
 
@@ -59,12 +58,6 @@ class TopicController extends AbstractController {
 	 * @var CriteriaRepository
 	 */
 	protected $criteraRepository;
-
-
-	/**
-	 * @var DatabaseConnection
-	 */
-	protected $databaseConnection;
 
 	/**
 	 * @var ForumRepository
@@ -135,14 +128,6 @@ class TopicController extends AbstractController {
 		$this->criteraRepository = $criteraRepository;
 	}
 
-
-	/**
-	 * @param DatabaseConnection $databaseConnection
-	 */
-	public function injectDatabaseConnection(DatabaseConnection $databaseConnection): void
-	{
-		$this->databaseConnection = $databaseConnection;
-	}
 
 
 	/**
@@ -219,13 +204,6 @@ class TopicController extends AbstractController {
 	}
 
 
-
-	/**
-	 *
-	 */
-	public function initializeObject() {
-		$this->databaseConnection = $GLOBALS['TYPO3_DB'];
-	}
 
     /**
      *  Listing Action.
