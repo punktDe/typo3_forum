@@ -26,7 +26,7 @@ namespace Mittwald\Typo3Forum\ViewHelpers;
 
 use TYPO3\CMS\Extbase\DomainObject\AbstractDomainObject;
 use TYPO3Fluid\Fluid\ViewHelpers\IfViewHelper;
-use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractConditionViewHelper;
+use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractConditionViewHelper;
 
 /**
  * ViewHelper that renders its contents if a certain object is an instance

@@ -780,4 +780,84 @@ class Topic extends AbstractEntity implements AccessibleInterface, Subscribeable
 	public function removeSubscriber(FrontendUser $user) {
 		$this->subscribers->detach($user);
 	}
+
+	/**
+	 * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage
+	 */
+	public function getFavSubscribers(): \TYPO3\CMS\Extbase\Persistence\ObjectStorage
+	{
+		return $this->favSubscribers;
+	}
+
+	/**
+	 * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage $favSubscribers
+	 */
+	public function setFavSubscribers(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $favSubscribers): void
+	{
+		$this->favSubscribers = $favSubscribers;
+	}
+
+	/**
+	 * @return \DateTime
+	 */
+	public function getLastPostCrdate(): \DateTime
+	{
+		return $this->lastPostCrdate;
+	}
+
+	/**
+	 * @param \DateTime $lastPostCrdate
+	 */
+	public function setLastPostCrdate(\DateTime $lastPostCrdate): void
+	{
+		$this->lastPostCrdate = $lastPostCrdate;
+	}
+
+	/**
+	 * @return \DateTime
+	 */
+	public function getCrdate(): \DateTime
+	{
+		return $this->crdate;
+	}
+
+	/**
+	 * @param \DateTime $crdate
+	 */
+	public function setCrdate(\DateTime $crdate): void
+	{
+		$this->crdate = $crdate;
+	}
+
+	/**
+	 * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage
+	 */
+	public function getReaders(): \TYPO3\CMS\Extbase\Persistence\ObjectStorage
+	{
+		return $this->readers;
+	}
+
+	/**
+	 * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage $readers
+	 */
+	public function setReaders(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $readers): void
+	{
+		$this->readers = $readers;
+	}
+
+	/**
+	 * @return TopicRepository
+	 */
+	public function getTopicRepository(): TopicRepository
+	{
+		return $this->topicRepository;
+	}
+
+	/**
+	 * @param TopicRepository $topicRepository
+	 */
+	public function setTopicRepository(TopicRepository $topicRepository): void
+	{
+		$this->topicRepository = $topicRepository;
+	}
 }

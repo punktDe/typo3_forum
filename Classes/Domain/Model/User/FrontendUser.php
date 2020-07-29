@@ -148,7 +148,6 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser implemen
 	 * Fav Subscribed topics.
 	 *
 	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Mittwald\Typo3Forum\Domain\Model\Forum\Topic>
-	 * @Lazy()
 	 */
 	protected $topicFavSubscriptions;
 
@@ -156,7 +155,6 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser implemen
 	 * Fav Subscribed forums.
 	 *
 	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Mittwald\Typo3Forum\Domain\Model\Forum\Forum>
-	 * @Lazy()
 	 */
 	protected $forumFavSubscriptions;
 
@@ -164,7 +162,6 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser implemen
 	 * Subscribed topics.
 	 *
 	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Mittwald\Typo3Forum\Domain\Model\Forum\Topic>
-	 * @Lazy()
 	 */
 	protected $topicSubscriptions;
 
@@ -172,7 +169,6 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser implemen
 	 * Subscribed forums.
 	 *
 	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Mittwald\Typo3Forum\Domain\Model\Forum\Forum>
-	 * @Lazy()
 	 */
 	protected $forumSubscriptions;
 
@@ -194,7 +190,6 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser implemen
 	 * Read topics.
 	 *
 	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Mittwald\Typo3Forum\Domain\Model\Forum\Topic>
-	 * @Lazy()
 	 */
 	protected $readTopics;
 
@@ -202,7 +197,6 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser implemen
 	 * Read forum.
 	 *
 	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Mittwald\Typo3Forum\Domain\Model\Forum\Forum>
-	 * @Lazy()
 	 */
 	protected $readForum;
 
@@ -210,7 +204,6 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser implemen
 	 * Read topics.
 	 *
 	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Mittwald\Typo3Forum\Domain\Model\Forum\Post>
-	 * @Lazy()
 	 */
 	protected $supportPosts;
 
@@ -650,6 +643,152 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser implemen
 	 */
 	public function isAnonymous() {
 		return FALSE;
+	}
+
+	/**
+	 * @return ObjectStorage
+	 */
+	public function getTopicFavSubscriptions()
+	{
+		return $this->topicFavSubscriptions;
+	}
+
+	/**
+	 * @return ObjectStorage
+	 */
+	public function getForumFavSubscriptions()
+	{
+		return $this->forumFavSubscriptions;
+	}
+
+	/**
+	 * @param ObjectStorage $forumFavSubscriptions
+	 */
+	public function setForumFavSubscriptions(ObjectStorage $forumFavSubscriptions): void
+	{
+		$this->forumFavSubscriptions = $forumFavSubscriptions;
+	}
+
+	/**
+	 * @return \DateTime
+	 */
+	public function getCrdate(): \DateTime
+	{
+		return $this->crdate;
+	}
+
+	/**
+	 * @param \DateTime $crdate
+	 */
+	public function setCrdate(\DateTime $crdate): void
+	{
+		$this->crdate = $crdate;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getContact(): string
+	{
+		return $this->contact;
+	}
+
+	/**
+	 * @param string $contact
+	 */
+	public function setContact(string $contact): void
+	{
+		$this->contact = $contact;
+	}
+
+	/**
+	 * @return RankRepository
+	 */
+	public function getRankRepository(): RankRepository
+	{
+		return $this->rankRepository;
+	}
+
+	/**
+	 * @param RankRepository $rankRepository
+	 */
+	public function setRankRepository(RankRepository $rankRepository): void
+	{
+		$this->rankRepository = $rankRepository;
+	}
+
+	/**
+	 * @return ObjectStorage
+	 */
+	public function getReadTopics(): ObjectStorage
+	{
+		return $this->readTopics;
+	}
+
+	/**
+	 * @param ObjectStorage $readTopics
+	 */
+	public function setReadTopics(ObjectStorage $readTopics): void
+	{
+		$this->readTopics = $readTopics;
+	}
+
+	/**
+	 * @return ObjectStorage
+	 */
+	public function getReadForum(): ObjectStorage
+	{
+		return $this->readForum;
+	}
+
+	/**
+	 * @param ObjectStorage $readForum
+	 */
+	public function setReadForum(ObjectStorage $readForum): void
+	{
+		$this->readForum = $readForum;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getStaticInfoCountry(): string
+	{
+		return $this->staticInfoCountry;
+	}
+
+	/**
+	 * @param string $staticInfoCountry
+	 */
+	public function setStaticInfoCountry(string $staticInfoCountry): void
+	{
+		$this->staticInfoCountry = $staticInfoCountry;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isUseGravatar(): bool
+	{
+		return $this->useGravatar;
+	}
+
+	/**
+	 * @param bool $useGravatar
+	 */
+	public function setUseGravatar(bool $useGravatar): void
+	{
+		$this->useGravatar = $useGravatar;
+	}
+
+
+
+	/**
+	 * @param ObjectStorage $topicFavSubscriptions
+	 */
+	public function setTopicFavSubscriptions(ObjectStorage $topicFavSubscriptions): void
+	{
+		$this->topicFavSubscriptions = $topicFavSubscriptions;
 	}
 
 	/**

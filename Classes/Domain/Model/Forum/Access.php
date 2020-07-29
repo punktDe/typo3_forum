@@ -143,7 +143,7 @@ class Access extends AbstractValueObject {
 	 * Gets the group for this entry.
 	 * @return \Mittwald\Typo3Forum\Domain\Model\User\FrontendUserGroup group The group
 	 */
-	public function getGroup() {
+	public function getAffectedGroup() {
 		return $this->affectedGroup;
 	}
 

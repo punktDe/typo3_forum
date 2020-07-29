@@ -883,4 +883,67 @@ class Forum extends AbstractEntity implements AccessibleInterface, Subscribeable
 		$this->topicCount = count($this->topics);
 	}
 
+	/**
+	 * @return ObjectManagerInterface
+	 */
+	public function getObjectManager(): ObjectManagerInterface
+	{
+		return $this->objectManager;
+	}
+
+	/**
+	 * @param ObjectManagerInterface $objectManager
+	 */
+	public function setObjectManager(ObjectManagerInterface $objectManager): void
+	{
+		$this->objectManager = $objectManager;
+	}
+
+	/**
+	 * @return ObjectStorage
+	 */
+	public function getReaders(): ObjectStorage
+	{
+		return $this->readers;
+	}
+
+	/**
+	 * @param ObjectStorage $readers
+	 */
+	public function setReaders(ObjectStorage $readers): void
+	{
+		$this->readers = $readers;
+	}
+
+	/**
+	 * @return \ArrayObject
+	 */
+	public function getVisibleChildren(): \ArrayObject
+	{
+		return $this->visibleChildren;
+	}
+
+	/**
+	 * @param \ArrayObject $visibleChildren
+	 */
+	public function setVisibleChildren(\ArrayObject $visibleChildren): void
+	{
+		$this->visibleChildren = $visibleChildren;
+	}
+
+	/**
+	 * @return AuthenticationServiceInterface
+	 */
+	public function getAuthenticationService(): AuthenticationServiceInterface
+	{
+		return $this->authenticationService;
+	}
+
+	/**
+	 * @param AuthenticationServiceInterface $authenticationService
+	 */
+	public function setAuthenticationService(AuthenticationServiceInterface $authenticationService): void
+	{
+		$this->authenticationService = $authenticationService;
+	}
 }
