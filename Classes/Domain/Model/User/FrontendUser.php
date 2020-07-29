@@ -148,6 +148,7 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser implemen
 	 * Fav Subscribed topics.
 	 *
 	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Mittwald\Typo3Forum\Domain\Model\Forum\Topic>
+ 	 * @Lazy()
 	 */
 	protected $topicFavSubscriptions;
 
@@ -155,6 +156,7 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser implemen
 	 * Fav Subscribed forums.
 	 *
 	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Mittwald\Typo3Forum\Domain\Model\Forum\Forum>
+	 * @Lazy()
 	 */
 	protected $forumFavSubscriptions;
 
@@ -162,6 +164,7 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser implemen
 	 * Subscribed topics.
 	 *
 	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Mittwald\Typo3Forum\Domain\Model\Forum\Topic>
+	 * @Lazy()
 	 */
 	protected $topicSubscriptions;
 
@@ -169,6 +172,7 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser implemen
 	 * Subscribed forums.
 	 *
 	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Mittwald\Typo3Forum\Domain\Model\Forum\Forum>
+	 * @Lazy()
 	 */
 	protected $forumSubscriptions;
 
@@ -190,6 +194,7 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser implemen
 	 * Read topics.
 	 *
 	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Mittwald\Typo3Forum\Domain\Model\Forum\Topic>
+	 * @Lazy()
 	 */
 	protected $readTopics;
 
@@ -197,6 +202,7 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser implemen
 	 * Read forum.
 	 *
 	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Mittwald\Typo3Forum\Domain\Model\Forum\Forum>
+	 * @Lazy()
 	 */
 	protected $readForum;
 
@@ -204,6 +210,7 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser implemen
 	 * Read topics.
 	 *
 	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Mittwald\Typo3Forum\Domain\Model\Forum\Post>
+	 * @Lazy()
 	 */
 	protected $supportPosts;
 
