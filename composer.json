@@ -35,7 +35,7 @@
 			"Mittwald\\Typo3Forum\\": "Classes/"
 		},
 		"classmap": [
-			"web/typo3conf/ext/typo3_forum/Resources/Private/Libraries"
+			"Resources/Private/Libraries"
 		]
 	},
 	"autoload-dev": {
