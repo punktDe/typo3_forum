@@ -110,6 +110,15 @@ class PostController extends AbstractController {
 
 
 	/**
+	 * @param PostFactory $postFactory
+	 */
+	public function injectPostFactory(PostFactory $postFactory): void
+	{
+		$this->postFactory = $postFactory;
+	}
+
+
+	/**
 	 * @param TopicRepository $topicRepository
 	 */
 	public function injectTopicRepository(TopicRepository $topicRepository): void
