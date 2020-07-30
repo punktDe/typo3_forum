@@ -36,7 +36,7 @@ use Mittwald\Typo3Forum\Domain\Repository\User\RankRepository;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
-use TYPO3\CMS\Extbase\Annotation\ORM\Lazy;
+use TYPO3\CMS\Extbase\Annotation\ORM as ExtbaseORM;
 
 /**
  * A frontend user.
@@ -148,7 +148,7 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser implemen
 	 * Fav Subscribed topics.
 	 *
 	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Mittwald\Typo3Forum\Domain\Model\Forum\Topic>
- 	 * @Lazy()
+	 * @ExtbaseORM\Lazy
 	 */
 	protected $topicFavSubscriptions;
 
@@ -156,7 +156,7 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser implemen
 	 * Fav Subscribed forums.
 	 *
 	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Mittwald\Typo3Forum\Domain\Model\Forum\Forum>
-	 * @Lazy()
+	 * @ExtbaseORM\Lazy
 	 */
 	protected $forumFavSubscriptions;
 
@@ -164,7 +164,7 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser implemen
 	 * Subscribed topics.
 	 *
 	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Mittwald\Typo3Forum\Domain\Model\Forum\Topic>
-	 * @Lazy()
+	 * @ExtbaseORM\Lazy
 	 */
 	protected $topicSubscriptions;
 
@@ -172,7 +172,7 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser implemen
 	 * Subscribed forums.
 	 *
 	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Mittwald\Typo3Forum\Domain\Model\Forum\Forum>
-	 * @Lazy()
+	 * @ExtbaseORM\Lazy
 	 */
 	protected $forumSubscriptions;
 
@@ -194,7 +194,7 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser implemen
 	 * Read topics.
 	 *
 	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Mittwald\Typo3Forum\Domain\Model\Forum\Topic>
-	 * @Lazy()
+	 * @ExtbaseORM\Lazy
 	 */
 	protected $readTopics;
 
@@ -202,7 +202,7 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser implemen
 	 * Read forum.
 	 *
 	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Mittwald\Typo3Forum\Domain\Model\Forum\Forum>
-	 * @Lazy()
+	 * @ExtbaseORM\Lazy
 	 */
 	protected $readForum;
 
@@ -210,7 +210,7 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser implemen
 	 * Read topics.
 	 *
 	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Mittwald\Typo3Forum\Domain\Model\Forum\Post>
-	 * @Lazy()
+	 * @ExtbaseORM\Lazy
 	 */
 	protected $supportPosts;
 
@@ -275,7 +275,7 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser implemen
 	 * The private messages of this user.
 	 *
 	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Mittwald\Typo3Forum\Domain\Model\User\PrivateMessage>
-	 * @Lazy()
+	 * @ExtbaseORM\Lazy
 	 */
 	protected $privateMessages;
 

@@ -31,8 +31,8 @@ use Mittwald\Typo3Forum\Service\Authentication\AuthenticationServiceInterface;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
-use TYPO3\CMS\Extbase\Annotation\ORM\Lazy;
 use TYPO3\CMS\Extbase\Annotation as Extbase;
+use TYPO3\CMS\Extbase\Annotation\ORM as ExtbaseORM;
 
 
 /**
@@ -50,14 +50,14 @@ class Forum extends AbstractEntity implements AccessibleInterface, Subscribeable
 	/**
 	 * The child forums
 	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Mittwald\Typo3Forum\Domain\Model\Forum\Forum>
-	 * @Lazy()
+	 * @ExtbaseORM\Lazy
 	 */
 	protected $children;
 
 	/**
 	 * The criterias of this forum.
 	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Mittwald\Typo3Forum\Domain\Model\Forum\Criteria>
-	 * @Lazy()
+	 * @ExtbaseORM\Lazy
 	 */
 	protected $criteria;
 
@@ -75,7 +75,7 @@ class Forum extends AbstractEntity implements AccessibleInterface, Subscribeable
 	/**
 	 * The parent forum.
 	 * @var \Mittwald\Typo3Forum\Domain\Model\Forum\Forum
-	 * @Lazy()
+	 * @ExtbaseORM\Lazy
 	 */
 	protected $forum;
 
@@ -105,14 +105,14 @@ class Forum extends AbstractEntity implements AccessibleInterface, Subscribeable
 	 * All users who have read this forum.
 	 *
 	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Mittwald\Typo3Forum\Domain\Model\User\FrontendUser>
-	 * @Lazy()
+	 * @ExtbaseORM\Lazy
 	 */
 	protected $readers;
 
 	/**
 	 * All subscribers of this forum.
 	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Mittwald\Typo3Forum\Domain\Model\User\FrontendUser>
-	 * @Lazy()
+	 * @ExtbaseORM\Lazy
 	 */
 	protected $subscribers;
 
@@ -131,7 +131,7 @@ class Forum extends AbstractEntity implements AccessibleInterface, Subscribeable
 	/**
 	 * The topics in this forum.
 	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Mittwald\Typo3Forum\Domain\Model\Forum\Topic>
-	 * @Lazy()
+	 * @ExtbaseORM\Lazy
 	 */
 	protected $topics;
 
@@ -140,7 +140,7 @@ class Forum extends AbstractEntity implements AccessibleInterface, Subscribeable
 	 * currently logged in user has read access to.
 	 *
 	 * @var \ArrayObject<\Mittwald\Typo3Forum\Domain\Model\Forum\Forum>
-	 * @Lazy()
+	 * @ExtbaseORM\Lazy
 	 */
 	protected $visibleChildren;
 

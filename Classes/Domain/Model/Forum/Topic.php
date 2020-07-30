@@ -37,8 +37,8 @@ use Mittwald\Typo3Forum\Domain\Repository\Forum\TopicRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
-use TYPO3\CMS\Extbase\Annotation\ORM\Lazy;
 use TYPO3\CMS\Extbase\Annotation as Extbase;
+use TYPO3\CMS\Extbase\Annotation\ORM as ExtbaseORM;
 
 
 /**
@@ -61,7 +61,7 @@ class Topic extends AbstractEntity implements AccessibleInterface, Subscribeable
 	/**
 	 * The posts in this topic.
 	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Mittwald\Typo3Forum\Domain\Model\Forum\Post>
-	 * @Lazy()
+	 * @ExtbaseORM\Lazy
 	 */
 	protected $posts;
 
@@ -83,7 +83,7 @@ class Topic extends AbstractEntity implements AccessibleInterface, Subscribeable
 	 * All users who have subscribed this topic.
 	 *
 	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Mittwald\Typo3Forum\Domain\Model\User\FrontendUser>
-	 * @Lazy()
+	 * @ExtbaseORM\Lazy
 	 */
 	protected $subscribers;
 
@@ -91,7 +91,7 @@ class Topic extends AbstractEntity implements AccessibleInterface, Subscribeable
 	 * All users who have subscribed this topic.
 	 *
 	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Mittwald\Typo3Forum\Domain\Model\User\FrontendUser>
-	 * @Lazy()
+	 * @ExtbaseORM\Lazy
 	 */
 	protected $favSubscribers;
 
@@ -99,7 +99,7 @@ class Topic extends AbstractEntity implements AccessibleInterface, Subscribeable
 	 * The as solution marked post
 	 *
 	 * @var \Mittwald\Typo3Forum\Domain\Model\Forum\Post
-	 * @Lazy()
+	 * @ExtbaseORM\Lazy
 	 */
 	protected $solution;
 
@@ -160,7 +160,7 @@ class Topic extends AbstractEntity implements AccessibleInterface, Subscribeable
 	 * All users who have read this topic.
 	 *
 	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Mittwald\Typo3Forum\Domain\Model\User\FrontendUser>
-	 * @Lazy()
+	 * @ExtbaseORM\Lazy
 	 */
 	protected $readers;
 
@@ -175,7 +175,7 @@ class Topic extends AbstractEntity implements AccessibleInterface, Subscribeable
 	 * Get all tags of this topic
 	 *
 	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Mittwald\Typo3Forum\Domain\Model\Forum\Tag>
-	 * @Lazy()
+	 * @ExtbaseORM\Lazy
 	 */
 	protected $tags;
 
