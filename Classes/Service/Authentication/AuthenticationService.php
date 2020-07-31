@@ -33,6 +33,7 @@ use Mittwald\Typo3Forum\Domain\Model\Forum\Post;
 use Mittwald\Typo3Forum\Domain\Model\Forum\Topic;
 use Mittwald\Typo3Forum\Domain\Repository\User\FrontendUserRepository;
 use Mittwald\Typo3Forum\Service\AbstractService;
+use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
@@ -241,7 +242,8 @@ class AuthenticationService extends AbstractService implements AuthenticationSer
 			} elseif ($user->isAnonymous()) {
 				$this->userGroupIdentifier = 'a';
 			} else {
-				$groupUids = GeneralUtility::trimExplode(',', $this->typoScriptFrontendController->gr_list);
+				$context = GeneralUtility::makeInstance(Context::class);
+				$groupUids = $context->getPropertyFromAspect('frontend.user', 'groupIds');
 
 				$this->userGroupIdentifier = implode('g', $groupUids);
 			}
