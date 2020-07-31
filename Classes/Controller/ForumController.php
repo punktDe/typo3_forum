@@ -37,11 +37,6 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 class ForumController extends AbstractController {
 
 	/**
-	 * @var \TYPO3\CMS\Core\Database\DatabaseConnection
-	 */
-	protected $databaseConnection;
-
-	/**
 	 * @var ForumRepository
 	 */
 	protected $forumRepository;
@@ -105,7 +100,6 @@ class ForumController extends AbstractController {
 	 *
 	 */
 	public function initializeAction() {
-		$this->databaseConnection = $GLOBALS['TYPO3_DB'];
 	}
 
 	/**
