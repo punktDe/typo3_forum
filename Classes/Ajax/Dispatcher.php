@@ -79,7 +79,6 @@ final class Dispatcher implements SingletonInterface
         );
         $GLOBALS['TSFE']->initFEuser();
         $GLOBALS['TSFE']->initUserGroups();
-        EidUtility::initTCA();
         $GLOBALS['TSFE']->checkAlternativeIdMethods();
         $GLOBALS['TSFE']->determineId();
         $GLOBALS['TSFE']->sys_page = GeneralUtility::makeInstance(PageRepository::class);
