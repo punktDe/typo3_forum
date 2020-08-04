@@ -371,7 +371,7 @@ class AjaxController extends AbstractController
         $standaloneView->setTemplateRootPaths($templateRootPaths);
         $standaloneView->getRenderingContext()->setControllerName('Ajax');
         $standaloneView->setTemplate('topicListMenu');
-        $standaloneView->setFormat('html');
+        $standaloneView->setFormat('json');
 
 		$topicIcons = $this->topicRepository->findByUids($displayedTopics);
 		$counter = 0;
