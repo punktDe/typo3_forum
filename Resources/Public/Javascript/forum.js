@@ -111,7 +111,7 @@ jQuery(document).ready(function ($) {
 				"tx_typo3forum_ajax[displayedAds]": JSON.stringify(displayedAds)
 			},
 			success: function (data) {
-				var json = $.parseJSON(data);
+				var json = data;
 				if (json.topicIcons) {
 					json.topicIcons.forEach(function (entry) {
 						$('.topic_icon[data-uid="' + entry.uid + '"]').html(entry.html);

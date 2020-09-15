@@ -179,11 +179,15 @@ class BbCodeEditorViewHelper extends TextareaViewHelper {
 
 		/* @var \TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder $uriBuilder */
         $uriBuilder = $this->renderingContext->getControllerContext()->getUriBuilder();
-        $uri = $uriBuilder
-            ->reset()
-            ->setTargetPageUid($GLOBALS['TSFE']->id)
-            ->setArguments(['type' => 43568275])
-            ->uriFor('preview', [], 'Ajax', 'Typo3Forum', 'Ajax');
+
+		$uri = $uriBuilder
+			->reset()
+			->setArguments([
+				'pid' => $GLOBALS['TSFE']->id,
+				'ajaxforumapi' => 'preview'
+			])
+			->setCreateAbsoluteUri(true)
+			->buildFrontendUri();
 
         $editorSettings = [
             'previewParserPath' => $uri,

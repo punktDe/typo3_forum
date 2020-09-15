@@ -66,8 +66,6 @@ if (!is_array($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations
     $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['typo3forum_main'] = [];
 }
 
-$GLOBALS['TYPO3_CONF_VARS']['FE']['eID_include']['typo3_forum'] = \Mittwald\Typo3Forum\Ajax\Dispatcher::class . '::processRequest';
-
 // Connect signals to slots. Some parts of extbase suck, but the signal-slot
 // pattern is really cool! :P
 $signalSlotDispatcher = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\CMS\Extbase\SignalSlot\Dispatcher');
@@ -117,3 +115,4 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/install']['update']['postsWithout
 
 // Middleware target definitions
 $GLOBALS['TYPO3_CONF_VARS']['FE']['ajaxForumApi_include']['main'] = \Mittwald\Typo3Forum\Handler\ForumHandler::class . '::main';
+$GLOBALS['TYPO3_CONF_VARS']['FE']['ajaxForumApi_include']['preview'] = \Mittwald\Typo3Forum\Handler\ForumHandler::class . '::preview';

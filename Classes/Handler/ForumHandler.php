@@ -338,4 +338,28 @@ class ForumHandler
 		if (!empty($output)) return $output;
 	}
 
+	/**
+	 * @param ServerRequest $request
+	 * @return HtmlResponse
+	 */
+	public function preview(ServerRequest $request): HtmlResponse
+	{
+		$this->initializeObject();
+
+		$text = $request->getParsedBody()['tx_typo3forum_ajax']['text'] ?? '';
+
+		$extbaseSettings = $this->configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK, 'Typo3Forum');
+		$templateRootPaths = $extbaseSettings['view']['templateRootPaths'];
+
+		/* @var StandaloneView $standaloneView */
+		$standaloneView = GeneralUtility::makeInstance(StandaloneView::class);
+		$standaloneView->setTemplateRootPaths($templateRootPaths);
+		$standaloneView->getRenderingContext()->setControllerName('Ajax');
+		$standaloneView->setTemplate('preview');
+
+		$standaloneView->assign('text', $text);
+
+		return new HtmlResponse($standaloneView->render());
+	}
+
 }
