@@ -28,6 +28,8 @@ use Mittwald\Typo3Forum\Domain\Model\AccessibleInterface;
 use Mittwald\Typo3Forum\Domain\Model\SubscribeableInterface;
 use Mittwald\Typo3Forum\Domain\Model\User\FrontendUser;
 use Mittwald\Typo3Forum\Service\Authentication\AuthenticationServiceInterface;
+use TYPO3\CMS\Core\Context\Context;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
@@ -484,11 +486,13 @@ class Forum extends AbstractEntity implements AccessibleInterface, Subscribeable
 			return $this->getParent()->checkAccess($user, $accessType);
 		}
 
-		if($accessType === Access::TYPE_READ) {
-			return true;
-		}
+		if (GeneralUtility::makeInstance(Context::class)->getPropertyFromAspect('frontend.user', 'isLoggedIn') === false) {
+			if ($accessType === Access::TYPE_READ) {
+				return true;
+			}
 
-		return false;
+			return false;
+		}
 	}
 
 

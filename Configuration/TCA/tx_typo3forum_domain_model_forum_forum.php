@@ -22,7 +22,8 @@ return [
 		'showRecordFieldList' => 'hidden,title,description,children,acls,criteria,topics,topic_count,post_count,last_topic,last_post,forum,subscribers,readers,displayed_pid',
 	],
 	'types' => [
-		'1' => ['showitem' => 'hidden,title,description,children,acls,criteria,topics,last_topic,last_post,forum,subscribers,readers'],
+		#'1' => ['showitem' => 'hidden,title,description,children,acls,criteria,topics,last_topic,last_post,forum,subscribers,readers'],
+		'1' => ['showitem' => 'title,description,children,acls,criteria'],
 	],
     'palettes' => [
         'language' => ['showitem' => 'sys_language_uid, l18n_parent'],
