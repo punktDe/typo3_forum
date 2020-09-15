@@ -3,6 +3,7 @@ namespace Mittwald\Typo3Forum\Handler;
 
 use Mittwald\Typo3Forum\Domain\Model\Forum\Post;
 use Mittwald\Typo3Forum\Domain\Repository\Forum\ForumRepository;
+use Mittwald\Typo3Forum\Domain\Repository\Forum\PostRepository;
 use Mittwald\Typo3Forum\Domain\Repository\Forum\TopicRepository;
 use Mittwald\Typo3Forum\Domain\Repository\User\FrontendUserRepository;
 use TYPO3\CMS\Core\FormProtection\FormProtectionFactory;
@@ -17,6 +18,11 @@ use TYPO3\CMS\Fluid\View\StandaloneView;
 
 class ForumHandler
 {
+
+	/**
+	 * @var PostRepository
+	 */
+	protected $postRepository;
 
 	/**
 	 * @var FrontendUserRepository
@@ -51,6 +57,7 @@ class ForumHandler
 		$this->topicRepository = $objectManager->get(TopicRepository::class);
 		$this->forumRepository = $objectManager->get(ForumRepository::class);
 		$this->frontendUserRepository = $objectManager->get(FrontendUserRepository::class);
+		$this->postRepository = $objectManager->get(PostRepository::class);
 	}
 
 	/**
@@ -77,34 +84,35 @@ class ForumHandler
 			$content['forumMenus'] = $this->_getForumMenus($displayedForumMenus);
 		}
 
+		$postSummarys = json_decode($arguments['postSummarys']);
+		if (!empty($postSummarys)) {
+			$content['postSummarys'] = $this->_getPostSummarys($postSummarys);
+		}
 
-//		if (!empty($postSummarys)) {
-//			$content['postSummarys'] = $this->_getPostSummarys($postSummarys);
-//		}
-//		if (!empty($topicIcons)) {
-//			$content['topicIcons'] = $this->_getTopicIcons($topicIcons);
-//		}
-//		if (!empty($forumIcons)) {
-//			$content['forumIcons'] = $this->_getForumIcons($forumIcons);
-//		}
+		$topicIcons = json_decode($arguments['topicIcons']);
+		if (!empty($topicIcons)) {
+			$content['topicIcons'] = $this->_getTopicIcons($topicIcons);
+		}
+
+		$forumIcons = json_decode($arguments['forumIcons']);
+		if (!empty($forumIcons)) {
+			$content['forumIcons'] = $this->_getForumIcons($forumIcons);
+		}
 
 		$displayedTopics = json_decode($arguments['displayedTopics']);
 		if (!empty($displayedTopics)) {
 			$content['topics'] = $this->_getTopics($displayedTopics);
 		}
-//		if (!empty($displayedPosts)) {
-//			$content['posts'] = $this->_getPosts($displayedPosts);
-//		}
-//		if ($displayOnlinebox == 1) {
-//			$content['onlineBox'] = $this->_getOnlinebox();
-//		}
-//		$displayedAds = json_decode($displayedAds);
-//		if ((int)$displayedAds->count > 1) {
-//			$content['ads'] = $this->_getAds($displayedAds);
-//		}
-//
-//		$this->view->assign('content', json_encode($content));
-//		return $this->view->render('Main');
+
+		$displayedPosts = json_decode($arguments['displayedPosts']);
+		if (!empty($displayedPosts)) {
+			$content['posts'] = $this->_getPosts($displayedPosts);
+		}
+
+		$displayOnlinebox = json_decode($arguments['displayOnlinebox']);
+		if ($displayOnlinebox == 1) {
+			$content['onlineBox'] = $this->_getOnlinebox();
+		}
 
 		return new JsonResponse($content);
 	}
@@ -116,11 +124,11 @@ class ForumHandler
 	private function _getOnlinebox() {
 		$data = [];
 		$data['count'] = $this->frontendUserRepository->countByFilter(TRUE);
-		$this->request->setFormat('html');
+		//$this->request->setFormat('html');
 		$users = $this->frontendUserRepository->findByFilter((int)$this->settings['widgets']['onlinebox']['limit'], [], TRUE);
 		$this->view->assign('users', $users);
 		$data['html'] = $this->view->render('Onlinebox');
-		$this->request->setFormat('json');
+		//$this->request->setFormat('json');
 		return $data;
 	}
 
@@ -168,7 +176,7 @@ class ForumHandler
 	private function _getPosts($displayedPosts) {
 		$data = [];
 		if (count($displayedPosts) < 1) return $data;
-		$this->request->setFormat('html');
+		//$this->request->setFormat('html');
 		$posts = $this->postRepository->findByUids($displayedPosts);
 		$counter = 0;
 
@@ -178,7 +186,6 @@ class ForumHandler
 		foreach ($posts as $post) {
 			/* @var StandaloneView $standaloneView */
 			$standaloneView = GeneralUtility::makeInstance(StandaloneView::class);
-			$standaloneView->setControllerContext($this->controllerContext);
 			$standaloneView->setTemplateRootPaths($templateRootPaths);
 			$standaloneView->getRenderingContext()->setControllerName('Ajax');
 			$standaloneView->setTemplate('PostHelpfulButton');
@@ -195,7 +202,6 @@ class ForumHandler
 
 			/* @var StandaloneView $standaloneView */
 			$standaloneView = GeneralUtility::makeInstance(StandaloneView::class);
-			$standaloneView->setControllerContext($this->controllerContext);
 			$standaloneView->setTemplateRootPaths($templateRootPaths);
 			$standaloneView->getRenderingContext()->setControllerName('Ajax');
 			$standaloneView->setTemplate('PostEditLink');
@@ -249,9 +255,8 @@ class ForumHandler
 	 */
 	private function _getTopicIcons($topicIcons) {
 		$data = [];
-		$topicIcons = json_decode($topicIcons);
 		if (count($topicIcons) < 1) return $data;
-		$this->request->setFormat('html');
+		//$this->request->setFormat('html');
 		$topicIcons = $this->topicRepository->findByUids($topicIcons);
 		$counter = 0;
 		foreach ($topicIcons as $topic) {
@@ -260,7 +265,7 @@ class ForumHandler
 			$data[$counter]['uid'] = $topic->getUid();
 			$counter++;
 		}
-		$this->request->setFormat('json');
+		//$this->request->setFormat('json');
 		return $data;
 	}
 
@@ -270,9 +275,8 @@ class ForumHandler
 	 */
 	private function _getForumIcons($forumIcons) {
 		$data = [];
-		$forumIcons = json_decode($forumIcons);
 		if (count($forumIcons) < 1) return $data;
-		$this->request->setFormat('html');
+		//$this->request->setFormat('html');
 		$forumIcons = $this->forumRepository->findByUids($forumIcons);
 		$counter = 0;
 		foreach ($forumIcons as $forum) {
@@ -281,7 +285,7 @@ class ForumHandler
 			$data[$counter]['uid'] = $forum->getUid();
 			$counter++;
 		}
-		$this->request->setFormat('json');
+		//$this->request->setFormat('json');
 		return $data;
 	}
 
@@ -290,10 +294,10 @@ class ForumHandler
 	 * @return array
 	 */
 	private function _getPostSummarys($postSummarys) {
-		$postSummarys = json_decode($postSummarys);
+
 		$data = [];
 		$counter = 0;
-		$this->request->setFormat('html');
+		//$this->request->setFormat('html');
 		foreach ($postSummarys as $summary) {
 			$post = false;
 			switch ($summary->type) {
@@ -316,7 +320,7 @@ class ForumHandler
 				$counter++;
 			}
 		}
-		$this->request->setFormat('json');
+		//$this->request->setFormat('json');
 		return $data;
 	}
 
@@ -332,39 +336,6 @@ class ForumHandler
 			$output[] = $onlineUser->getUid();
 		}
 		if (!empty($output)) return $output;
-	}
-
-	/**
-	 * @param \stdClass $meta
-	 * @return array
-	 */
-	private function _getAds(\stdClass $meta) {
-		$count = (int)$meta->count;
-		$result = [];
-		$this->request->setFormat('html');
-
-		$actDatetime = new \DateTime();
-		if (!$this->sessionHandlingService->get('adTime')) {
-			$this->sessionHandlingService->set('adTime', $actDatetime);
-			$adDateTime = $actDatetime;
-		} else {
-			$adDateTime = $this->sessionHandlingService->get('adTime');
-		}
-		if ($actDatetime->getTimestamp() - $adDateTime->getTimestamp() > $this->settings['ads']['timeInterval'] && $count > 2) {
-			$this->sessionHandlingService->set('adTime', $actDatetime);
-			if ((int)$meta->mode === 0) {
-				$ads = $this->adRepository->findForForumView(1);
-			} else {
-				$ads = $this->adRepository->findForTopicView(1);
-			}
-			if (!empty($ads)) {
-				$this->view->assign('ads', $ads);
-				$result['html'] = $this->view->render('ads');
-				$result['position'] = mt_rand(1, $count - 2);
-			}
-		}
-		$this->request->setFormat('json');
-		return $result;
 	}
 
 }
