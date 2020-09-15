@@ -6,10 +6,13 @@ use Mittwald\Typo3Forum\Domain\Repository\Forum\ForumRepository;
 use Mittwald\Typo3Forum\Domain\Repository\Forum\TopicRepository;
 use Mittwald\Typo3Forum\Domain\Repository\User\FrontendUserRepository;
 use TYPO3\CMS\Core\FormProtection\FormProtectionFactory;
+use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Http\JsonResponse;
 use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
 class ForumHandler
@@ -36,34 +39,18 @@ class ForumHandler
 	protected $topicRepository;
 
 	/**
-	 * @param TopicRepository $topicRepository
+	 * @var int
 	 */
-	public function injectTopicRepository(TopicRepository $topicRepository): void
-	{
-	    $this->topicRepository = $topicRepository;
-	}
-	/**
-	 * @param ForumRepository $forumRepository
-	 */
-	public function injectForumRepository(ForumRepository $forumRepository): void
-	{
-	    $this->forumRepository = $forumRepository;
-	}
+	protected $pid;
 
-	/**
-	 * @param FrontendUserRepository $frontendUserRepository
-	 */
-	public function injectFrontendUserRepository(FrontendUserRepository $frontendUserRepository): void
-	{
-	    $this->frontendUserRepository = $frontendUserRepository;
-	}
 
-	/**
-	 * @param ConfigurationManager $configurationManager
-	 */
-	public function injectConfigurationManager(ConfigurationManager $configurationManager): void
+	protected function initializeObject()
 	{
-		$this->configurationManager = $configurationManager;
+		$objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+		$this->configurationManager = $objectManager->get(ConfigurationManager::class);
+		$this->topicRepository = $objectManager->get(TopicRepository::class);
+		$this->forumRepository = $objectManager->get(ForumRepository::class);
+		$this->frontendUserRepository = $objectManager->get(FrontendUserRepository::class);
 	}
 
 	/**
@@ -73,6 +60,9 @@ class ForumHandler
 	 */
 	public function main(ServerRequest $request)
 	{
+		$this->initializeObject();
+
+		$this->pid = (int)$request->getQueryParams()['pid'];
 
 		$content = [];
 		$arguments = $request->getParsedBody()['tx_typo3forum_ajax'] ?? '';
@@ -116,7 +106,7 @@ class ForumHandler
 //		$this->view->assign('content', json_encode($content));
 //		return $this->view->render('Main');
 
-		return new JsonResponse([]);
+		return new JsonResponse($content);
 	}
 
 
@@ -157,11 +147,12 @@ class ForumHandler
 		foreach ($foren as $forum) {
 			$standaloneView->assignMultiple([
 				'forum' => $forum,
-				'user' => $this->getCurrentUser()
+				'user' => $this->getCurrentUser(),
+				'pid' => $this->pid
 			]);
 
 			$csrfToken = FormProtectionFactory::get('frontend')->generateToken('forumMenu_' . $forum->getUid());
-			$this->view->assign('csrfToken', $csrfToken);
+			$standaloneView->assign('csrfToken', $csrfToken);
 
 			$data[$counter]['uid'] = $forum->getUid();
 			$data[$counter]['html'] = $standaloneView->render();
@@ -240,9 +231,10 @@ class ForumHandler
 		$counter = 0;
 		foreach ($topicIcons as $topic) {
 			$csrfToken = FormProtectionFactory::get('frontend')->generateToken('topicListMenu_' . $topic->getUid());
-			$this->view->assign('csrfToken', $csrfToken);
+			$standaloneView->assign('csrfToken', $csrfToken);
 
 			$standaloneView->assign('topic', $topic);
+			$standaloneView->assign('pid', $this->pid);
 			$data[$counter]['uid'] = $topic->getUid();
 			$data[$counter]['replyCount'] = $topic->getReplyCount();
 			$data[$counter]['topicListMenu'] = $standaloneView->render();
