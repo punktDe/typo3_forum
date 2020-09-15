@@ -89,21 +89,11 @@ jQuery(document).ready(function($) {
 	/* 
 		support old layout versions
 	*/
-	if(typeof typo3_forum_ajaxUrl === 'undefined'
-		&& typeof currentPageUid !== 'undefined'
-	){
-        typo3_forum_ajaxUrl = "?id=" + currentPageUid + "&eID=typo3_forum&language=de&tx_typo3forum_ajax[controller]=Ajax&tx_typo3forum_ajax[action]=main&tx_typo3forum_ajax[format]=json";
+	var typo3_forum_ajaxUrl;
+	if(typeof currentPageUid !== 'undefined'){
+        typo3_forum_ajaxUrl = "?ajaxforumapi=main&id=" + currentPageUid + "&language=de";
     }
-    if(typeof typo3_forum_ajaxUrl_helpful === 'undefined'
-    	&& typeof currentPageUid !== 'undefined'
-    ){
-        typo3_forum_ajaxUrl_helpful = "index.php?id=" + currentPageUid +
-            "&eID=" + "__typo3_forum_eid__" +
-            "&tx_typo3forum_ajax[controller]=Post" +
-            "&tx_typo3forum_ajax[action]=" + "__typo3_forum_action__" +
-            "&tx_typo3forum_ajax[post]=" + "__typo3_forum_post__";
-    }
-    
+
     if (typeof typo3_forum_ajaxUrl !== 'undefined') {
         $.ajax({
             type: "POST",
@@ -177,9 +167,7 @@ jQuery(document).ready(function($) {
                     var targetElement = this;
                     var counttargetVal = $('.' + $(targetElement).attr('data-counttarget')).html();
                     var countusertargetVal = $('.' + $(targetElement).attr('data-countusertarget')).html();
-                    var type = 'add';
                     var action = 'addSupporter';
-                    var eID  = $(this).attr('data-eid');
                     var post = $(this).attr('data-post');
                     if ($(targetElement).hasClass('supported')) {
                         type = 'remove';
@@ -187,7 +175,7 @@ jQuery(document).ready(function($) {
                     }
                     $.ajax({
                         type: "GET",
-                        url: "index.php?id="+currentPageUid+"&eID=" + $(this).attr('data-eid') + "&tx_typo3forum_ajax[controller]=Post&tx_typo3forum_ajax[action]=" + type + "Supporter&tx_typo3forum_ajax[post]=" + $(this).attr('data-post')+'&no_cache=1',
+                        url:  "?ajaxforumapi="+action+"&id=" + currentPageUid + "&language=de&post=" + $(this).attr('data-post'),
                         async: false,
                         beforeSend: function (msg) {
                             $('.' + $(targetElement).attr('data-counttarget')).html('<div class="tx-typo3forum-ajax-loader"></div>');
