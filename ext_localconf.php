@@ -116,6 +116,4 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks']['Mittwald\Typo3F
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/install']['update']['postsWithoutAuthorName'] = \Mittwald\Typo3Forum\Updates\PostsWithoutAuthorNameUpdate::class;
 
 // Middleware target definitions
-$GLOBALS['TYPO3_CONF_VARS']['FE']['ajaxApi_include']['postPreview'] = \Mittwald\Typo3Forum\Controller\AjaxController::class . '::previewAction';
-$GLOBALS['TYPO3_CONF_VARS']['FE']['ajaxApi_include']['loginbox'] = \Mittwald\Typo3Forum\Controller\AjaxController::class . '::loginboxAction';
-$GLOBALS['TYPO3_CONF_VARS']['FE']['ajaxApi_include']['forumMain'] = \Mittwald\Typo3Forum\Controller\AjaxController::class . '::mainAction';
+$GLOBALS['TYPO3_CONF_VARS']['FE']['ajaxForumApi_include']['main'] = \Mittwald\Typo3Forum\Handler\ForumHandler::class . '::main';

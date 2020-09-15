@@ -25,7 +25,7 @@ use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
  *
  * @internal
  */
-class ForumAjaxApi implements MiddlewareInterface
+class AjaxForumApi implements MiddlewareInterface
 {
 	/**
 	 * @var string
@@ -70,7 +70,7 @@ class ForumAjaxApi implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        $ajaxApi = $request->getParsedBody()['forumajaxapi'] ?? $request->getQueryParams()['forumajaxapi'] ?? null;
+        $ajaxApi = $request->getParsedBody()['ajaxforumapi'] ?? $request->getQueryParams()['ajaxforumapi'] ?? null;
 
         if ($ajaxApi === null) {
             return $handler->handle($request);
@@ -79,7 +79,7 @@ class ForumAjaxApi implements MiddlewareInterface
         // Remove any output produced until now
         ob_clean();
 
-        $target = $GLOBALS['TYPO3_CONF_VARS']['FE']['ajaxApi_include'][$ajaxApi] ?? null;
+        $target = $GLOBALS['TYPO3_CONF_VARS']['FE']['ajaxForumApi_include'][$ajaxApi] ?? null;
         if (empty($target)) {
             return (new HtmlResponse('1596543502'))->withStatus(500);
         }
