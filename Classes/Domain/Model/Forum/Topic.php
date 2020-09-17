@@ -33,9 +33,12 @@ use Mittwald\Typo3Forum\Domain\Model\ReadableInterface;
 use Mittwald\Typo3Forum\Domain\Model\SubscribeableInterface;
 use Mittwald\Typo3Forum\Domain\Model\User\AnonymousFrontendUser;
 use Mittwald\Typo3Forum\Domain\Model\User\FrontendUser;
+use Mittwald\Typo3Forum\Domain\Repository\Forum\TopicRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Extbase\Annotation as Extbase;
+use TYPO3\CMS\Extbase\Annotation\ORM as ExtbaseORM;
 
 
 /**
@@ -51,14 +54,14 @@ class Topic extends AbstractEntity implements AccessibleInterface, Subscribeable
 	 * The subject
 	 *
 	 * @var string
-	 * @validate NotEmpty
+	 * @Extbase\Validate("NotEmpty")
 	 */
 	protected $subject;
 
 	/**
 	 * The posts in this topic.
 	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Mittwald\Typo3Forum\Domain\Model\Forum\Post>
-	 * @lazy
+	 * @ExtbaseORM\Lazy
 	 */
 	protected $posts;
 
@@ -80,7 +83,7 @@ class Topic extends AbstractEntity implements AccessibleInterface, Subscribeable
 	 * All users who have subscribed this topic.
 	 *
 	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Mittwald\Typo3Forum\Domain\Model\User\FrontendUser>
-	 * @lazy
+	 * @ExtbaseORM\Lazy
 	 */
 	protected $subscribers;
 
@@ -88,7 +91,7 @@ class Topic extends AbstractEntity implements AccessibleInterface, Subscribeable
 	 * All users who have subscribed this topic.
 	 *
 	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Mittwald\Typo3Forum\Domain\Model\User\FrontendUser>
-	 * @lazy
+	 * @ExtbaseORM\Lazy
 	 */
 	protected $favSubscribers;
 
@@ -96,7 +99,7 @@ class Topic extends AbstractEntity implements AccessibleInterface, Subscribeable
 	 * The as solution marked post
 	 *
 	 * @var \Mittwald\Typo3Forum\Domain\Model\Forum\Post
-	 * @lazy
+	 * @ExtbaseORM\Lazy
 	 */
 	protected $solution;
 
@@ -157,7 +160,7 @@ class Topic extends AbstractEntity implements AccessibleInterface, Subscribeable
 	 * All users who have read this topic.
 	 *
 	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Mittwald\Typo3Forum\Domain\Model\User\FrontendUser>
-	 * @lazy
+	 * @ExtbaseORM\Lazy
 	 */
 	protected $readers;
 
@@ -172,15 +175,23 @@ class Topic extends AbstractEntity implements AccessibleInterface, Subscribeable
 	 * Get all tags of this topic
 	 *
 	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Mittwald\Typo3Forum\Domain\Model\Forum\Tag>
-	 * @lazy
+	 * @ExtbaseORM\Lazy
 	 */
 	protected $tags;
 
 	/**
-	 * @var \Mittwald\Typo3Forum\Domain\Repository\Forum\TopicRepository
-	 * @inject
+	 * @var TopicRepository
 	 */
 	protected $topicRepository;
+
+
+	/**
+	 * @param TopicRepository $topicRepository
+	 */
+	public function injectTopicRepository(TopicRepository $topicRepository): void
+	{
+		$this->topicRepository = $topicRepository;
+	}
 
 	/**
 	 * Constructor. Initializes all \TYPO3\CMS\Extbase\Persistence\ObjectStorage instances.
@@ -768,5 +779,85 @@ class Topic extends AbstractEntity implements AccessibleInterface, Subscribeable
 	 */
 	public function removeSubscriber(FrontendUser $user) {
 		$this->subscribers->detach($user);
+	}
+
+	/**
+	 * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage
+	 */
+	public function getFavSubscribers(): \TYPO3\CMS\Extbase\Persistence\ObjectStorage
+	{
+		return $this->favSubscribers;
+	}
+
+	/**
+	 * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage $favSubscribers
+	 */
+	public function setFavSubscribers(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $favSubscribers): void
+	{
+		$this->favSubscribers = $favSubscribers;
+	}
+
+	/**
+	 * @return \DateTime
+	 */
+	public function getLastPostCrdate(): \DateTime
+	{
+		return $this->lastPostCrdate;
+	}
+
+	/**
+	 * @param \DateTime $lastPostCrdate
+	 */
+	public function setLastPostCrdate(\DateTime $lastPostCrdate): void
+	{
+		$this->lastPostCrdate = $lastPostCrdate;
+	}
+
+	/**
+	 * @return \DateTime
+	 */
+	public function getCrdate(): \DateTime
+	{
+		return $this->crdate;
+	}
+
+	/**
+	 * @param \DateTime $crdate
+	 */
+	public function setCrdate(\DateTime $crdate): void
+	{
+		$this->crdate = $crdate;
+	}
+
+	/**
+	 * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage
+	 */
+	public function getReaders(): \TYPO3\CMS\Extbase\Persistence\ObjectStorage
+	{
+		return $this->readers;
+	}
+
+	/**
+	 * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage $readers
+	 */
+	public function setReaders(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $readers): void
+	{
+		$this->readers = $readers;
+	}
+
+	/**
+	 * @return TopicRepository
+	 */
+	public function getTopicRepository(): TopicRepository
+	{
+		return $this->topicRepository;
+	}
+
+	/**
+	 * @param TopicRepository $topicRepository
+	 */
+	public function setTopicRepository(TopicRepository $topicRepository): void
+	{
+		$this->topicRepository = $topicRepository;
 	}
 }

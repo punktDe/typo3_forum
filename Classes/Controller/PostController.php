@@ -24,50 +24,107 @@ namespace Mittwald\Typo3Forum\Controller;
  *  This copyright notice MUST APPEAR in all copies of the script!      *
  *                                                                      */
 
+use Mittwald\Typo3Forum\Domain\Factory\Forum\PostFactory;
 use Mittwald\Typo3Forum\Domain\Model\Forum\Post;
 use Mittwald\Typo3Forum\Domain\Model\Forum\Topic;
 use Mittwald\Typo3Forum\Domain\Model\User\FrontendUser;
+use Mittwald\Typo3Forum\Domain\Repository\Forum\AttachmentRepository;
+use Mittwald\Typo3Forum\Domain\Repository\Forum\ForumRepository;
+use Mittwald\Typo3Forum\Domain\Repository\Forum\PostRepository;
+use Mittwald\Typo3Forum\Domain\Repository\Forum\TopicRepository;
+use Mittwald\Typo3Forum\Domain\Repository\Moderation\PostReportRepository;
+use Mittwald\Typo3Forum\Service\AttachmentService;
 use Mittwald\Typo3Forum\Utility\Localization;
 use TYPO3\CMS\Core\FormProtection\FormProtectionFactory;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Extbase\Annotation as Extbase;
 
 class PostController extends AbstractController {
 
 	/**
-	 * @var \Mittwald\Typo3Forum\Domain\Repository\Forum\AttachmentRepository
-	 * @inject
+	 * @var AttachmentRepository
 	 */
 	protected $attachmentRepository;
 
 	/**
-	 * @var \Mittwald\Typo3Forum\Service\AttachmentService
-	 * @inject
+	 * @var AttachmentService
 	 */
 	protected $attachmentService = NULL;
 
+
 	/**
-	 * @var \Mittwald\Typo3Forum\Domain\Repository\Forum\ForumRepository
-	 * @inject
+	 * @var ForumRepository
 	 */
 	protected $forumRepository;
 
 	/**
-	 * @var \Mittwald\Typo3Forum\Domain\Repository\Forum\PostRepository
-	 * @inject
+	 * @var PostRepository
 	 */
 	protected $postRepository;
 
 	/**
-	 * @var \Mittwald\Typo3Forum\Domain\Factory\Forum\PostFactory
-	 * @inject
+	 * @var PostFactory
 	 */
 	protected $postFactory;
 
 	/**
-	 * @var \Mittwald\Typo3Forum\Domain\Repository\Forum\TopicRepository
-	 * @inject
+	 * @var TopicRepository
 	 */
 	protected $topicRepository;
+
+
+	/**
+	 * @param AttachmentRepository $attachmentRepository
+	 */
+	public function injectAttachmentRepository(AttachmentRepository $attachmentRepository): void
+	{
+		$this->attachmentRepository = $attachmentRepository;
+	}
+
+
+	/**
+	 * @param AttachmentService $attachmentService
+	 */
+	public function injectAttachmentService(AttachmentService $attachmentService): void
+	{
+		$this->attachmentService = $attachmentService;
+	}
+
+
+	/**
+	 * @param ForumRepository $forumRepository
+	 */
+	public function injectForumRepository(ForumRepository $forumRepository): void
+	{
+		$this->forumRepository = $forumRepository;
+	}
+
+
+	/**
+	 * @param PostReportRepository $postRepository
+	 */
+	public function injectPostRepository(PostReportRepository $postRepository): void
+	{
+		$this->postRepository = $postRepository;
+	}
+
+
+	/**
+	 * @param PostFactory $postFactory
+	 */
+	public function injectPostFactory(PostFactory $postFactory): void
+	{
+		$this->postFactory = $postFactory;
+	}
+
+
+	/**
+	 * @param TopicRepository $topicRepository
+	 */
+	public function injectTopicRepository(TopicRepository $topicRepository): void
+	{
+		$this->topicRepository = $topicRepository;
+	}
 
     /**
      *  Listing Action.
@@ -187,7 +244,7 @@ class PostController extends AbstractController {
 	/**
 	 * Displays the form for creating a new post.
 	 *
-	 * @ignorevalidation $post
+	 * @TYPO3\CMS\Extbase\Annotation\IgnoreValidation("post")
 	 *
 	 * @param Topic $topic The topic in which the new post is to be created.
 	 * @param Post $post The new post.
@@ -224,8 +281,8 @@ class PostController extends AbstractController {
      * @param string $csrfToken
 	 * @param array $attachments File attachments for the post.
 	 *
-	 * @validate $post \Mittwald\Typo3Forum\Domain\Validator\Forum\PostValidator
-	 * @validate $attachments \Mittwald\Typo3Forum\Domain\Validator\Forum\AttachmentPlainValidator
+	 * @Extbase\Validate("Mittwald\Typo3Forum\Domain\Validator\Forum\PostValidator", param="post")
+	 * @Extbase\Validate("Mittwald\Typo3Forum\Domain\Validator\Forum\AttachmentPlainValidator", param="attachments")
      *
      * @throws \Exception if csrf token isn't valid
 	 */
@@ -269,7 +326,8 @@ class PostController extends AbstractController {
 	/**
 	 * Displays a form for editing a post.
 	 *
-	 * @ignorevalidation $post
+	 * @TYPO3\CMS\Extbase\Annotation\IgnoreValidation("post")
+	 *
 	 * @param Post $post The post that is to be edited.
 	 * @return void
 	 */

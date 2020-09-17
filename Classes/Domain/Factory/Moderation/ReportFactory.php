@@ -29,14 +29,24 @@ use Mittwald\Typo3Forum\Domain\Model\Moderation\PostReport;
 use Mittwald\Typo3Forum\Domain\Model\Moderation\ReportComment;
 use Mittwald\Typo3Forum\Domain\Model\Moderation\ReportWorkflowStatus;
 use Mittwald\Typo3Forum\Domain\Model\Moderation\UserReport;
+use Mittwald\Typo3Forum\Domain\Repository\Moderation\ReportWorkflowStatusRepository;
 
 class ReportFactory extends AbstractFactory {
 
 	/**
-	 * @var \Mittwald\Typo3Forum\Domain\Repository\Moderation\ReportWorkflowStatusRepository
-	 * @inject
+	 * @var ReportWorkflowStatusRepository
 	 */
 	protected $workflowStatusRepository;
+
+
+
+	/**
+	 * @param ReportWorkflowStatusRepository $workflowStatusRepository
+	 */
+	public function injectWorkflowStatusRepository(ReportWorkflowStatusRepository $workflowStatusRepository): void
+	{
+		$this->workflowStatusRepository = $workflowStatusRepository;
+	}
 
 	/**
 	 *

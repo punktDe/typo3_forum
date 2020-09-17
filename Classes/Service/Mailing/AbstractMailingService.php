@@ -24,6 +24,7 @@ namespace Mittwald\Typo3Forum\Service\Mailing;
  *  This copyright notice MUST APPEAR in all copies of the script!      *
  *                                                                      */
 
+use Mittwald\Typo3Forum\Configuration\ConfigurationBuilder;
 use Mittwald\Typo3Forum\Service\AbstractService;
 
 abstract class AbstractMailingService extends AbstractService implements MailingServiceInterface {
@@ -35,8 +36,7 @@ abstract class AbstractMailingService extends AbstractService implements Mailing
 	protected $settings;
 
     /**
-     * @var \Mittwald\Typo3Forum\Configuration\ConfigurationBuilder
-     * @inject
+     * @var ConfigurationBuilder
      */
     protected $configurationBuilder;
 
@@ -55,6 +55,16 @@ abstract class AbstractMailingService extends AbstractService implements Mailing
 	 * @var string
 	 */
 	protected $format = self::MAILING_FORMAT_HTML;
+
+
+
+	/**
+	 * @param ConfigurationBuilder $configurationBuilder
+	 */
+	public function injectConfigurationBuilder(ConfigurationBuilder $configurationBuilder): void
+	{
+		$this->configurationBuilder = $configurationBuilder;
+	}
 
 	public function initializeObject() {
 		$this->settings = $this->configurationBuilder->getSettings();

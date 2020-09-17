@@ -23,6 +23,9 @@ namespace Mittwald\Typo3Forum\ViewHelpers\Form;
  *  This copyright notice MUST APPEAR in all copies of the script!      *
  *                                                                      */
 
+use Mittwald\Typo3Forum\Cache\Cache;
+use Mittwald\Typo3Forum\Utility\TypoScript;
+use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 use TYPO3\CMS\Fluid\ViewHelpers\Form\TextareaViewHelper;
 
 /**
@@ -33,16 +36,14 @@ class BbCodeEditorViewHelper extends TextareaViewHelper {
 	/**
 	 * cache
 	 *
-	 * @var \Mittwald\Typo3Forum\Cache\Cache
-	 * @inject
+	 * @var Cache
 	 */
 	protected $cache = NULL;
 
 	/**
 	 * Instance of the typo3_forum TypoScript reader class. This class is used
 	 * to read a bbcode editor's configuration from the typoscript setup.
-	 * @var \Mittwald\Typo3Forum\Utility\TypoScript
-	 * @inject
+	 * @var TypoScript
 	 */
 	protected $typoscriptReader = NULL;
 
@@ -61,8 +62,7 @@ class BbCodeEditorViewHelper extends TextareaViewHelper {
 
 	/**
 	 * An Instance of the Extbase Object Manager class.
-	 * @var \TYPO3\CMS\Extbase\Object\ObjectManagerInterface
-	 * @inject
+	 * @var ObjectManagerInterface
 	 */
 	protected $objectManager = NULL;
 
@@ -70,6 +70,34 @@ class BbCodeEditorViewHelper extends TextareaViewHelper {
      * @var string
      */
 	protected $javascriptSetup;
+
+
+
+	/**
+	 * @param Cache $cache
+	 */
+	public function injectCache(Cache $cache): void
+	{
+		$this->cache = $cache;
+	}
+
+
+	/**
+	 * @param TypoScript $typoscriptReader
+	 */
+	public function injectTyposcriptReader(TypoScript $typoscriptReader): void
+	{
+		$this->typoscriptReader = $typoscriptReader;
+	}
+
+
+	/**
+	 * @param ObjectManagerInterface $objectManager
+	 */
+	public function injectObjectManager(ObjectManagerInterface $objectManager): void
+	{
+		$this->objectManager = $objectManager;
+	}
 
     /**
 	 * Initializes the view helper arguments.
@@ -151,11 +179,15 @@ class BbCodeEditorViewHelper extends TextareaViewHelper {
 
 		/* @var \TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder $uriBuilder */
         $uriBuilder = $this->renderingContext->getControllerContext()->getUriBuilder();
-        $uri = $uriBuilder
-            ->reset()
-            ->setTargetPageUid($GLOBALS['TSFE']->id)
-            ->setArguments(['type' => 43568275])
-            ->uriFor('preview', [], 'Ajax', 'Typo3Forum', 'Ajax');
+
+		$uri = $uriBuilder
+			->reset()
+			->setArguments([
+				'pid' => $GLOBALS['TSFE']->id,
+				'ajaxforumapi' => 'preview'
+			])
+			->setCreateAbsoluteUri(true)
+			->buildFrontendUri();
 
         $editorSettings = [
             'previewParserPath' => $uri,

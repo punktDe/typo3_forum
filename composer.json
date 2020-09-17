@@ -10,8 +10,8 @@
 		}
 	],
 	"require": {
-		"typo3/cms-core": "^8.7 || ^9.5",
-		"typo3-ter/static-info-tables": "6.5.*"
+		"typo3/cms-core": "^10.4",
+		"sjbr/static-info-tables": "6.9.*"
 	},
 	"require-dev": {
 		"namelesscoder/typo3-repository-client": "^1.2",
@@ -33,7 +33,10 @@
 	"autoload": {
 		"psr-4": {
 			"Mittwald\\Typo3Forum\\": "Classes/"
-		}
+		},
+		"classmap": [
+			"Resources/Private/Libraries"
+		]
 	},
 	"autoload-dev": {
 		"psr-4": {

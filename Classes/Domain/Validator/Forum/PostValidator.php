@@ -24,9 +24,25 @@ namespace Mittwald\Typo3Forum\Domain\Validator\Forum;
  *  This copyright notice MUST APPEAR in all copies of the script!      *
  *                                                                      */
 
+use Mittwald\Typo3Forum\Domain\Repository\User\FrontendUserRepository;
 use TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator;
 
 class PostValidator extends AbstractValidator {
+
+	/**
+	 * @var FrontendUserRepository
+	 */
+	protected $userRepository = NULL;
+
+
+
+	/**
+	 * @param FrontendUserRepository $userRepository
+	 */
+	public function injectUserRepository(FrontendUserRepository $userRepository): void
+	{
+		$this->userRepository = $userRepository;
+	}
 
 	/**
 	 * Check if $value is valid. If it is not valid, needs to add an error
@@ -41,6 +57,16 @@ class PostValidator extends AbstractValidator {
 		if (trim($post->getText()) === '') {
 			$this->addError('The post can\'t be empty!.', 1221560718);
 			$result = FALSE;
+		}
+
+		if ($this->userRepository->findCurrent()->isAnonymous()) {
+			if (empty($post->getAuthorName())) {
+				$this->addError('Author name must be present when post is created by anonymous user.', 1335106565);
+				$result = FALSE;
+			} elseif (strlen($post->getAuthorName()) < 3) {
+				$this->addError('Author name must be at least three characters long.', 1335106566);
+				$result = FALSE;
+			}
 		}
 
 		return $result;

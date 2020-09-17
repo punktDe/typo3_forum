@@ -24,6 +24,7 @@ namespace Mittwald\Typo3Forum\Controller;
  *  This copyright notice MUST APPEAR in all copies of the script!      *
  *                                                                      */
 
+use Mittwald\Typo3Forum\Domain\Factory\Forum\TopicFactory;
 use Mittwald\Typo3Forum\Domain\Model\Forum\Forum;
 use Mittwald\Typo3Forum\Domain\Model\Forum\Post;
 use Mittwald\Typo3Forum\Domain\Model\Forum\Topic;
@@ -33,60 +34,131 @@ use Mittwald\Typo3Forum\Domain\Model\Moderation\ReportComment;
 use Mittwald\Typo3Forum\Domain\Model\Moderation\ReportWorkflowStatus;
 use Mittwald\Typo3Forum\Domain\Model\Moderation\UserReport;
 use Mittwald\Typo3Forum\Domain\Model\User\FrontendUser;
+use Mittwald\Typo3Forum\Domain\Repository\Forum\ForumRepository;
+use Mittwald\Typo3Forum\Domain\Repository\Forum\PostRepository;
+use Mittwald\Typo3Forum\Domain\Repository\Forum\TopicRepository;
+use Mittwald\Typo3Forum\Domain\Repository\Moderation\PostReportRepository;
+use Mittwald\Typo3Forum\Domain\Repository\Moderation\ReportRepository;
+use Mittwald\Typo3Forum\Domain\Repository\Moderation\UserReportRepository;
 use Mittwald\Typo3Forum\Utility\Localization;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Exception\InvalidArgumentValueException;
+use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
+use TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface;
 
 class ModerationController extends AbstractController {
 
 	/**
-	 * @var \Mittwald\Typo3Forum\Domain\Repository\Forum\ForumRepository
-	 * @inject
+	 * @var ForumRepository
 	 */
 	protected $forumRepository;
 
 	/**
-	 * @var \TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface
-	 * @inject
+	 * @var PersistenceManagerInterface
 	 */
 	protected $persistenceManager;
 
+
 	/**
-	 * @var \Mittwald\Typo3Forum\Domain\Repository\Moderation\PostReportRepository
-	 * @inject
+	 * @var PostReportRepository
 	 */
 	protected $postReportRepository = NULL;
 
 	/**
-	 * @var \Mittwald\Typo3Forum\Domain\Repository\Forum\PostRepository
-	 * @inject
+	 * @var PostRepository
 	 */
 	protected $postRepository;
 
 	/**
-	 * @var \Mittwald\Typo3Forum\Domain\Repository\Moderation\ReportRepository
-	 * @inject
+	 * @var ReportRepository
 	 */
 	protected $reportRepository = NULL;
 
 	/**
-	 * @var \Mittwald\Typo3Forum\Domain\Factory\Forum\TopicFactory
-	 * @inject
+	 * @var TopicFactory
 	 */
 	protected $topicFactory;
 
 	/**
-	 * @var \Mittwald\Typo3Forum\Domain\Repository\Forum\TopicRepository
-	 * @inject
+	 * @var TopicRepository
 	 */
 	protected $topicRepository;
 
 	/**
-	 * @var \Mittwald\Typo3Forum\Domain\Repository\Moderation\UserReportRepository
-	 * @inject
+	 * @var UserReportRepository
 	 */
 	protected $userReportRepository = NULL;
+
+	/**
+	 * @param ForumRepository $forumRepository
+	 */
+	public function injectForumRepository(ForumRepository $forumRepository): void
+	{
+		$this->forumRepository = $forumRepository;
+	}
+
+	/**
+	 * @param PersistenceManager $persistenceManager
+	 */
+	public function injectPersistenceManager(PersistenceManager $persistenceManager): void
+	{
+		$this->persistenceManager = $persistenceManager;
+	}
+
+
+	/**
+	 * @param PostReportRepository $postReportRepository
+	 */
+	public function injectPostReportRepository(PostReportRepository $postReportRepository): void
+	{
+		$this->postReportRepository = $postReportRepository;
+	}
+
+
+	/**
+	 * @param PostRepository $postRepository
+	 */
+	public function injectPostRepository(PostRepository $postRepository): void
+	{
+		$this->postRepository = $postRepository;
+	}
+
+
+	/**
+	 * @param ReportRepository $reportRepository
+	 */
+	public function injectReportRepository(ReportRepository $reportRepository): void
+	{
+		$this->reportRepository = $reportRepository;
+	}
+
+
+	/**
+	 * @param TopicFactory $topicFactory
+	 */
+	public function injectTopicFactory(TopicFactory $topicFactory): void
+	{
+		$this->topicFactory = $topicFactory;
+	}
+
+
+	/**
+	 * @param TopicRepository $topicRepository
+	 */
+	public function injectTopicRepository(TopicRepository $topicRepository): void
+	{
+		$this->topicRepository = $topicRepository;
+	}
+
+
+	/**
+	 * @param UserReportRepository $userReportRepository
+	 */
+	public function injectUserReportRepository(UserReportRepository $userReportRepository): void
+	{
+		$this->userReportRepository = $userReportRepository;
+	}
 
 	/**
 	 * @return void
@@ -151,7 +223,7 @@ class ModerationController extends AbstractController {
 	 * @param Report $report
 	 * @param ReportComment $comment
 	 *
-	 * @ignorevalidation $comment
+	 * @TYPO3\CMS\Extbase\Annotation\IgnoreValidation("comment")
 	 */
 	public function newReportCommentAction(Report $report, ReportComment $comment = NULL) {
 		$this->view->assignMultiple([
@@ -319,13 +391,13 @@ class ModerationController extends AbstractController {
 	}
 
 	/**
-	 * Delete a topic from repository!
+	 * Delete a topic from repository
 	 *
-	 * @param Topic $topic The topic that is be deleted.
+	 * @param Topic $topic The topic to be deleted
 	 *
 	 * @return void
 	 */
-	public function topicConformDeleteAction(Topic $topic) {
+	public function deleteTopicAction(Topic $topic) {
 		$this->authenticationService->assertModerationAuthorization($topic->getForum());
 		foreach ($topic->getPosts() as $post) {
 			$this->postRepository->remove($post);

@@ -33,6 +33,8 @@ use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
+use TYPO3\CMS\Extbase\Annotation as Extbase;
+use TYPO3\CMS\Extbase\Annotation\ORM as ExtbaseORM;
 
 /**
  * A forum post. Forum posts are submitted to the access control mechanism and can be
@@ -44,7 +46,7 @@ class Post extends AbstractEntity implements AccessibleInterface, NotifiableInte
 	 * The post text.
 	 *
 	 * @var string
-	 * @validate NotEmpty
+	 * @Extbase\Validate("NotEmpty")
 	 */
 	protected $text;
 
@@ -86,14 +88,14 @@ class Post extends AbstractEntity implements AccessibleInterface, NotifiableInte
 	/**
 	 * All subscribers of this forum.
 	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Mittwald\Typo3Forum\Domain\Model\User\FrontendUser>
-	 * @lazy
+	 * @ExtbaseORM\Lazy
 	 */
 	protected $supporters;
 
 	/**
 	 * Attachments.
 	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Mittwald\Typo3Forum\Domain\Model\Forum\Attachment>
-	 * @lazy
+	 * @ExtbaseORM\Lazy
 	 */
 	protected $attachments;
 
@@ -258,7 +260,7 @@ class Post extends AbstractEntity implements AccessibleInterface, NotifiableInte
 		switch ($accessType) {
 			case Access::TYPE_EDIT_POST:
 			case Access::TYPE_DELETE_POST:
-				return $this->checkEditOrDeletePostAccess($user, $accessType);
+				return $this->checkEditOrDeletePostAccess($accessType, $user);
 			default:
 				return $this->topic->checkAccess($user, $accessType);
 		}
@@ -277,10 +279,14 @@ class Post extends AbstractEntity implements AccessibleInterface, NotifiableInte
 	 * @param string $operation
 	 * @return boolean TRUE, if the user is allowed to edit this post, otherwise FALSE.
 	 */
-	public function checkEditOrDeletePostAccess(FrontendUser $user, $operation) {
+	public function checkEditOrDeletePostAccess($operation, FrontendUser $user = NULL) {
 		if ($user === NULL || $user->isAnonymous()) {
 			return FALSE;
 		} else {
+			if ($user->checkAccess($user, Access::TYPE_MODERATE)) {
+				return TRUE;
+			}
+
 			if ($this->getForum()->checkModerationAccess($user)) {
 				return TRUE;
 			}
@@ -351,7 +357,6 @@ class Post extends AbstractEntity implements AccessibleInterface, NotifiableInte
 	 * Sets the attachments.
 	 *
 	 * @param ObjectStorage $attachments The attachments.
-	 * @validate $attachments Tx_Typo3Forum_Domain_Validator_Forum_AttachmentValidator
 	 *
 	 * @return void
 	 */

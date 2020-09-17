@@ -28,26 +28,53 @@ use Mittwald\Typo3Forum\Domain\Exception\Authentication\NotLoggedInException;
 use Mittwald\Typo3Forum\Domain\Factory\AbstractFactory;
 use Mittwald\Typo3Forum\Domain\Model\Forum\Post;
 use Mittwald\Typo3Forum\Domain\Model\User\FrontendUser;
+use Mittwald\Typo3Forum\Domain\Repository\Forum\PostRepository;
+use Mittwald\Typo3Forum\Domain\Repository\Forum\TopicRepository;
 
 class PostFactory extends AbstractFactory {
 
 	/**
-	 * @var \Mittwald\Typo3Forum\Domain\Repository\Forum\PostRepository
-	 * @inject
+	 * @var PostRepository
 	 */
 	protected $postRepository;
 
 	/**
-	 * @var \Mittwald\Typo3Forum\Domain\Factory\Forum\TopicFactory
-	 * @inject
+	 * @var TopicFactory
 	 */
 	protected $topicFactory;
 
 	/**
-	 * @var \Mittwald\Typo3Forum\Domain\Repository\Forum\TopicRepository
-	 * @inject
+	 * @var TopicRepository
 	 */
 	protected $topicRepository;
+
+
+	/**
+	 * @param PostRepository $postRepository
+	 */
+	public function injectPostRepository(PostRepository $postRepository): void
+	{
+		$this->postRepository = $postRepository;
+	}
+
+
+	/**
+	 * @param TopicFactory $topicFactory
+	 */
+	public function injectTopicFactory(TopicFactory $topicFactory): void
+	{
+		$this->topicFactory = $topicFactory;
+	}
+
+
+	/**
+	 * @param TopicRepository $topicRepository
+	 */
+	public function injectTopicRepository(TopicRepository $topicRepository): void
+	{
+		$this->topicRepository = $topicRepository;
+	}
+
 
 	/**
 	 * Creates an empty post

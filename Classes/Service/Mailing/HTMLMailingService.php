@@ -43,13 +43,15 @@ class HTMLMailingService extends AbstractMailingService
      */
     public function sendMail(FrontendUser $recipient, $subject, $bodyText)
     {
+		/* @var MailMessage $typo3Mail */
         $typo3Mail = GeneralUtility::makeInstance(MailMessage::class);
         $typo3Mail->setFrom([
             $this->getDefaultSenderAddress() => $this->getDefaultSenderName()]
         )
             ->setTo($recipient->getEmail())
             ->setSubject($subject)
-            ->setBody($bodyText, 'text/html')
+            ->html($bodyText)
+
             ->send();
     }
 }

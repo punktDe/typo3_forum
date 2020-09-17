@@ -24,7 +24,6 @@ namespace Mittwald\Typo3Forum\Domain\Model\User;
  *  This copyright notice MUST APPEAR in all copies of the script!      *
  *                                                                      */
 
-use Mittwald\Typo3Forum\Configuration\ConfigurationBuilder;
 use Mittwald\Typo3Forum\Domain\Model\AccessibleInterface;
 use Mittwald\Typo3Forum\Domain\Model\ConfigurableEntityTrait;
 use Mittwald\Typo3Forum\Domain\Model\ConfigurableInterface;
@@ -33,9 +32,11 @@ use Mittwald\Typo3Forum\Domain\Model\Forum\Forum;
 use Mittwald\Typo3Forum\Domain\Model\Forum\Topic;
 use Mittwald\Typo3Forum\Domain\Model\ReadableInterface;
 use Mittwald\Typo3Forum\Domain\Model\SubscribeableInterface;
-use TYPO3\CMS\Core\Resource\FileReference;
+use Mittwald\Typo3Forum\Domain\Repository\User\RankRepository;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
+use TYPO3\CMS\Extbase\Annotation\ORM as ExtbaseORM;
 
 /**
  * A frontend user.
@@ -51,10 +52,18 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser implemen
 	/**
 	 * The rank repository
 	 *
-	 * @var \Mittwald\Typo3Forum\Domain\Repository\User\RankRepository
-	 * @inject
+	 * @var RankRepository
 	 */
 	protected $rankRepository = NULL;
+
+
+	/**
+	 * @param RankRepository $rankRepository
+	 */
+	public function injectRankRepository(RankRepository $rankRepository): void
+	{
+		$this->rankRepository = $rankRepository;
+	}
 
 	/**
 	 * Forum post count
@@ -139,7 +148,7 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser implemen
 	 * Fav Subscribed topics.
 	 *
 	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Mittwald\Typo3Forum\Domain\Model\Forum\Topic>
-	 * @lazy
+	 * @ExtbaseORM\Lazy
 	 */
 	protected $topicFavSubscriptions;
 
@@ -147,7 +156,7 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser implemen
 	 * Fav Subscribed forums.
 	 *
 	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Mittwald\Typo3Forum\Domain\Model\Forum\Forum>
-	 * @lazy
+	 * @ExtbaseORM\Lazy
 	 */
 	protected $forumFavSubscriptions;
 
@@ -155,7 +164,7 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser implemen
 	 * Subscribed topics.
 	 *
 	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Mittwald\Typo3Forum\Domain\Model\Forum\Topic>
-	 * @lazy
+	 * @ExtbaseORM\Lazy
 	 */
 	protected $topicSubscriptions;
 
@@ -163,7 +172,7 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser implemen
 	 * Subscribed forums.
 	 *
 	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Mittwald\Typo3Forum\Domain\Model\Forum\Forum>
-	 * @lazy
+	 * @ExtbaseORM\Lazy
 	 */
 	protected $forumSubscriptions;
 
@@ -185,7 +194,7 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser implemen
 	 * Read topics.
 	 *
 	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Mittwald\Typo3Forum\Domain\Model\Forum\Topic>
-	 * @lazy
+	 * @ExtbaseORM\Lazy
 	 */
 	protected $readTopics;
 
@@ -193,7 +202,7 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser implemen
 	 * Read forum.
 	 *
 	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Mittwald\Typo3Forum\Domain\Model\Forum\Forum>
-	 * @lazy
+	 * @ExtbaseORM\Lazy
 	 */
 	protected $readForum;
 
@@ -201,7 +210,7 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser implemen
 	 * Read topics.
 	 *
 	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Mittwald\Typo3Forum\Domain\Model\Forum\Post>
-	 * @lazy
+	 * @ExtbaseORM\Lazy
 	 */
 	protected $supportPosts;
 
@@ -266,7 +275,7 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser implemen
 	 * The private messages of this user.
 	 *
 	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Mittwald\Typo3Forum\Domain\Model\User\PrivateMessage>
-	 * @lazy
+	 * @ExtbaseORM\Lazy
 	 */
 	protected $privateMessages;
 
@@ -488,16 +497,13 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser implemen
 	 * @return boolean
 	 */
 	public function checkAccess(FrontendUser $user = NULL, $accessType = Access::TYPE_MODERATE) {
-		// @todo: the $accessType and the switch statement are useless here
-		switch ($accessType) {
-			default:
-				foreach ($user->getUsergroup() as $group) {
-					if ($group->getUserMod()) {
-						return TRUE;
-					}
-				}
-				return FALSE;
+		foreach ($user->getUsergroup() as $group) {
+			if ($group->getUserMod()) {
+				return TRUE;
+			}
 		}
+
+		return FALSE;
 	}
 
 	/**
@@ -603,10 +609,10 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser implemen
 		// and you're fine (http://de.gravatar.com/site/implement/images/).
 		if ($this->useGravatar) {
 			$emailHash = md5(strtolower($this->email));
-			$temporaryFilename = 'typo3temp/typo3_forum/gravatar/' . $emailHash . '.jpg';
-			if (!file_exists(PATH_site . $temporaryFilename)) {
+			$temporaryFilename = '/typo3temp/typo3_forum/gravatar/' . $emailHash . '.jpg';
+			if (!file_exists(Environment::getPublicPath() . $temporaryFilename)) {
 				$image = GeneralUtility::getUrl('https://secure.gravatar.com/avatar/' . $emailHash . '.jpg');
-				file_put_contents(PATH_site . $temporaryFilename, $image);
+				file_put_contents(Environment::getPublicPath() . $temporaryFilename, $image);
 			}
 
 			return $temporaryFilename;
@@ -644,6 +650,152 @@ class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser implemen
 	 */
 	public function isAnonymous() {
 		return FALSE;
+	}
+
+	/**
+	 * @return ObjectStorage
+	 */
+	public function getTopicFavSubscriptions()
+	{
+		return $this->topicFavSubscriptions;
+	}
+
+	/**
+	 * @return ObjectStorage
+	 */
+	public function getForumFavSubscriptions()
+	{
+		return $this->forumFavSubscriptions;
+	}
+
+	/**
+	 * @param ObjectStorage $forumFavSubscriptions
+	 */
+	public function setForumFavSubscriptions(ObjectStorage $forumFavSubscriptions): void
+	{
+		$this->forumFavSubscriptions = $forumFavSubscriptions;
+	}
+
+	/**
+	 * @return \DateTime
+	 */
+	public function getCrdate(): \DateTime
+	{
+		return $this->crdate;
+	}
+
+	/**
+	 * @param \DateTime $crdate
+	 */
+	public function setCrdate(\DateTime $crdate): void
+	{
+		$this->crdate = $crdate;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getContact(): string
+	{
+		return $this->contact;
+	}
+
+	/**
+	 * @param string $contact
+	 */
+	public function setContact(string $contact): void
+	{
+		$this->contact = $contact;
+	}
+
+	/**
+	 * @return RankRepository
+	 */
+	public function getRankRepository(): RankRepository
+	{
+		return $this->rankRepository;
+	}
+
+	/**
+	 * @param RankRepository $rankRepository
+	 */
+	public function setRankRepository(RankRepository $rankRepository): void
+	{
+		$this->rankRepository = $rankRepository;
+	}
+
+	/**
+	 * @return ObjectStorage
+	 */
+	public function getReadTopics(): ObjectStorage
+	{
+		return $this->readTopics;
+	}
+
+	/**
+	 * @param ObjectStorage $readTopics
+	 */
+	public function setReadTopics(ObjectStorage $readTopics): void
+	{
+		$this->readTopics = $readTopics;
+	}
+
+	/**
+	 * @return ObjectStorage
+	 */
+	public function getReadForum(): ObjectStorage
+	{
+		return $this->readForum;
+	}
+
+	/**
+	 * @param ObjectStorage $readForum
+	 */
+	public function setReadForum(ObjectStorage $readForum): void
+	{
+		$this->readForum = $readForum;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getStaticInfoCountry(): string
+	{
+		return $this->staticInfoCountry;
+	}
+
+	/**
+	 * @param string $staticInfoCountry
+	 */
+	public function setStaticInfoCountry(string $staticInfoCountry): void
+	{
+		$this->staticInfoCountry = $staticInfoCountry;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isUseGravatar(): bool
+	{
+		return $this->useGravatar;
+	}
+
+	/**
+	 * @param bool $useGravatar
+	 */
+	public function setUseGravatar(bool $useGravatar): void
+	{
+		$this->useGravatar = $useGravatar;
+	}
+
+
+
+	/**
+	 * @param ObjectStorage $topicFavSubscriptions
+	 */
+	public function setTopicFavSubscriptions(ObjectStorage $topicFavSubscriptions): void
+	{
+		$this->topicFavSubscriptions = $topicFavSubscriptions;
 	}
 
 	/**

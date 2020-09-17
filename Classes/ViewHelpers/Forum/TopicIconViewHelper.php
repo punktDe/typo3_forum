@@ -27,9 +27,10 @@ namespace Mittwald\Typo3Forum\ViewHelpers\Forum;
 
 use Mittwald\Typo3Forum\Domain\Model\Forum\ShadowTopic;
 use Mittwald\Typo3Forum\Domain\Model\Forum\Topic;
+use Mittwald\Typo3Forum\Domain\Repository\User\FrontendUserRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
 use TYPO3\CMS\Fluid\ViewHelpers\CObjectViewHelper;
+use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderableClosure;
 
 /**
@@ -44,10 +45,18 @@ class TopicIconViewHelper extends AbstractViewHelper
 
     /**
      * The frontend user repository.
-     * @var \Mittwald\Typo3Forum\Domain\Repository\User\FrontendUserRepository
-     * @inject
+     * @var FrontendUserRepository
      */
     protected $frontendUserRepository = null;
+
+
+	/**
+	 * @param FrontendUserRepository $frontendUserRepository
+	 */
+	public function injectFrontendUserRepository(FrontendUserRepository $frontendUserRepository): void
+	{
+		$this->frontendUserRepository = $frontendUserRepository;
+	}
 
     /**
      *

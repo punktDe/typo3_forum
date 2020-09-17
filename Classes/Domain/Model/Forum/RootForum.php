@@ -24,6 +24,7 @@ namespace Mittwald\Typo3Forum\Domain\Model\Forum;
  *  This copyright notice MUST APPEAR in all copies of the script!      *
  *                                                                      */
 use Mittwald\Typo3Forum\Domain\Model\User\FrontendUser;
+use Mittwald\Typo3Forum\Domain\Repository\Forum\ForumRepository;
 use TYPO3\CMS\Core\SingletonInterface;
 
 
@@ -35,10 +36,18 @@ use TYPO3\CMS\Core\SingletonInterface;
 class RootForum extends Forum implements SingletonInterface {
 
 	/**
-	 * @var \Mittwald\Typo3Forum\Domain\Repository\Forum\ForumRepository
-	 * @inject
+	 * @var ForumRepository
 	 */
 	protected $forumRepository = NULL;
+
+
+	/**
+	 * @param ForumRepository $forumRepository
+	 */
+	public function injectForumRepository(ForumRepository $forumRepository): void
+	{
+		$this->forumRepository = $forumRepository;
+	}
 
 	public function __construct() {
 		$this->uid = 0;

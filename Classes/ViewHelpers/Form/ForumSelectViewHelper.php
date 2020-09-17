@@ -25,6 +25,7 @@ namespace Mittwald\Typo3Forum\ViewHelpers\Form;
  *                                                                      */
 
 use Mittwald\Typo3Forum\Domain\Model\Forum\Forum;
+use Mittwald\Typo3Forum\Domain\Repository\Forum\ForumRepository;
 use TYPO3\CMS\Fluid\ViewHelpers\Form\AbstractFormFieldViewHelper;
 use TYPO3\CMS\Fluid\ViewHelpers\Form\SelectViewHelper;
 
@@ -35,10 +36,19 @@ class ForumSelectViewHelper extends SelectViewHelper {
 
 	/**
 	 * The forum repository.
-	 * @var \Mittwald\Typo3Forum\Domain\Repository\Forum\ForumRepository
-	 * @inject
+	 * @var ForumRepository
 	 */
 	protected $forumRepository = NULL;
+
+
+
+	/**
+	 * @param ForumRepository $forumRepository
+	 */
+	public function injectForumRepository(ForumRepository $forumRepository): void
+	{
+		$this->forumRepository = $forumRepository;
+	}
 
 	/**
 	 * Initializses the view helper arguments.

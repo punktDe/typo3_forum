@@ -1,8 +1,6 @@
 <?php
 namespace Mittwald\Typo3Forum\TextParser\Service;
 
-include("../../../Resources/Private/Libraries/GeSHi/geshi.php");
-
 class AbstractGeshiService {
 
 	/**

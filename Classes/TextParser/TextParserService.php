@@ -25,7 +25,11 @@ namespace Mittwald\Typo3Forum\TextParser;
  *                                                                      */
 
 use Mittwald\Typo3Forum\Service\AbstractService;
+use Mittwald\Typo3Forum\Utility\TypoScript;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ControllerContext;
+use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
+use TYPO3Fluid\Fluid\Core\ViewHelper\ViewHelperVariableContainer;
 
 /**
  * Service class for parsing text values for display. This service handles
@@ -35,8 +39,7 @@ class TextParserService extends AbstractService {
 
 	/**
 	 * An instance of the Extbase object manager.
-	 * @var \TYPO3\CMS\Extbase\Object\ObjectManagerInterface
-	 * @inject
+	 * @var ObjectManagerInterface
 	 */
 	protected $objectManager;
 
@@ -44,8 +47,7 @@ class TextParserService extends AbstractService {
 	 * An instance of the typo3_forum typoscript reader. Is used to read the
 	 * text parser's typoscript configuration.
 	 *
-	 * @var \Mittwald\Typo3Forum\Utility\TypoScript
-	 * @inject
+	 * @var TypoScript
 	 */
 	protected $typoscriptReader;
 
@@ -59,8 +61,7 @@ class TextParserService extends AbstractService {
 	 * The viewHelper variable container. This needs to be set when this service is
 	 * called from a viewHelper context.
 	 *
-	 * @var \TYPO3\CMS\Fluid\Core\ViewHelper\ViewHelperVariableContainer
-	 * @inject
+	 * @var ViewHelperVariableContainer
 	 */
 	protected $viewHelperVariableContainer;
 
@@ -69,6 +70,36 @@ class TextParserService extends AbstractService {
 	 * @var ControllerContext
 	 */
 	protected $controllerContext;
+
+
+
+	/**
+	 * @param ObjectManagerInterface $objectManager
+	 */
+	public function injectObjectManager(ObjectManagerInterface $objectManager): void
+	{
+		$this->objectManager = $objectManager;
+	}
+
+
+
+	/**
+	 * @param TypoScript $typoscriptReader
+	 */
+	public function injectTyposcriptReader(TypoScript $typoscriptReader): void
+	{
+		$this->typoscriptReader = $typoscriptReader;
+	}
+
+
+
+	/**
+	 * 
+	 */
+	public function initializeObject(): void
+	{
+		$this->viewHelperVariableContainer = GeneralUtility::makeInstance(ViewHelperVariableContainer::class);
+	}
 
 	/**
 	 * Sets the current Extbase controller context.

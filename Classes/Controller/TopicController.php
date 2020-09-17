@@ -25,90 +25,185 @@ namespace Mittwald\Typo3Forum\Controller;
  *                                                                      */
 
 use Mittwald\Typo3Forum\Domain\Exception\Authentication\NoAccessException;
+use Mittwald\Typo3Forum\Domain\Factory\Forum\PostFactory;
+use Mittwald\Typo3Forum\Domain\Factory\Forum\TopicFactory;
 use Mittwald\Typo3Forum\Domain\Model\Forum\Forum;
 use Mittwald\Typo3Forum\Domain\Model\Forum\Post;
 use Mittwald\Typo3Forum\Domain\Model\Forum\Topic;
+use Mittwald\Typo3Forum\Domain\Repository\Forum\AdRepository;
+use Mittwald\Typo3Forum\Domain\Repository\Forum\CriteriaRepository;
+use Mittwald\Typo3Forum\Domain\Repository\Forum\ForumRepository;
+use Mittwald\Typo3Forum\Domain\Repository\Forum\PostRepository;
+use Mittwald\Typo3Forum\Domain\Repository\Forum\TagRepository;
+use Mittwald\Typo3Forum\Domain\Repository\Forum\TopicRepository;
+use Mittwald\Typo3Forum\Service\AttachmentService;
+use Mittwald\Typo3Forum\Service\SessionHandlingService;
+use Mittwald\Typo3Forum\Service\TagService;
 use TYPO3\CMS\Core\FormProtection\FormProtectionFactory;
+use TYPO3\CMS\Extbase\Annotation as Extbase;
 
 class TopicController extends AbstractController {
 
 	/**
-	 * @var \Mittwald\Typo3Forum\Domain\Repository\Forum\AdRepository
-	 * @inject
+	 * @var AdRepository
 	 */
 	protected $adRepository;
 
 	/**
-	 * @var \Mittwald\Typo3Forum\Service\AttachmentService
-	 * @inject
+	 * @var AttachmentService
 	 */
 	protected $attachmentService;
 
 	/**
-	 * @var \Mittwald\Typo3Forum\Domain\Repository\Forum\CriteriaRepository
-	 * @inject
+	 * @var CriteriaRepository
 	 */
 	protected $criteraRepository;
 
 	/**
-	 * @var \TYPO3\CMS\Core\Database\DatabaseConnection
-	 */
-	protected $databaseConnection;
-
-	/**
-	 * @var \Mittwald\Typo3Forum\Domain\Repository\Forum\ForumRepository
-	 * @inject
+	 * @var ForumRepository
 	 */
 	protected $forumRepository;
 
 	/**
-	 * @var \Mittwald\Typo3Forum\Domain\Factory\Forum\PostFactory
-	 * @inject
+	 * @var PostFactory
 	 */
 	protected $postFactory;
 
 	/**
-	 * @var \Mittwald\Typo3Forum\Domain\Repository\Forum\PostRepository
-	 * @inject
+	 * @var PostRepository
 	 */
 	protected $postRepository;
 
 	/**
-	 * @var \Mittwald\Typo3Forum\Service\SessionHandlingService
-	 * @inject
+	 * @var SessionHandlingService
 	 */
 	protected $sessionHandling;
 
 	/**
-	 * @var \Mittwald\Typo3Forum\Domain\Repository\Forum\TagRepository
-	 * @inject
+	 * @var TagRepository
 	 */
 	protected $tagRepository;
 
 	/**
-	 * @var \Mittwald\Typo3Forum\Service\TagService
-	 * @inject
+	 * @var TagService
 	 */
 	protected $tagService = NULL;
 
 	/**
-	 * @var \Mittwald\Typo3Forum\Domain\Factory\Forum\TopicFactory
-	 * @inject
+	 * @var TopicFactory
 	 */
 	protected $topicFactory;
 
 	/**
-	 * @var \Mittwald\Typo3Forum\Domain\Repository\Forum\TopicRepository
-	 * @inject
+	 * @var TopicRepository
 	 */
 	protected $topicRepository;
 
+
+
 	/**
-	 *
+	 * @param AdRepository $adRepository
 	 */
-	public function initializeObject() {
-		$this->databaseConnection = $GLOBALS['TYPO3_DB'];
+	public function injectAdRepository(AdRepository $adRepository): void
+	{
+		$this->adRepository = $adRepository;
 	}
+
+
+	/**
+	 * @param AttachmentService $attachmentService
+	 */
+	public function injectAttachmentService(AttachmentService $attachmentService): void
+	{
+		$this->attachmentService = $attachmentService;
+	}
+
+
+
+	/**
+	 * @param CriteriaRepository $criteraRepository
+	 */
+	public function injectCriteraRepository(CriteriaRepository $criteraRepository): void
+	{
+		$this->criteraRepository = $criteraRepository;
+	}
+
+
+
+	/**
+	 * @param ForumRepository $forumRepository
+	 */
+	public function injectForumRepository(ForumRepository $forumRepository): void
+	{
+		$this->forumRepository = $forumRepository;
+	}
+
+
+	/**
+	 * @param PostFactory $postFactory
+	 */
+	public function injectPostFactory(PostFactory $postFactory): void
+	{
+		$this->postFactory = $postFactory;
+	}
+
+
+
+	/**
+	 * @param PostRepository $postRepository
+	 */
+	public function injectPostRepository(PostRepository $postRepository): void
+	{
+		$this->postRepository = $postRepository;
+	}
+
+
+	/**
+	 * @param SessionHandlingService $sessionHandling
+	 */
+	public function injectSessionHandling(SessionHandlingService $sessionHandling): void
+	{
+		$this->sessionHandling = $sessionHandling;
+	}
+
+
+	/**
+	 * @param TagRepository $tagRepository
+	 */
+	public function injectTagRepository(TagRepository $tagRepository): void
+	{
+		$this->tagRepository = $tagRepository;
+	}
+
+
+
+	/**
+	 * @param TagService $tagService
+	 */
+	public function injectTagService(TagService $tagService): void
+	{
+		$this->tagService = $tagService;
+	}
+
+
+	/**
+	 * @param TopicFactory $topicFactory
+	 */
+	public function injectTopicFactory(TopicFactory $topicFactory): void
+	{
+		$this->topicFactory = $topicFactory;
+	}
+
+
+	/**
+	 * @param TopicRepository $topicRepository
+	 */
+	public function injectTopicRepository(TopicRepository $topicRepository): void
+	{
+		$this->topicRepository = $topicRepository;
+	}
+
+
 
     /**
      *  Listing Action.
@@ -197,7 +292,7 @@ class TopicController extends AbstractController {
 	 * @param Post $post The first post of the new topic.
 	 * @param string $subject The subject of the new topic
 	 *
-	 * @ignorevalidation $post
+	 * @TYPO3\CMS\Extbase\Annotation\IgnoreValidation("post")
 	 */
 	public function newAction(Forum $forum, Post $post = NULL, $subject = NULL) {
 		$this->authenticationService->assertNewTopicAuthorization($forum);
@@ -227,9 +322,9 @@ class TopicController extends AbstractController {
 	 * @param string $tags All defined tags for this topic
 	 * @param string $subscribe The flag if the new topic is subscribed by author
 	 *
-	 * @validate $post \Mittwald\Typo3Forum\Domain\Validator\Forum\PostValidator
-	 * @validate $attachments \Mittwald\Typo3Forum\Domain\Validator\Forum\AttachmentPlainValidator
-	 * @validate $subject NotEmpty
+	 * @Extbase\Validate("Mittwald\Typo3Forum\Domain\Validator\Forum\PostValidator", param="post")
+	 * @Extbase\Validate("Mittwald\Typo3Forum\Domain\Validator\Forum\AttachmentPlainValidator", param="attachments")
+	 * @Extbase\Validate("NotEmpty", param="subject")
      *
      * @throws \Exception if CSRF validation was not valid
 	 */
@@ -268,9 +363,13 @@ class TopicController extends AbstractController {
 		// Notify potential listeners.
 		$this->signalSlotDispatcher->dispatch(Topic::class, 'topicCreated', ['topic' => $topic]);
 		$this->clearCacheForCurrentPage();
-		$uriBuilder = $this->controllerContext->getUriBuilder();
-		$uri = $uriBuilder->setTargetPageUid($this->settings['pids']['Forum'])->setArguments(['tx_typo3forum_pi1[forum]' => $forum->getUid(), 'tx_typo3forum_pi1[controller]' => 'Forum', 'tx_typo3forum_pi1[action]' => 'show'])->build();
-		$this->purgeUrl('http://' . $_SERVER['HTTP_HOST'] . '/' . $uri);
+
+		if ($this->settings['purgeCache']) {
+			$uriBuilder = $this->controllerContext->getUriBuilder();
+			$uri = $uriBuilder->setTargetPageUid($this->settings['pids']['Forum'])->setArguments(['tx_typo3forum_pi1[forum]' => $forum->getUid(), 'tx_typo3forum_pi1[controller]' => 'Forum', 'tx_typo3forum_pi1[action]' => 'show'])->build();
+			$this->purgeUrl('http://' . $_SERVER['HTTP_HOST'] . '/' . $uri);
+		}
+
 		// Redirect to single forum display view
 		$this->redirect('show', 'Forum', NULL, ['forum' => $forum]);
 	}

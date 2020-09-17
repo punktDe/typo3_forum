@@ -24,23 +24,42 @@ namespace Mittwald\Typo3Forum\TextParser\Service;
 	 *  This copyright notice MUST APPEAR in all copies of the script!      *
 	 *                                                                      */
 
-use Mittwald\Typo3Forum\Utility\File;
+	use Mittwald\Typo3Forum\Domain\Repository\Forum\PostRepository;
+	use Mittwald\Typo3Forum\Utility\File;
+	use TYPO3\CMS\Fluid\View\StandaloneView;
 
-class QuoteParserService extends AbstractTextParserService {
+	class QuoteParserService extends AbstractTextParserService {
 
 	/**
 	 * The post repository.
-	 * @var \Mittwald\Typo3Forum\Domain\Repository\Forum\PostRepository
-	 * @inject
+	 * @var PostRepository
 	 */
 	protected $postRepository;
 
 	/**
 	 * A standalone fluid view, used to render each individual quote.
-	 * @var \TYPO3\CMS\Fluid\View\StandaloneView
-	 * @inject
+	 * @var StandaloneView
 	 */
 	protected $view;
+
+
+	/**
+	 * @param PostRepository $postRepository
+	 */
+	public function injectPostRepository(PostRepository $postRepository): void
+	{
+		$this->postRepository = $postRepository;
+	}
+
+
+
+	/**
+	 * @param StandaloneView $view
+	 */
+	public function injectView(StandaloneView $view): void
+	{
+		$this->view = $view;
+	}
 
 	/**
 	 * Renders the parsed text.

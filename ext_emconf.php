@@ -7,7 +7,6 @@ $EM_CONF[$_EXTKEY] = [
 	'author' => 'Mittwald CM Service',
 	'author_email' => 'support@mittwald.de',
 	'author_company' => 'Mittwald CM Service',
-	'dependencies' => 'cms,extbase,fluid,sr_feuser_register,static_info_tables',
 	'state' => 'stable',
 	'uploadfolder' => 0,
 	'createDirs' => 'typo3temp/typo3_forum,typo3temp/typo3_forum/gravatar, typo3temp/typo3_forum/workflowstatus',
@@ -19,9 +18,9 @@ $EM_CONF[$_EXTKEY] = [
 	'version' => '1.0-dev',
 	'constraints' => [
 		'depends' => [
-			'typo3' => '8.7.0 - 9.5.99',
+			'typo3' => '^10.4',
 			'static_info_tables' => '',
-			'php' => '7.1',
+			'php' => '>=7.1',
 		]
 	],
 ];

@@ -27,8 +27,14 @@ namespace Mittwald\Typo3Forum\Domain\Model\Forum;
 use Mittwald\Typo3Forum\Domain\Model\AccessibleInterface;
 use Mittwald\Typo3Forum\Domain\Model\SubscribeableInterface;
 use Mittwald\Typo3Forum\Domain\Model\User\FrontendUser;
+use Mittwald\Typo3Forum\Service\Authentication\AuthenticationServiceInterface;
+use TYPO3\CMS\Core\Context\Context;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
+use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
+use TYPO3\CMS\Extbase\Annotation as Extbase;
+use TYPO3\CMS\Extbase\Annotation\ORM as ExtbaseORM;
 
 
 /**
@@ -46,14 +52,14 @@ class Forum extends AbstractEntity implements AccessibleInterface, Subscribeable
 	/**
 	 * The child forums
 	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Mittwald\Typo3Forum\Domain\Model\Forum\Forum>
-	 * @lazy
+	 * @ExtbaseORM\Lazy
 	 */
 	protected $children;
 
 	/**
 	 * The criterias of this forum.
 	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Mittwald\Typo3Forum\Domain\Model\Forum\Criteria>
-	 * @lazy
+	 * @ExtbaseORM\Lazy
 	 */
 	protected $criteria;
 
@@ -71,7 +77,7 @@ class Forum extends AbstractEntity implements AccessibleInterface, Subscribeable
 	/**
 	 * The parent forum.
 	 * @var \Mittwald\Typo3Forum\Domain\Model\Forum\Forum
-	 * @lazy
+	 * @ExtbaseORM\Lazy
 	 */
 	protected $forum;
 
@@ -87,8 +93,7 @@ class Forum extends AbstractEntity implements AccessibleInterface, Subscribeable
 
 	/**
 	 * An instance of the Extbase object manager.
-	 * @var \TYPO3\CMS\Extbase\Object\ObjectManagerInterface
-	 * @inject
+	 * @var ObjectManagerInterface
 	 */
 	protected $objectManager;
 
@@ -102,20 +107,20 @@ class Forum extends AbstractEntity implements AccessibleInterface, Subscribeable
 	 * All users who have read this forum.
 	 *
 	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Mittwald\Typo3Forum\Domain\Model\User\FrontendUser>
-	 * @lazy
+	 * @ExtbaseORM\Lazy
 	 */
 	protected $readers;
 
 	/**
 	 * All subscribers of this forum.
 	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Mittwald\Typo3Forum\Domain\Model\User\FrontendUser>
-	 * @lazy
+	 * @ExtbaseORM\Lazy
 	 */
 	protected $subscribers;
 
 	/**
 	 * @var string
-	 * @validate NotEmpty
+	 * @Extbase\Validate("NotEmpty")
 	 */
 	protected $title;
 
@@ -128,7 +133,7 @@ class Forum extends AbstractEntity implements AccessibleInterface, Subscribeable
 	/**
 	 * The topics in this forum.
 	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Mittwald\Typo3Forum\Domain\Model\Forum\Topic>
-	 * @lazy
+	 * @ExtbaseORM\Lazy
 	 */
 	protected $topics;
 
@@ -137,14 +142,13 @@ class Forum extends AbstractEntity implements AccessibleInterface, Subscribeable
 	 * currently logged in user has read access to.
 	 *
 	 * @var \ArrayObject<\Mittwald\Typo3Forum\Domain\Model\Forum\Forum>
-	 * @lazy
+	 * @ExtbaseORM\Lazy
 	 */
 	protected $visibleChildren;
 
 	/**
 	 * An instance of the typo3_forum authentication service.
-	 * @var \Mittwald\Typo3Forum\Service\Authentication\AuthenticationServiceInterface
-	 * @inject
+	 * @var AuthenticationServiceInterface
 	 */
 	protected $authenticationService;
 
@@ -153,6 +157,26 @@ class Forum extends AbstractEntity implements AccessibleInterface, Subscribeable
 	 * @var int
 	 */
 	protected $sorting;
+
+
+	/**
+	 * @param ObjectManagerInterface $objectManager
+	 */
+	public function injectObjectManager(ObjectManagerInterface $objectManager): void
+	{
+		$this->objectManager = $objectManager;
+	}
+
+
+	/**
+	 * @param AuthenticationServiceInterface $authenticationService
+	 */
+	public function injectAuthenticationService(AuthenticationServiceInterface $authenticationService): void
+	{
+		$this->authenticationService = $authenticationService;
+	}
+
+
 
 	/**
 	 * Constructor. Initializes all \TYPO3\CMS\Extbase\Persistence\ObjectStorage instances.
@@ -460,6 +484,14 @@ class Forum extends AbstractEntity implements AccessibleInterface, Subscribeable
 
 		if(($parent = $this->getParent())) {
 			return $this->getParent()->checkAccess($user, $accessType);
+		}
+
+		if (GeneralUtility::makeInstance(Context::class)->getPropertyFromAspect('frontend.user', 'isLoggedIn') === false) {
+			if ($accessType === Access::TYPE_READ) {
+				return true;
+			}
+
+			return false;
 		}
 	}
 
@@ -855,4 +887,67 @@ class Forum extends AbstractEntity implements AccessibleInterface, Subscribeable
 		$this->topicCount = count($this->topics);
 	}
 
+	/**
+	 * @return ObjectManagerInterface
+	 */
+	public function getObjectManager(): ObjectManagerInterface
+	{
+		return $this->objectManager;
+	}
+
+	/**
+	 * @param ObjectManagerInterface $objectManager
+	 */
+	public function setObjectManager(ObjectManagerInterface $objectManager): void
+	{
+		$this->objectManager = $objectManager;
+	}
+
+	/**
+	 * @return ObjectStorage
+	 */
+	public function getReaders(): ObjectStorage
+	{
+		return $this->readers;
+	}
+
+	/**
+	 * @param ObjectStorage $readers
+	 */
+	public function setReaders(ObjectStorage $readers): void
+	{
+		$this->readers = $readers;
+	}
+
+	/**
+	 * @return \ArrayObject
+	 */
+	public function getVisibleChildren(): \ArrayObject
+	{
+		return $this->visibleChildren;
+	}
+
+	/**
+	 * @param \ArrayObject $visibleChildren
+	 */
+	public function setVisibleChildren(\ArrayObject $visibleChildren): void
+	{
+		$this->visibleChildren = $visibleChildren;
+	}
+
+	/**
+	 * @return AuthenticationServiceInterface
+	 */
+	public function getAuthenticationService(): AuthenticationServiceInterface
+	{
+		return $this->authenticationService;
+	}
+
+	/**
+	 * @param AuthenticationServiceInterface $authenticationService
+	 */
+	public function setAuthenticationService(AuthenticationServiceInterface $authenticationService): void
+	{
+		$this->authenticationService = $authenticationService;
+	}
 }

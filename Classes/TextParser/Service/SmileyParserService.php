@@ -25,12 +25,12 @@ namespace Mittwald\Typo3Forum\TextParser\Service;
  *                                                                      */
 
 use Mittwald\Typo3Forum\Domain\Model\Format\Smiley;
+use Mittwald\Typo3Forum\Domain\Repository\Format\SmileyRepository;
 
 class SmileyParserService extends AbstractTextParserService {
 
 	/**
-	 * @var \Mittwald\Typo3Forum\Domain\Repository\Format\SmileyRepository
-	 * @inject
+	 * @var SmileyRepository
 	 */
 	protected $smileyRepository;
 
@@ -39,6 +39,16 @@ class SmileyParserService extends AbstractTextParserService {
 	 * @var array<\Mittwald\Typo3Forum\Domain\Model\Format\Smiley>
 	 */
 	protected $smileys = NULL;
+
+
+
+	/**
+	 * @param SmileyRepository $smileyRepository
+	 */
+	public function injectSmileyRepository(SmileyRepository $smileyRepository): void
+	{
+		$this->smileyRepository = $smileyRepository;
+	}
 
 	/**
 	 * Renders the parsed text.
