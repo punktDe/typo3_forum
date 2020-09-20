@@ -394,7 +394,7 @@ plugin.tx_typo3forum.userfields {
     }
 }
 
-[globalVar = LIT:1 = {$plugin.tx_typo3forum.settings.useDefaultCSS}]
+[{$plugin.tx_typo3forum.settings.useDefaultCSS} == '1']
     page.includeCSS {
         typo3_forum = EXT:typo3_forum/Resources/Public/Stylesheets/typo3_forum.css
         bootstrap = EXT:typo3_forum/Resources/Public/Bootstrap/css/bootstrap.min.css
