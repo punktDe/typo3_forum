@@ -111,7 +111,8 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks']['Mittwald\Typo3F
 ];
 
 // Register upgrade wizard
-$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/install']['update']['postsWithoutAuthorName'] = \Mittwald\Typo3Forum\Updates\PostsWithoutAuthorNameUpdate::class;
+// wrong Version for TYPO3 10
+//$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/install']['update']['postsWithoutAuthorName'] = \Mittwald\Typo3Forum\Updates\PostsWithoutAuthorNameUpdate::class;
 
 // Middleware target definitions
 $GLOBALS['TYPO3_CONF_VARS']['FE']['ajaxForumApi_include']['main'] = \Mittwald\Typo3Forum\Handler\ForumHandler::class . '::main';
