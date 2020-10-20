@@ -101,9 +101,9 @@ class PostController extends AbstractController {
 
 
 	/**
-	 * @param PostReportRepository $postRepository
+	 * @param PostRepository $postRepository
 	 */
-	public function injectPostRepository(PostReportRepository $postRepository): void
+	public function injectPostRepository(PostRepository $postRepository): void
 	{
 		$this->postRepository = $postRepository;
 	}
