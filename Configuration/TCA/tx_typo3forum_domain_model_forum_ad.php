@@ -1,5 +1,7 @@
 <?php
 
+$lllPath = 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_forum_ad.';
+
 return [
 	'ctrl' => [
 		'title' => 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_forum_ad',
@@ -16,37 +18,37 @@ return [
 	],
 	'columns' => [
 		'name' => [
-			'label' => 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_forum_ad.name',
+			'label' => $lllPath . 'name',
 			'config' => [
 				'type' => 'input',
 			],
 		],
 		'alt_text' => [
-			'label' => 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_forum_ad.alt',
+			'label' => $lllPath . 'alt',
 			'config' => [
 				'type' => 'text',
 			],
 		],
 		'url' => [
-			'label' => 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_forum_ad.url',
+			'label' => $lllPath . 'url',
 			'config' => [
 				'type' => 'input',
 			],
 		],
 		'path' => [
-			'label' => 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_forum_ad.path',
+			'label' => $lllPath . 'path',
 			'config' => [
 				'type' => 'input',
 			],
 		],
 		'active' => [
-			'label' => 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_forum_ad.active',
+			'label' => $lllPath . 'active',
 			'config' => [
 				'type' => 'check',
 			],
 		],
 		'category' => [
-			'label' => 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_forum_ad.category',
+			'label' => $lllPath . 'category',
 			'config' => [
 				'type' => 'radio',
 				'items' => [

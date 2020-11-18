@@ -25,7 +25,6 @@ namespace Mittwald\Typo3Forum\Utility;
  *                                                                      */
 
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
-use TYPO3\CMS\Core\Utility\PathUtility;
 
 /**
  * Utility module that contains file system-related functions.
@@ -41,7 +40,7 @@ class File {
 	 */
 	public static function replaceSiteRelPath($string) {
 		return preg_replace_callback(',EXT:([0-9a-z_-]+)/,', function($matches) {
-			return PathUtility::stripPathSitePrefix(ExtensionManagementUtility::extPath($matches[1]));
+			return ExtensionManagementUtility::siteRelPath($matches[1]);
 		}, $string);
 	}
 

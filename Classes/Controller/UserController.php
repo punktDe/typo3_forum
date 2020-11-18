@@ -25,127 +25,60 @@ namespace Mittwald\Typo3Forum\Controller;
  *                                                                      */
 
 use Mittwald\Typo3Forum\Domain\Exception\Authentication\NotLoggedInException;
-use Mittwald\Typo3Forum\Domain\Factory\User\PrivateMessageFactory;
 use Mittwald\Typo3Forum\Domain\Model\Forum\Forum;
 use Mittwald\Typo3Forum\Domain\Model\Forum\Topic;
 use Mittwald\Typo3Forum\Domain\Model\SubscribeableInterface;
 use Mittwald\Typo3Forum\Domain\Model\User\FrontendUser;
 use Mittwald\Typo3Forum\Domain\Model\User\PrivateMessage;
 use Mittwald\Typo3Forum\Domain\Model\User\PrivateMessageText;
-use Mittwald\Typo3Forum\Domain\Repository\Forum\ForumRepository;
-use Mittwald\Typo3Forum\Domain\Repository\Forum\TopicRepository;
-use Mittwald\Typo3Forum\Domain\Repository\User\NotificationRepository;
-use Mittwald\Typo3Forum\Domain\Repository\User\PrivateMessageRepository;
-use Mittwald\Typo3Forum\Domain\Repository\User\RankRepository;
-use Mittwald\Typo3Forum\Domain\Repository\User\UserfieldRepository;
 use TYPO3\CMS\Core\FormProtection\FormProtectionFactory;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Extbase\Mvc\Exception\InvalidArgumentValueException;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
-use TYPO3\CMS\Extbase\Annotation as Extbase;
 
 class UserController extends AbstractController {
 
 	/**
-	 * @var ForumRepository
+	 * @var \Mittwald\Typo3Forum\Domain\Repository\Forum\ForumRepository
+	 * @inject
 	 */
 	protected $forumRepository = NULL;
 
 	/**
-	 * @var PrivateMessageRepository
+	 * @var \Mittwald\Typo3Forum\Domain\Repository\User\PrivateMessageRepository
+	 * @inject
 	 */
 	protected $privateMessageRepository = NULL;
 
 	/**
-	 * @var NotificationRepository
+	 * @var \Mittwald\Typo3Forum\Domain\Repository\User\NotificationRepository
+	 * @inject
 	 */
 	protected $notificationRepository = NULL;
 
 	/**
-	 * @var PrivateMessageFactory
+	 * @var \Mittwald\Typo3Forum\Domain\Factory\User\PrivateMessageFactory
+	 * @inject
 	 */
 	protected $privateMessageFactory;
 
 	/**
-	 * @var RankRepository
+	 * @var \Mittwald\Typo3Forum\Domain\Repository\User\RankRepository
+	 * @inject
 	 */
 	protected $rankRepository = NULL;
 
 	/**
-	 * @var TopicRepository
+	 * @var \Mittwald\Typo3Forum\Domain\Repository\Forum\TopicRepository
+	 * @inject
 	 */
 	protected $topicRepository = NULL;
 
 	/**
-	 * @var UserfieldRepository
+	 * @var \Mittwald\Typo3Forum\Domain\Repository\User\UserfieldRepository
+	 * @inject
 	 */
 	protected $userfieldRepository = NULL;
-
-
-
-	/**
-	 * @param ForumRepository $forumRepository
-	 */
-	public function injectForumRepository(ForumRepository $forumRepository): void
-	{
-		$this->forumRepository = $forumRepository;
-	}
-
-
-	/**
-	 * @param PrivateMessageRepository $privateMessageRepository
-	 */
-	public function injectPrivateMessageRepository(PrivateMessageRepository $privateMessageRepository): void
-	{
-		$this->privateMessageRepository = $privateMessageRepository;
-	}
-
-
-	/**
-	 * @param NotificationRepository $notificationRepository
-	 */
-	public function injectNotificationRepository(NotificationRepository $notificationRepository): void
-	{
-		$this->notificationRepository = $notificationRepository;
-	}
-
-
-	/**
-	 * @param PrivateMessageFactory $privateMessageFactory
-	 */
-	public function injectPrivateMessageFactory(PrivateMessageFactory $privateMessageFactory): void
-	{
-		$this->privateMessageFactory = $privateMessageFactory;
-	}
-
-
-	/**
-	 * @param RankRepository $rankRepository
-	 */
-	public function injectRankRepository(RankRepository $rankRepository): void
-	{
-		$this->rankRepository = $rankRepository;
-	}
-
-
-	/**
-	 * @param TopicRepository $topicRepository
-	 */
-	public function injectTopicRepository(TopicRepository $topicRepository): void
-	{
-		$this->topicRepository = $topicRepository;
-	}
-
-
-	/**
-	 * @param UserfieldRepository $userfieldRepository
-	 */
-	public function injectUserfieldRepository(UserfieldRepository $userfieldRepository): void
-	{
-		$this->userfieldRepository = $userfieldRepository;
-	}
-
-
 
 	/**
 	 * Displays a list of all existing users.
@@ -341,9 +274,8 @@ class UserController extends AbstractController {
 	 * @param string $recipient
 	 * @param string $text
 	 *
-	 * @Extbase\Validate("Mittwald\Typo3Forum\Domain\Validator\User\PrivateMessageRecipientValidator", param="recipient")
-	 *
 	 * @throws NotLoggedInException
+	 * @validate $recipient \Mittwald\Typo3Forum\Domain\Validator\User\PrivateMessageRecipientValidator
 	 */
 	public function createMessageAction($recipient, $text) {
 		$user = $this->getCurrentUser();

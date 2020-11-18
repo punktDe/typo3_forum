@@ -25,7 +25,6 @@ namespace Mittwald\Typo3Forum\Domain\Repository\User;
  *                                                                      */
 
 use Mittwald\Typo3Forum\Domain\Repository\AbstractRepository;
-use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 
 /**
  *
@@ -42,8 +41,8 @@ class UserfieldRepository extends AbstractRepository {
 
 	/**
 	 * ConfigurationManagerInterface
-	 *
-	 * @var ConfigurationManagerInterface
+	 * @var \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface
+	 * @inject
 	 */
 	protected $configurationManagerInterface = NULL;
 	/**
@@ -52,16 +51,6 @@ class UserfieldRepository extends AbstractRepository {
 	 * @var \Mittwald\Typo3Forum\Domain\Model\User\Userfield\AbstractUserfield
 	 */
 	private $coreUserfields = NULL;
-
-
-	/**
-	 * @param ConfigurationManagerInterface $configurationManagerInterface
-	 */
-	public function injectConfigurationManagerInterface(ConfigurationManagerInterface $configurationManagerInterface): void
-	{
-		$this->configurationManagerInterface = $configurationManagerInterface;
-	}
-
 
 	/**
 	 * Creates a new instance of the userfield repository.
@@ -104,7 +93,7 @@ class UserfieldRepository extends AbstractRepository {
 	 */
 	protected function findCoreUserfields() {
 		if ($this->coreUserfields === NULL) {
-			$conf = $this->configurationManagerInterface->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
+			$conf = $this->configurationManagerInterface->getConfiguration(\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
 			$this->coreUserfields = [];
 
 			foreach ($conf['settings']['userfields']['core_fields'] as $coreFieldKey => $coreFieldValues) {

@@ -23,12 +23,11 @@ namespace Mittwald\Typo3Forum\TextParser\Panel;
 	 *  This copyright notice MUST APPEAR in all copies of the script!      *
 	 *                                                                      */
 
-use Mittwald\Typo3Forum\Domain\Repository\Format\BBCodeRepository;
-
 class BbCodePanel extends AbstractPanel {
 
 	/**
-	 * @var BBCodeRepository
+	 * @var \Mittwald\Typo3Forum\Domain\Repository\Format\BBCodeRepository
+	 * @inject
 	 */
 	protected $bbCodeRepository = NULL;
 
@@ -36,16 +35,6 @@ class BbCodePanel extends AbstractPanel {
 	 * @var array<\Mittwald\Typo3Forum\Domain\Model\Format\BBCode>
 	 */
 	protected $bbCodes = NULL;
-
-
-
-	/**
-	 * @param BBCodeRepository $bbCodeRepository
-	 */
-	public function injectBbCodeRepository(BBCodeRepository $bbCodeRepository): void
-	{
-		$this->bbCodeRepository = $bbCodeRepository;
-	}
 
 	/**
 	 * @return array

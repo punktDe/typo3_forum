@@ -24,77 +24,40 @@ namespace Mittwald\Typo3Forum\Controller;
  *  This copyright notice MUST APPEAR in all copies of the script!      *
  *                                                                      */
 
-use Mittwald\Typo3Forum\Domain\Factory\Moderation\ReportFactory;
 use Mittwald\Typo3Forum\Domain\Model\Forum\Post;
 use Mittwald\Typo3Forum\Domain\Model\Moderation\PostReport;
 use Mittwald\Typo3Forum\Domain\Model\Moderation\Report;
 use Mittwald\Typo3Forum\Domain\Model\Moderation\ReportComment;
 use Mittwald\Typo3Forum\Domain\Model\Moderation\UserReport;
 use Mittwald\Typo3Forum\Domain\Model\User\FrontendUser;
-use Mittwald\Typo3Forum\Domain\Repository\Moderation\PostReportRepository;
-use Mittwald\Typo3Forum\Domain\Repository\Moderation\ReportRepository;
-use Mittwald\Typo3Forum\Domain\Repository\Moderation\UserReportRepository;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 class ReportController extends AbstractController {
 
 	/**
-	 * @var PostReportRepository
+	 * @var \Mittwald\Typo3Forum\Domain\Repository\Moderation\PostReportRepository
+	 * @inject
 	 */
 	protected $postReportRepository;
 
 	/**
-	 * @var ReportFactory
+	 * @var \Mittwald\Typo3Forum\Domain\Factory\Moderation\ReportFactory
+	 * @inject
 	 */
 	protected $reportFactory;
 
-
 	/**
-	 * @var ReportRepository
+	 * @var \Mittwald\Typo3Forum\Domain\Repository\Moderation\ReportRepository
+	 * @inject
 	 */
 	protected $reportRepository;
 
 	/**
-	 * @var UserReportRepository
+	 * @var \Mittwald\Typo3Forum\Domain\Repository\Moderation\UserReportRepository
+	 * @inject
 	 */
 	protected $userReportRepository;
-
-
-	/**
-	 * @param PostReportRepository $postReportRepository
-	 */
-	public function injectPostReportRepository(PostReportRepository $postReportRepository): void
-	{
-		$this->postReportRepository = $postReportRepository;
-	}
-
-
-	/**
-	 * @param ReportFactory $reportFactory
-	 */
-	public function injectReportFactory(ReportFactory $reportFactory): void
-	{
-		$this->reportFactory = $reportFactory;
-	}
-
-
-	/**
-	 * @param ReportRepository $reportRepository
-	 */
-	public function injectReportRepository(ReportRepository $reportRepository): void
-	{
-		$this->reportRepository = $reportRepository;
-	}
-
-
-	/**
-	 * @param UserReportRepository $userReportRepository
-	 */
-	public function injectUserReportRepository(UserReportRepository $userReportRepository): void
-	{
-		$this->userReportRepository = $userReportRepository;
-	}
 
 	/**
 	 * Displays a form for creating a new post report.
@@ -102,7 +65,7 @@ class ReportController extends AbstractController {
 	 * @param FrontendUser $user
 	 * @param ReportComment $firstComment
 	 *
-	 * @TYPO3\CMS\Extbase\Annotation\IgnoreValidation("firstComment")
+	 * @ignorevalidation $firstComment
 	 */
 	public function newUserReportAction(FrontendUser $user, ReportComment $firstComment = NULL) {
 		$this->view->assignMultiple([
@@ -117,7 +80,7 @@ class ReportController extends AbstractController {
 	 * @param Post $post
 	 * @param ReportComment $firstComment
 	 *
-	 * @TYPO3\CMS\Extbase\Annotation\IgnoreValidation("firstComment")
+	 * @ignorevalidation $firstComment
 	 */
 	public function newPostReportAction(Post $post, ReportComment $firstComment = NULL) {
 		$this->authenticationService->assertReadAuthorization($post);

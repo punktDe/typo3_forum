@@ -25,7 +25,6 @@ namespace Mittwald\Typo3Forum\Domain\Model\User\Userfield;
  *                                                                      */
 
 use TYPO3\CMS\Extbase\DomainObject\AbstractValueObject;
-use TYPO3\CMS\Extbase\Annotation as Extbase;
 
 /**
  * Abstract base class for additional user fields.
@@ -35,7 +34,7 @@ abstract class AbstractUserfield extends AbstractValueObject {
 	/**
 	 * The name of the userfield.
 	 * @var string
-	 * @Extbase\Validate("NotEmpty")
+	 * @validate NotEmpty
 	 */
 	protected $name;
 

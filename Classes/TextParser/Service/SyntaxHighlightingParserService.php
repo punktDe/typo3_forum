@@ -30,19 +30,10 @@ namespace Mittwald\Typo3Forum\TextParser\Service;
 class SyntaxHighlightingParserService extends AbstractTextParserService {
 
 	/**
-	 * @var AbstractGeshiService
+	 * @var \Mittwald\Typo3Forum\TextParser\Service\AbstractGeshiService
+	 * @inject
 	 */
 	protected $xtGeshi;
-
-
-
-	/**
-	 * @param AbstractGeshiService $xtGeshi
-	 */
-	public function injectXtGeshi(AbstractGeshiService $xtGeshi): void
-	{
-		$this->xtGeshi = $xtGeshi;
-	}
 
 	/**
 	 * Renders the parsed text.

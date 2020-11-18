@@ -1,13 +1,13 @@
 {namespace mmf=Mittwald\Typo3Forum\ViewHelpers}
 
-		<f:link.action pluginName="Pi1" pageUid="{pid}" controller="Forum" action="show" class="btn btn-primary ml-1" arguments="{forum: topic.forum}">
+		<f:link.action controller="Forum" action="show" class="btn btn-primary ml-1" arguments="{forum: topic.forum}">
 			<i class="tx-typo3forum-icon-16-back"></i>
 			<f:translate key="Button_Back" />
 		</f:link.action>
 
 
 	<mmf:authentication.ifAccess object="{topic}" accessType="newPost">
-			<f:link.action pluginName="Pi1" pageUid="{pid}" controller="Post" action="new" class="btn btn-primary ml-1" arguments="{topic: topic}">
+			<f:link.action controller="Post" action="new" class="btn btn-primary ml-1" arguments="{topic: topic}">
 				<i class="tx-typo3forum-icon-16-post-new"></i>
 				<f:translate key="Button_Reply" />
 			</f:link.action>
@@ -16,13 +16,13 @@
 	<mmf:authentication.ifLoggedIn>
 			<mmf:user.ifSubscribed object="{topic}">
 				<f:then>
-					<f:link.action pluginName="Pi1" pageUid="{pid}" controller="User" class="btn btn-primary ml-1" action="subscribe" arguments="{topic: topic, unsubscribe: 1, csrfToken: csrfToken}">
+					<f:link.action controller="User" class="btn btn-primary ml-1" action="subscribe" arguments="{topic: topic, unsubscribe: 1, csrfToken: csrfToken}">
 						<i class="tx-typo3forum-icon-16-unsubscribe"></i>
 						<f:translate key="Button_Unsubscribe" />
 					</f:link.action>
 				</f:then>
 				<f:else>
-					<f:link.action pluginName="Pi1" pageUid="{pid}" controller="User" class="btn btn-primary ml-1" action="subscribe" arguments="{topic: topic, csrfToken: csrfToken}">
+					<f:link.action controller="User" class="btn btn-primary ml-1" action="subscribe" arguments="{topic: topic, csrfToken: csrfToken}">
 						<i class="tx-typo3forum-icon-16-subscribe"></i>
 						<f:translate key="Button_Subscribe" />
 					</f:link.action>
@@ -39,14 +39,14 @@
 			</a>
 			<ul class="dropdown-menu">
 				<li>
-					<f:link.action pluginName="Pi1" pageUid="{pid}" controller="Moderation" action="editTopic" arguments="{topic: topic}">
+					<f:link.action controller="Moderation" action="editTopic" arguments="{topic: topic}">
 						<i class="tx-typo3forum-icon-16-moderate"></i>
 						<f:translate key="Button_Moderate" />
 					</f:link.action>
 				</li>
 				<li class="divider"></li>
 				<li>
-					<f:link.action pluginName="Pi1" pageUid="{pid}" controller="Moderation" action="topicConformDelete" arguments="{topic: topic}">
+					<f:link.action controller="Moderation" action="topicConformDelete" arguments="{topic: topic}">
 						<i class="tx-typo3forum-icon-16-post-delete"></i>
 						<f:translate key="Button_Delete_Topic"/>
 					</f:link.action>

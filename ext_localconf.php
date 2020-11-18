@@ -17,7 +17,7 @@ $_EXTKEY = 'typo3_forum';
 		'Post' => 'show, new, create, edit, update, delete',
 		'User' => 'showMyProfile, index, list, subscribe, favSubscribe, show, disableUser, unDisableUser, listNotifications, listMessages, createMessage, newMessage, listPosts',
 		'Report' => 'newUserReport, newPostReport, createUserReport, createPostReport',
-		'Moderation' => 'indexReport, editReport, newReportComment, editTopic, updateTopic, deleteTopic, updateUserReportStatus, updatePostReportStatus, createUserReportComment, createPostReportComment',
+		'Moderation' => 'indexReport, editReport, newReportComment, editTopic, updateTopic, updateUserReportStatus, updatePostReportStatus, createUserReportComment, createPostReportComment, topicConformDelete',
 		'Tag' => 'list, show, new, create, listUserTags, newUserTag, deleteUserTag',
 	],
 	[
@@ -26,7 +26,7 @@ $_EXTKEY = 'typo3_forum';
 		'Post' => 'new, create, edit, update, delete',
 		'User' => 'showMyProfile, dashboard, subscribe, favSubscribe, listFavorites, listNotifications, listTopics, listMessages, createMessage,listPosts',
 		'Report' => 'newUserReport, newPostReport, createUserReport, createPostReport',
-		'Moderation' => 'indexReport, updateTopic, deleteTopic, updateUserReportStatus, updatePostReportStatus, newReportComment, createUserReportComment, createPostReportComment',
+		'Moderation' => 'indexReport, updateTopic, topicConformDelete, updateUserReportStatus, updatePostReportStatus, newReportComment, createUserReportComment, createPostReportComment',
 		'Tag' => 'list, show, new, create, listUserTags, newUserTag, deleteUserTag',
 	]
 );
@@ -65,6 +65,8 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['clea
 if (!is_array($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['typo3forum_main'])) {
     $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['typo3forum_main'] = [];
 }
+
+$GLOBALS['TYPO3_CONF_VARS']['FE']['eID_include']['typo3_forum'] = 'EXT:typo3_forum/Classes/Ajax/Dispatcher.php';
 
 // Connect signals to slots. Some parts of extbase suck, but the signal-slot
 // pattern is really cool! :P
@@ -109,10 +111,3 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks']['Mittwald\Typo3F
 	'description' => 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang.xml:tx_typo3forum_scheduler_statsSummary_description',
 	'additionalFields' => 'Mittwald\Typo3Forum\Scheduler\StatsSummaryAdditionalFieldProvider',
 ];
-
-// Register upgrade wizard
-$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/install']['update']['postsWithoutAuthorName'] = \Mittwald\Typo3Forum\Updates\PostsWithoutAuthorNameUpdate::class;
-
-// Middleware target definitions
-$GLOBALS['TYPO3_CONF_VARS']['FE']['ajaxForumApi_include']['main'] = \Mittwald\Typo3Forum\Handler\ForumHandler::class . '::main';
-$GLOBALS['TYPO3_CONF_VARS']['FE']['ajaxForumApi_include']['preview'] = \Mittwald\Typo3Forum\Handler\ForumHandler::class . '::preview';

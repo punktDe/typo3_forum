@@ -24,16 +24,13 @@ namespace Mittwald\Typo3Forum\Service\Authentication;
  *  This copyright notice MUST APPEAR in all copies of the script!      *
  *                                                                      */
 
-use Mittwald\Typo3Forum\Cache\Cache;
 use Mittwald\Typo3Forum\Domain\Exception\Authentication\NoAccessException;
 use Mittwald\Typo3Forum\Domain\Model\AccessibleInterface;
 use Mittwald\Typo3Forum\Domain\Model\Forum\Access;
 use Mittwald\Typo3Forum\Domain\Model\Forum\Forum;
 use Mittwald\Typo3Forum\Domain\Model\Forum\Post;
 use Mittwald\Typo3Forum\Domain\Model\Forum\Topic;
-use Mittwald\Typo3Forum\Domain\Repository\User\FrontendUserRepository;
 use Mittwald\Typo3Forum\Service\AbstractService;
-use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
@@ -43,13 +40,15 @@ use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 class AuthenticationService extends AbstractService implements AuthenticationServiceInterface {
 
 	/**
-	 * @var FrontendUserRepository
+	 * @var \Mittwald\Typo3Forum\Domain\Repository\User\FrontendUserRepository
+	 * @inject
 	 */
 	protected $frontendUserRepository = NULL;
 
 	/**
 	 * An instance of the typo3_forum cache class.
-	 * @var Cache
+	 * @var \Mittwald\Typo3Forum\Cache\Cache
+	 * @inject
 	 */
 	protected $cache = NULL;
 
@@ -71,26 +70,6 @@ class AuthenticationService extends AbstractService implements AuthenticationSer
 	 * @var TypoScriptFrontendController
 	 */
 	protected $typoScriptFrontendController;
-
-
-
-	/**
-	 * @param FrontendUserRepository $frontendUserRepository
-	 */
-	public function injectFrontendUserRepository(FrontendUserRepository $frontendUserRepository): void
-	{
-		$this->frontendUserRepository = $frontendUserRepository;
-	}
-
-
-
-	/**
-	 * @param Cache $cache
-	 */
-	public function injectCache(Cache $cache): void
-	{
-		$this->cache = $cache;
-	}
 
 
 	public function __construct()
@@ -219,12 +198,9 @@ class AuthenticationService extends AbstractService implements AuthenticationSer
 	 * @access private
 	 */
 	protected function getCacheIdentifier(AccessibleInterface $object, $action) {
-		$objectName = explode('\\', get_class($object));
-		$className = array_pop($objectName);
+		$className = array_pop(explode('\\', get_class($object)));
 		/** @noinspection PhpUndefinedMethodInspection */
-		$cacheIdentifier = 'acl-' . $className . '-' . $object->getUid() . '-' . $this->getUserGroupIdentifier() . '-' . $action;
-
-		return $cacheIdentifier;
+		return 'acl-' . $className . '-' . $object->getUid() . '-' . $this->getUserGroupIdentifier() . '-' . $action;
 	}
 
 
@@ -239,11 +215,8 @@ class AuthenticationService extends AbstractService implements AuthenticationSer
 			$user = $this->getUser();
 			if ($user === NULL) {
 				$this->userGroupIdentifier = 'n';
-			} elseif ($user->isAnonymous()) {
-				$this->userGroupIdentifier = 'a';
 			} else {
-				$context = GeneralUtility::makeInstance(Context::class);
-				$groupUids = $context->getPropertyFromAspect('frontend.user', 'groupIds');
+				$groupUids = GeneralUtility::trimExplode(',', $this->typoScriptFrontendController->gr_list);
 
 				$this->userGroupIdentifier = implode('g', $groupUids);
 			}

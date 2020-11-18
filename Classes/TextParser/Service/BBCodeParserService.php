@@ -26,12 +26,12 @@ namespace Mittwald\Typo3Forum\TextParser\Service;
 
 use Mittwald\Typo3Forum\Domain\Model\Format\ListBBCode;
 use Mittwald\Typo3Forum\Domain\Model\Format\QuoteBBCode;
-use Mittwald\Typo3Forum\Domain\Repository\Format\BBCodeRepository;
 
 class BBCodeParserService extends AbstractTextParserService {
 
 	/**
-	 * @var BBCodeRepository
+	 * @var \Mittwald\Typo3Forum\Domain\Repository\Format\BBCodeRepository
+	 * @inject
 	 */
 	protected $bbCodeRepository;
 
@@ -40,15 +40,6 @@ class BBCodeParserService extends AbstractTextParserService {
 	 * @var array<\Mittwald\Typo3Forum\Domain\Model\Format\BBCode>
 	 */
 	protected $bbCodes = NULL;
-
-
-	/**
-	 * @param BBCodeRepository $bbCodeRepository
-	 */
-	public function injectBbCodeRepository(BBCodeRepository $bbCodeRepository): void
-	{
-		$this->bbCodeRepository = $bbCodeRepository;
-	}
 
 	/**
 	 * Parses the text. Replaces all bb codes in the text with appropriate HTML tags.

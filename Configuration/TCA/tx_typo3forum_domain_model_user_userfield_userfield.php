@@ -1,5 +1,12 @@
 <?php
 
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr(
+	'tx_typo3forum_domain_model_user_userfield_userfield',
+	'EXT:typo3_forum/Resources/Private/Language/locallang_csh_tx_typo3forum_domain_model_user_userfield_userfield.xml'
+);
+
+$lllPath = 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_user_userfield_userfield.';
+
 return [
 	'ctrl' => [
 		'title' => 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_user_userfield_userfield',
@@ -50,7 +57,7 @@ return [
 		'l18n_parent' => [
 			'displayCond' => 'FIELD:sys_language_uid:>:0',
 			'exclude' => 1,
-			'label' => 'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.l18n_parent',
+			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.l18n_parent',
 			'config' => [
 				'type' => 'select',
 				'renderType' => 'selectSingle',
@@ -68,7 +75,7 @@ return [
 		],
 		't3ver_label' => [
 			'displayCond' => 'FIELD:t3ver_label:REQ:true',
-			'label' => 'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.versionLabel',
+			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.versionLabel',
 			'config' => [
 				'type' => 'none',
 				'cols' => 27,
@@ -76,26 +83,26 @@ return [
 		],
 		'hidden' => [
 			'exclude' => 1,
-			'label' => 'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.hidden',
+			'label' => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
 			'config' => [
 				'type' => 'check',
 			],
 		],
 		'type' => [
-			'label' => 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_user_userfield_userfield.type',
+			'label' => $lllPath . 'type',
 			'config' => [
 				'type' => 'select',
 				'renderType' => 'selectSingle',
 				'items' => [
-					['LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_user_userfield_userfield.type.undefined', 0],
-					['LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_user_userfield_userfield.type.typoscript', 'Mittwald\Typo3Forum\Domain\Model\User\Userfield\TyposcriptUserfield'],
-					['LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_user_userfield_userfield.type.text', 'Mittwald\Typo3Forum\Domain\Model\User\Userfield\TextUserfield'],
+					[$lllPath . 'type.undefined', 0],
+					[$lllPath . 'type.typoscript', 'Mittwald\Typo3Forum\Domain\Model\User\Userfield\TyposcriptUserfield'],
+					[$lllPath . 'type.text', 'Mittwald\Typo3Forum\Domain\Model\User\Userfield\TextUserfield'],
 				],
 			],
 		],
 		'name' => [
 			'exclude' => 1,
-			'label' => 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_user_userfield_userfield.name',
+			'label' => $lllPath . 'name',
 			'config' => [
 				'type' => 'input',
 				'size' => 30,
@@ -104,7 +111,7 @@ return [
 		],
 		'typoscript_path' => [
 			'exclude' => 1,
-			'label' => 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_user_userfield_userfield.typoscript_path',
+			'label' => $lllPath . 'typoscript_path',
 			'config' => [
 				'type' => 'input',
 				'size' => 30,
@@ -113,7 +120,7 @@ return [
 		],
 		'map_to_user_object' => [
 			'exclude' => 1,
-			'label' => 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_user_userfield_userfield.map_to_user_object',
+			'label' => $lllPath . 'map_to_user_object',
 			'config' => [
 				'type' => 'input',
 				'size' => 30,

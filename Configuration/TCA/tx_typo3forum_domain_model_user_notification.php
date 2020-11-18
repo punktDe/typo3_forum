@@ -1,5 +1,7 @@
 <?php
 
+$lllPath = 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_user_notification.';
+
 return [
 	'ctrl' => [
 		'title' => 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_user_notification',
@@ -24,7 +26,7 @@ return [
 	'columns' => [
 		'crdate' => [
 			'exclude' => 1,
-			'label' => 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_user_notification.crdate',
+			'label' => $lllPath . 'crdate',
 			'config' => [
 				'type' => 'none',
 				'format' => 'date',
@@ -32,49 +34,52 @@ return [
 			],
 		],
 		'feuser' => [
-			'label' => 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_user_notification.feuser',
+			'label' => $lllPath . 'feuser',
 			'config' => [
 				'type' => 'select',
 				'renderType' => 'selectSingle',
 				'foreign_table' => 'fe_users',
+				'foreign_class' => '\Mittwald\Typo3Forum\Domain\Model\User\FrontendUser',
 				'maxitems' => 1,
 			],
 		],
 		'user_read' => [
-			'label' => 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_user_notification.user_read',
+			'label' => $lllPath . 'user_read',
 			'config' => [
 				'type' => 'check'
 			],
 		],
 		'post' => [
 			'exclude' => 1,
-			'label' => 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_user_notification.post',
+			'label' => $lllPath . 'post',
 			'config' => [
 				'type' => 'select',
 				'renderType' => 'selectSingle',
 				'foreign_table' => 'tx_typo3forum_domain_model_forum_post',
+				'foreign_class' => '\Mittwald\Typo3Forum\Domain\Model\Forum\Post',
 				'maxitems' => 1,
 			],
 		],
 		'tag' => [
 			'exclude' => 1,
-			'label' => 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_user_notification.tag',
+			'label' => $lllPath . 'tag',
 			'config' => [
 				'type' => 'select',
 				'renderType' => 'selectSingle',
 				'foreign_table' => 'tx_typo3forum_domain_model_forum_tag',
+				'foreign_class' => '\Mittwald\Typo3Forum\Domain\Model\Forum\Tag',
 				'maxitems' => 1,
 			],
 		],
 		'type' => [
 			'exclude' => 1,
-			'label' => 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_user_notification.type',
+			'label' => $lllPath . 'type',
 			'config' => [
 				'type' => 'select',
 				'renderType' => 'selectSingle',
 				'items' => [
 					['LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_forum_post', 'Mittwald\Typo3Forum\Domain\Model\Forum\Post'],
-					['LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_user_notification.tag', 'Mittwald\Typo3Forum\Domain\Model\Forum\Tag'],
+					[$lllPath . 'tag', 'Mittwald\Typo3Forum\Domain\Model\Forum\Tag'],
 				],
 			],
 		],

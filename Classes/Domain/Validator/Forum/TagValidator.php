@@ -24,7 +24,6 @@ namespace Mittwald\Typo3Forum\Domain\Validator\Forum;
  *  This copyright notice MUST APPEAR in all copies of the script!      *
  *                                                                      */
 
-use Mittwald\Typo3Forum\Domain\Repository\Forum\TagRepository;
 use TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator;
 
 class TagValidator extends AbstractValidator {
@@ -32,19 +31,10 @@ class TagValidator extends AbstractValidator {
 
 	/**
 	 * An instance of the tag repository.
-	 * @var TagRepository
+	 * @var \Mittwald\Typo3Forum\Domain\Repository\Forum\TagRepository
+	 * @inject
 	 */
 	protected $tagRepository;
-
-
-
-	/**
-	 * @param TagRepository $tagRepository
-	 */
-	public function injectTagRepository(TagRepository $tagRepository): void
-	{
-		$this->tagRepository = $tagRepository;
-	}
 
 	/**
 	 * Check if $value is valid. If it is not valid, needs to add an error

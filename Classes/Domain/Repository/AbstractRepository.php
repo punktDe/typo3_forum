@@ -24,7 +24,6 @@ namespace Mittwald\Typo3Forum\Domain\Repository;
  *  This copyright notice MUST APPEAR in all copies of the script!      *
  *                                                                      */
 
-use Mittwald\Typo3Forum\Configuration\ConfigurationBuilder;
 use TYPO3\CMS\Extbase\Persistence\Generic\QuerySettingsInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\Repository;
@@ -49,7 +48,8 @@ abstract class AbstractRepository extends Repository
 {
 
     /**
-     * @var ConfigurationBuilder
+     * @var \Mittwald\Typo3Forum\Configuration\ConfigurationBuilder
+     * @inject
      */
     protected $configurationBuilder;
 
@@ -62,15 +62,6 @@ abstract class AbstractRepository extends Repository
      * @var array
      */
     protected $persistenceSettings = [];
-
-
-	/**
-	 * @param ConfigurationBuilder $configurationBuilder
-	 */
-	public function injectConfigurationBuilder(ConfigurationBuilder $configurationBuilder): void
-	{
-		$this->configurationBuilder = $configurationBuilder;
-	}
 
     /**
      *

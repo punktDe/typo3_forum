@@ -1,5 +1,12 @@
 <?php
 
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr(
+	'tx_typo3forum_domain_model_user_userfield_value',
+	'EXT:typo3_forum/Resources/Private/Language/locallang_csh_tx_typo3forum_domain_model_user_userfield_value.xml'
+);
+
+$lllPath = 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_user_userfield_value.';
+
 return [
 	'ctrl' => [
 		'title' => 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_user_userfield_value',
@@ -48,7 +55,7 @@ return [
 		'l18n_parent' => [
 			'displayCond' => 'FIELD:sys_language_uid:>:0',
 			'exclude' => 1,
-			'label' => 'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.l18n_parent',
+			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.l18n_parent',
 			'config' => [
 				'type' => 'select',
 				'renderType' => 'selectSingle',
@@ -66,7 +73,7 @@ return [
 		],
 		't3ver_label' => [
 			'displayCond' => 'FIELD:t3ver_label:REQ:true',
-			'label' => 'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.versionLabel',
+			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.versionLabel',
 			'config' => [
 				'type' => 'none',
 				'cols' => 27
@@ -74,24 +81,25 @@ return [
 		],
 		'hidden' => [
 			'exclude' => 1,
-			'label' => 'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.hidden',
+			'label' => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
 			'config' => [
 				'type' => 'check'
 			],
 		],
 		'user' => [
 			'exclude' => 1,
-			'label' => 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_user_userfield_value.user',
+			'label' => $lllPath . 'user',
 			'config' => [
 				'type' => 'select',
 				'renderType' => 'selectSingle',
+				'foreign_class' => '\Mittwald\Typo3Forum\Domain\Model\User\FrontendUser',
 				'foreign_table' => 'fe_users',
 				'maxitems' => 1
 			],
 		],
 		'userfield' => [
 			'exclude' => 1,
-			'label' => 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_user_userfield_value.userfield',
+			'label' => $lllPath . 'userfield',
 			'config' => [
 				'type' => 'select',
 				'renderType' => 'selectSingle',
@@ -101,7 +109,7 @@ return [
 		],
 		'value' => [
 			'exclude' => 1,
-			'label' => 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_user_userfield_value.value',
+			'label' => $lllPath . 'value',
 			'config' => [
 				'type' => 'none',
 			],

@@ -23,8 +23,7 @@ namespace Mittwald\Typo3Forum\ViewHelpers\Bootstrap\Form;
  *  This copyright notice MUST APPEAR in all copies of the script!      *
  *                                                                      */
 
-use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
-use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper;
+use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper;
 
 /**
  * ViewHelper that renders a form row.
@@ -49,17 +48,15 @@ class RowViewHelper extends AbstractTagBasedViewHelper {
 		parent::initializeArguments();
 		$this->registerArgument('llLabel', 'string', 'Locallang key for label.', FALSE, '');
 		$this->registerArgument('label', 'string', 'Hardcoded label (better to use llLabel instead).', FALSE, '');
-		$this->registerArgument('labelFor', 'string', 'ID of the input to be used in label-for attribute', FALSE, '');
 		$this->registerArgument('error', 'string', 'Error property path.', FALSE);
 		$this->registerArgument('errorLLPrefix', 'string', 'Error label locallang prefix.', FALSE);
 	}
 
 	public function render() {
 		$class = 'control-group';
-		$errorContent = '';
 
 		if ($this->arguments['llLabel']) {
-			$label = LocalizationUtility::translate($this->arguments['llLabel'], 'typo3_forum');
+			$label = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate($this->arguments['llLabel'], 'typo3_forum');
 		} else {
 			$label = $this->arguments['label'];
 		}
@@ -72,19 +69,23 @@ class RowViewHelper extends AbstractTagBasedViewHelper {
 			foreach ($propertyPath as $currentPropertyName) {
 				$errors = array_merge($errors,$this->getErrorsForProperty($currentPropertyName, $results));
             }
-			if (!empty($errors)) {
+			if (count($errors) > 0) {
 				$class .= ' error';
+				$errorContent = '';
 				foreach ($errors as $error) {
-					$errorText = LocalizationUtility::translate($this->arguments['errorLLPrefix'] . '_' . $error->getCode(), 'typo3_forum');
+					$errorText = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate($this->arguments['errorLLPrefix'] . '_' . $error->getCode(),
+					                                                        'typo3_forum');
 					if (!$errorText) {
 						$errorText = 'TRANSLATE: ' . $this->arguments['errorLLPrefix'] . '_' . $error->getCode();
 					}
-					$errorContent .= '<p class="invalid-feedback help-block">' . $errorText . '</p>';
+					$errorContent .= '<p class="help-block">' . $errorText . '</p>';
 				}
 			}
+		} else {
+			$errorText = '';
 		}
 
-		$label = '<label' . ($this->arguments['labelFor'] ? ' for="' . $this->arguments['labelFor'] . '"' : '') . '>' . $label . '</label>';
+		$label   = '<label>' . $label . '</label>';
 		$content = '<div>' . $this->renderChildren() . $errorContent . '</div>';
 
 		$this->tag->addAttribute('class', $class);

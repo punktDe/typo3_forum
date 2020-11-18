@@ -1,5 +1,7 @@
 <?php
 
+$lllPath = 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_stats_summary.';
+
 return [
 	'ctrl' => [
 		'title' => 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_stats_summary',
@@ -20,7 +22,7 @@ return [
 	],
 	'columns' => [
 		'type' => [
-			'label' => 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_stats_summary.type',
+			'label' => $lllPath . 'type',
 			'config' => [
 				'type' => 'radio',
 				'items' => [
@@ -32,13 +34,13 @@ return [
 			],
 		],
 		'amount' => [
-			'label' => 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_stats_summary.amount',
+			'label' => $lllPath . 'amount',
 			'config' => [
 				'type' => 'input',
 			],
 		],
 		'tstamp' => [
-			'label' => 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_stats_summary.tstamp',
+			'label' => $lllPath . 'tstamp',
 			'config' => [
 				'type' => 'none',
 				'format' => 'date',

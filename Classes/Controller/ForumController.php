@@ -26,80 +26,46 @@ namespace Mittwald\Typo3Forum\Controller;
 
 use Mittwald\Typo3Forum\Domain\Exception\Authentication\NotLoggedInException;
 use Mittwald\Typo3Forum\Domain\Model\Forum\Forum;
-use Mittwald\Typo3Forum\Domain\Model\Forum\RootForum;
 use Mittwald\Typo3Forum\Domain\Model\Forum\Topic;
 use Mittwald\Typo3Forum\Domain\Model\User\FrontendUser;
-use Mittwald\Typo3Forum\Domain\Repository\Forum\AdRepository;
-use Mittwald\Typo3Forum\Domain\Repository\Forum\ForumRepository;
-use Mittwald\Typo3Forum\Domain\Repository\Forum\TopicRepository;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 class ForumController extends AbstractController {
 
 	/**
-	 * @var ForumRepository
+	 * @var \TYPO3\CMS\Core\Database\DatabaseConnection
+	 */
+	protected $databaseConnection;
+
+	/**
+	 * @var \Mittwald\Typo3Forum\Domain\Repository\Forum\ForumRepository
+	 * @inject
 	 */
 	protected $forumRepository;
 
-
 	/**
-	 * @var TopicRepository
+	 * @var \Mittwald\Typo3Forum\Domain\Repository\Forum\TopicRepository
+	 * @inject
 	 */
 	protected $topicRepository;
 
-
 	/**
-	 * @var AdRepository
+	 * @var \Mittwald\Typo3Forum\Domain\Repository\Forum\AdRepository
+	 * @inject
 	 */
 	protected $adRepository;
 
-
 	/**
-	 * @var RootForum
+	 * @var \Mittwald\Typo3Forum\Domain\Model\Forum\RootForum
+	 * @inject
 	 */
 	protected $rootForum;
-
-
-	/**
-	 * @param ForumRepository $forumRepository
-	 */
-	public function injectForumRepository(ForumRepository $forumRepository): void
-	{
-		$this->forumRepository = $forumRepository;
-	}
-
-
-	/**
-	 * @param TopicRepository $topicRepository
-	 */
-	public function injectTopicRepository(TopicRepository $topicRepository): void
-	{
-		$this->topicRepository = $topicRepository;
-	}
-
-
-	/**
-	 * @param AdRepository $adRepository
-	 */
-	public function injectAdRepository(AdRepository $adRepository): void
-	{
-		$this->adRepository = $adRepository;
-	}
-
-
-	/**
-	 * @param RootForum $rootForum
-	 */
-	public function injectRootForum(RootForum $rootForum): void
-	{
-		$this->rootForum = $rootForum;
-	}
-
 
 	/**
 	 *
 	 */
 	public function initializeAction() {
+		$this->databaseConnection = $GLOBALS['TYPO3_DB'];
 	}
 
 	/**

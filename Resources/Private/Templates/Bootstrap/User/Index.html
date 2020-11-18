@@ -3,7 +3,7 @@
 
 
 
-<!-- MAIN Section -->
+	<!-- MAIN Section -->
 <f:section name="main">
 
 	<h2>
@@ -37,7 +37,7 @@
 						<f:link.action controller="User" action="show" arguments="{user: user}" pageUid="{settings.pids.UserShow}">{user.username}</f:link.action>
 					</td>
 					<td>
-						<f:format.date format="{settings.format.dateFormat}">{user.timestamp}</f:format.date>
+						<f:format.date format="d. m. Y">{user.timestamp}</f:format.date>
 					</td>
 					<td>{user.postCount}</td>
 					<td>
@@ -51,6 +51,7 @@
 </f:section>
 
 
-<!-- MENU Section -->
+
+	<!-- MENU Section -->
 <f:section name="menu">
 </f:section>

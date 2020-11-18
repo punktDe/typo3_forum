@@ -23,12 +23,11 @@ namespace Mittwald\Typo3Forum\TextParser\Panel;
  *  This copyright notice MUST APPEAR in all copies of the script!      *
  *                                                                      */
 
-use Mittwald\Typo3Forum\Domain\Repository\Format\SmileyRepository;
-
 class SmileyPanel extends AbstractPanel {
 
 	/**
-	 * @var SmileyRepository
+	 * @var \Mittwald\Typo3Forum\Domain\Repository\Format\SmileyRepository
+	 * @inject
 	 */
 	protected $smileyRepository = NULL;
 
@@ -36,16 +35,6 @@ class SmileyPanel extends AbstractPanel {
 	 * @var array<\Mittwald\Typo3Forum\Domain\Model\Format\Smiley>
 	 */
 	protected $smileys = NULL;
-
-
-
-	/**
-	 * @param SmileyRepository $smileyRepository
-	 */
-	public function injectSmileyRepository(SmileyRepository $smileyRepository): void
-	{
-		$this->smileyRepository = $smileyRepository;
-	}
 
 	/**
 	 * @return array

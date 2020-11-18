@@ -1,5 +1,7 @@
 <?php
 
+$lllPath = 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_forum_criteria.';
+
 return [
 	'ctrl' => [
 		'title' => 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_forum_criteria',
@@ -22,7 +24,7 @@ return [
 			],
 		],
 		'options' => [
-			'label' => 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_forum_criteria.options',
+			'label' => $lllPath . 'options',
 			'config' => [
 				'type' => 'inline',
 				'foreign_table' => 'tx_typo3forum_domain_model_forum_criteria_options',
@@ -37,12 +39,13 @@ return [
 			],
 		],
 		'default_option' => [
-			'label' => 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_forum_criteria.default_option',
+			'label' => $lllPath . 'default_option',
 			'config' => [
 				'type' => 'select',
 				'renderType' => 'selectSingle',
 				'maxitems' => 1,
 				'foreign_table' => 'tx_typo3forum_domain_model_forum_criteria_options',
+				'foreign_class' => '\Mittwald\Typo3Forum\Domain\Model\Forum\CriteriaOption',
 			],
 		],
 	],

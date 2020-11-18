@@ -26,12 +26,12 @@ namespace Mittwald\Typo3Forum\ViewHelpers\Forum;
  *                                                                      */
 
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
-use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper;
+use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper;
 
 /**
- * ViewHelper that renders a rootline as nav-pills or breadcrumb.
+ * ViewHelper that renders a big button.
  */
-	class RootlineViewHelper extends AbstractTagBasedViewHelper
+class RootlineViewHelper extends AbstractTagBasedViewHelper
 {
 
     /**
@@ -51,11 +51,8 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper;
     {
         parent::initializeArguments();
         $this->registerUniversalTagAttributes();
-        $this->registerArgument('rootline', 'array', 'Array of rootline elements', true);
-        $this->registerArgument('reverse', 'boolean', 'Reverse the order of the elements in the rootline');
-        $this->registerArgument('breadcrumb', 'boolean', 'Use bootstrap breadcrumb classes instead of nav-pills');
-        $this->registerArgument('forumicon', 'string', 'Class to use for the forum icon');
-        $this->registerArgument('topicicon', 'string', 'Class to use for the topic icon');
+        $this->registerArgument('rootline', 'array', 'array of rootline elements', true);
+        $this->registerArgument('reverse', 'boolean', '');
     }
 
     /**
@@ -75,71 +72,62 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper;
     {
 
         $rootline = $this->arguments['rootline'];
+        $reverse = $this->arguments['reverse'];
 
-        if ($this->arguments['reverse']) {
-			$rootline = array_reverse($rootline);
-			$currentNodeIndex = 0;
-        } else {
-			$currentNodeIndex = count($rootline) - 1;
-		}
 
-        $class = $this->arguments['breadcrumb'] ? 'breadcrumb' : 'nav nav-pills nav-pills-condensed';
+        if ($reverse) {
+            array_reverse($rootline);
+        }
+
+        $class = 'nav nav-pills nav-pills-condensed';
         if ($this->arguments['class']) {
             $class .= ' ' . $this->arguments['class'];
         }
         $this->tag->addAttribute('class', $class);
 
         $content = '';
-        foreach ($rootline as $index => $element) {
-            $content .= $this->renderNavigationNode($element, $index === $currentNodeIndex);
+        foreach ($rootline as $element) {
+            $content .= $this->renderNavigationNode($element);
         }
+        $content .= '';
 
         $this->tag->setContent($content);
         return $this->tag->render();
     }
 
-	/**
-	 * renderNavigationNode
-	 *
-	 * @param $object
-	 *
-	 * @param bool $isCurrentNode
-	 * @return string
-	 */
-    protected function renderNavigationNode($object, bool $isCurrentNode)
+    /**
+     * renderNavigationNode
+     *
+     * @param $object
+     *
+     * @return string
+     */
+    protected function renderNavigationNode($object)
     {
         $extensionName = 'typo3forum';
         $pluginName = 'pi1';
         if ($object instanceof \Mittwald\Typo3Forum\Domain\Model\Forum\Forum) {
             $controller = 'Forum';
             $arguments = ['forum' => $object];
-            $icon = $this->arguments['forumicon'];
+            $icon = 'iconset-22-folder';
         } else {
             $controller = 'Topic';
             $arguments = ['topic' => $object];
-            $icon = $this->arguments['topicicon'];
+            $icon = 'iconset-22-balloon';
         }
         $fullTitle = htmlspecialchars($object->getTitle());
         $limit = (int)$this->settings['cutBreadcrumbOnChar'];
         if ($limit == 0 || strlen($fullTitle) < $limit) {
             $title = $fullTitle;
         } else {
-            $title = substr($fullTitle, 0, $limit) . '...';
+            $title = substr($fullTitle, 0, $limit) . "...";
         }
 
         $uriBuilder = $this->getUriBuilder();
         $uri = $uriBuilder->reset()->setTargetPageUid((int)$this->settings['pids']['Forum'])
             ->uriFor('show', $arguments, $controller, $extensionName, $pluginName);
 
-		if ($this->arguments['breadcrumb']) {
-			$liClass = ' class="breadcrumb-item' . ($isCurrentNode ? ' active' : '') . '"';
-		} else {
-			$liClass = '';
-		}
-
-		$icon = empty($icon) ? '' : '<i class="' . $icon . '"></i>';
-
-		return '<li' . $liClass . '><a href="' . $uri . '" title="' . $fullTitle . '">' . $icon . $title . '</a></li>';
+        return '<li><a href="' . $uri . '" title="' . $fullTitle . '"><i class="' . $icon . '"></i>' . $title . '</a></li>';
     }
 
 

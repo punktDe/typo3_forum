@@ -1,5 +1,7 @@
 <?php
 
+$lllPath = 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_moderation_reportcomment.';
+
 return [
 	'ctrl' => [
 		'title' => 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_moderation_reportcomment',
@@ -20,21 +22,21 @@ return [
 	'columns' => [
 		'hidden' => [
 			'exclude' => 1,
-			'label'   => 'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.hidden',
+			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
 			'config'  => [
 				'type' => 'check',
 			],
 		],
 		'tstamp' => [
 			'exclude' => 1,
-			'label'   => 'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.timestamp',
+			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.tstamp',
 			'config'  => [
 				'type' => 'passthrough',
 			],
 		],
 		'report' => [
 			'exclude' => 1,
-			'label'   => 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_moderation_reportcomment.report',
+			'label'   => $lllPath . 'report',
 			'config' => [
 				'type' => 'select',
 				'renderType' => 'selectSingle',
@@ -44,7 +46,7 @@ return [
 		],
 		'author' => [
 			'exclude' => 1,
-			'label'   => 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_moderation_reportcomment.author',
+			'label'   => $lllPath . 'author',
 			'config' => [
 				'type' => 'select',
 				'renderType' => 'selectSingle',

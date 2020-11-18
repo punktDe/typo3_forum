@@ -45,13 +45,11 @@
 		</fieldset>
 	</f:form>
 	<script type="text/javascript">
-		$(document).ready(function () {
-			$('#tx-typo3forum-movetopic').click(function () {
-				if (this.checked) {
+		$(document).ready(function() {
+			$('#tx-typo3forum-movetopic').click(function() {
+				if($(this).attr('checked'))
 					$('#tx-typo3forum-movetopic-target').removeAttr('disabled');
-				} else {
-					$('#tx-typo3forum-movetopic-target').attr('disabled', 'disabled');
-				}
+				else $('#tx-typo3forum-movetopic-target').attr('disabled','disabled');
 			});
 		});
 	</script>

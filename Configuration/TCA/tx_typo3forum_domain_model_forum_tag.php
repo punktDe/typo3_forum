@@ -1,5 +1,7 @@
 <?php
 
+$lllPath = 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_forum_tag.';
+
 return [
 	'ctrl' => [
 		'title' => 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_forum_tag',
@@ -17,13 +19,13 @@ return [
 	],
 	'columns' => [
 		'name' => [
-			'label' => 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_forum_tag.name',
+			'label' => $lllPath . 'name',
 			'config' => [
 				'type' => 'input',
 			]
 		],
 		'tstamp' => [
-			'label' => 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_forum_tag.tstamp',
+			'label' => $lllPath . 'tstamp',
 			'config' => [
 				'type' => 'none',
 				'format' => 'date',
@@ -31,7 +33,7 @@ return [
 			]
 		],
 		'crdate' => [
-			'label' => 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_forum_tag.crdate',
+			'label' => $lllPath . 'crdate',
 			'config' => [
 				'type' => 'none',
 				'format' => 'date',
@@ -39,13 +41,13 @@ return [
 			]
 		],
 		'topic_count' => [
-			'label' => 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_forum_tag.topicCount',
+			'label' => $lllPath . 'topicCount',
 			'config' => [
 				'type' => 'none',
 			],
 		],
 		'feuser' => [
-			'label' => 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_forum_tag.feuser',
+			'label' => $lllPath . 'feuser',
 			'config' => [
 				'type' => 'select',
 				'size' => 10,

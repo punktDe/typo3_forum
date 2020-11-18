@@ -1,5 +1,4 @@
 <?php
-
 namespace Mittwald\Typo3Forum\Controller;
 
 /*                                                                      *
@@ -25,169 +24,73 @@ namespace Mittwald\Typo3Forum\Controller;
  *  This copyright notice MUST APPEAR in all copies of the script!      *
  *                                                                      */
 
-use Mittwald\Typo3Forum\Configuration\ConfigurationBuilder;
-use Mittwald\Typo3Forum\Domain\Factory\Forum\PostFactory;
 use Mittwald\Typo3Forum\Domain\Model\Forum\Post;
-use Mittwald\Typo3Forum\Domain\Repository\Forum\AdRepository;
-use Mittwald\Typo3Forum\Domain\Repository\Forum\AttachmentRepository;
-use Mittwald\Typo3Forum\Domain\Repository\Forum\ForumRepository;
-use Mittwald\Typo3Forum\Domain\Repository\Forum\PostRepository;
-use Mittwald\Typo3Forum\Domain\Repository\Forum\TopicRepository;
-use Mittwald\Typo3Forum\Service\AttachmentService;
-use Mittwald\Typo3Forum\Service\SessionHandlingService;
-use TYPO3\CMS\Core\FormProtection\FormProtectionFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Fluid\View\StandaloneView;
+use TYPO3\CMS\Core\FormProtection\FormProtectionFactory;
 
-class AjaxController extends AbstractController
-{
+class AjaxController extends AbstractController {
 
 	/**
-	 * @var AdRepository
+	 * @var \Mittwald\Typo3Forum\Domain\Repository\Forum\AdRepository
+	 * @inject
 	 */
 	protected $adRepository;
 
 	/**
-	 * @var AttachmentRepository
+	 * @var \Mittwald\Typo3Forum\Domain\Repository\Forum\AttachmentRepository
+	 * @inject
 	 */
 	protected $attachmentRepository;
 
 	/**
-	 * @var ForumRepository
+	 * @var \Mittwald\Typo3Forum\Domain\Repository\Forum\ForumRepository
+	 * @inject
 	 */
 	protected $forumRepository;
 
-	/**
-	 * @var ConfigurationBuilder
-	 */
-	protected $configurationBuilder;
+    /**
+     * @var \Mittwald\Typo3Forum\Configuration\ConfigurationBuilder
+     * @inject
+     */
+    protected $configurationBuilder;
 
 	/**
-	 * @var PostFactory
+	 * @var \Mittwald\Typo3Forum\Domain\Factory\Forum\PostFactory
+	 * @inject
 	 */
 	protected $postFactory;
 
 	/**
-	 * @var PostRepository
+	 * @var \Mittwald\Typo3Forum\Domain\Repository\Forum\PostRepository
+	 * @inject
 	 */
 	protected $postRepository;
 
 	/**
 	 * Whole TypoScript typo3_forum settings
-	 *
 	 * @var array
 	 */
 	protected $settings;
 
 	/**
-	 * @var TopicRepository
+	 * @var \Mittwald\Typo3Forum\Domain\Repository\Forum\TopicRepository
+	 * @inject
 	 */
 	protected $topicRepository;
 
-
 	/**
-	 * @var SessionHandlingService
+	 * @var \Mittwald\Typo3Forum\Service\SessionHandlingService
+	 * @inject
 	 */
 	protected $sessionHandlingService;
 
-
 	/**
-	 * @var AttachmentService
+	 * @var \Mittwald\Typo3Forum\Service\AttachmentService
+	 * @inject
 	 */
-	protected $attachmentService = null;
-
-
-
-	/**
-	 * @param AdRepository $adRepository
-	 */
-	public function injectAdRepository(AdRepository $adRepository): void
-	{
-		$this->adRepository = $adRepository;
-	}
-
-
-
-	/**
-	 * @param AttachmentRepository $attachmentRepository
-	 */
-	public function injectAttachmentRepository(AttachmentRepository $attachmentRepository): void
-	{
-		$this->attachmentRepository = $attachmentRepository;
-	}
-
-
-
-	/**
-	 * @param ForumRepository $forumRepository
-	 */
-	public function injectForumRepository(ForumRepository $forumRepository): void
-	{
-		$this->forumRepository = $forumRepository;
-	}
-
-
-
-	/**
-	 * @param ConfigurationBuilder $configurationBuilder
-	 */
-	public function injectConfigurationBuilder(ConfigurationBuilder $configurationBuilder): void
-	{
-		$this->configurationBuilder = $configurationBuilder;
-	}
-
-
-
-	/**
-	 * @param PostFactory $postFactory
-	 */
-	public function injectPostFactory(PostFactory $postFactory): void
-	{
-		$this->postFactory = $postFactory;
-	}
-
-
-
-	/**
-	 * @param PostRepository $postRepository
-	 */
-	public function injectPostRepository(PostRepository $postRepository): void
-	{
-		$this->postRepository = $postRepository;
-	}
-
-
-
-	/**
-	 * @param TopicRepository $topicRepository
-	 */
-	public function injectTopicRepository(TopicRepository $topicRepository): void
-	{
-		$this->topicRepository = $topicRepository;
-	}
-
-
-
-	/**
-	 * @param SessionHandlingService $sessionHandlingService
-	 */
-	public function injectSessionHandlingService(SessionHandlingService $sessionHandlingService): void
-	{
-		$this->sessionHandlingService = $sessionHandlingService;
-	}
-
-
-
-	/**
-	 * @param AttachmentService $attachmentService
-	 */
-	public function injectAttachmentService(AttachmentService $attachmentService): void
-	{
-		$this->attachmentService = $attachmentService;
-	}
-
-
+	protected $attachmentService = NULL;
 
 	/**
 	 *
@@ -371,7 +274,7 @@ class AjaxController extends AbstractController
         $standaloneView->setTemplateRootPaths($templateRootPaths);
         $standaloneView->getRenderingContext()->setControllerName('Ajax');
         $standaloneView->setTemplate('topicListMenu');
-        $standaloneView->setFormat('json');
+        $standaloneView->setFormat('html');
 
 		$topicIcons = $this->topicRepository->findByUids($displayedTopics);
 		$counter = 0;

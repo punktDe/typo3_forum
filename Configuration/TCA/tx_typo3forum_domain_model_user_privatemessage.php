@@ -1,5 +1,7 @@
 <?php
 
+$lllPath = 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_user_privatemessage.';
+
 return [
 	'ctrl' => [
 		'title' => 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_user_privatemessage',
@@ -17,10 +19,11 @@ return [
 	],
 	'columns' => [
 		'message' => [
-			'label' => 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_user_privatemessage.message',
+			'label' => $lllPath . 'message',
 			'config' => [
 				'type' => 'inline',
 				'foreign_table' => 'tx_typo3forum_domain_model_user_privatemessage_text',
+				'foreign_class' => '\Mittwald\Typo3Forum\Domain\Model\User\PrivateMessageText',
 				'maxitems' => 1,
 				'appearance' => [
 					'collapseAll' => 1,
@@ -30,25 +33,27 @@ return [
 			],
 		],
 		'feuser' => [
-			'label' => 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_user_privatemessage.feuser',
+			'label' => $lllPath . 'feuser',
 			'config' => [
 				'type' => 'select',
 				'renderType' => 'selectSingle',
 				'foreign_table' => 'fe_users',
+				'foreign_class' => '\Mittwald\Typo3Forum\Domain\Model\User\FrontendUser',
 				'maxitems' => 1
 			],
 		],
 		'opponent' => [
-			'label' => 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_user_privatemessage.opponent',
+			'label' => $lllPath . 'opponent',
 			'config' => [
 				'type' => 'select',
 				'renderType' => 'selectSingle',
 				'foreign_table' => 'fe_users',
+				'foreign_class' => '\Mittwald\Typo3Forum\Domain\Model\User\FrontendUser',
 				'maxitems' => 1
 			],
 		],
 		'type' => [
-			'label' => 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_user_privatemessage.type',
+			'label' => $lllPath . 'type',
 			'config' => [
 				'type' => 'radio',
 				'items' => [
@@ -59,7 +64,7 @@ return [
 			],
 		],
 		'user_read' => [
-			'label' => 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_user_privatemessage.user_read',
+			'label' => $lllPath . 'user_read',
 			'config' => [
 				'type' => 'check'
 			],

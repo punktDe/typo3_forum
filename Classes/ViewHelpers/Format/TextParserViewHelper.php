@@ -26,9 +26,7 @@ namespace Mittwald\Typo3Forum\ViewHelpers\Format;
  *                                                                      */
 
 use Mittwald\Typo3Forum\Domain\Model\Forum\Post;
-use Mittwald\Typo3Forum\Domain\Repository\Forum\PostRepository;
-use Mittwald\Typo3Forum\TextParser\TextParserService;
-use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
+use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
  * ViewHelper that performs text parsing operations on text input.
@@ -39,7 +37,8 @@ class TextParserViewHelper extends AbstractViewHelper
     /**
      * An instance of the post repository class. The repository is needed
      * only when a rendered post text has to be persisted in the database.
-     * @var PostRepository
+     * @var \Mittwald\Typo3Forum\Domain\Repository\Forum\PostRepository
+     * @inject
      */
     protected $postRepository;
 
@@ -50,28 +49,10 @@ class TextParserViewHelper extends AbstractViewHelper
 
 	/**
 	 * The text parser service
-	 * @var TextParserService
+	 * @var \Mittwald\Typo3Forum\TextParser\TextParserService
+	 * @inject
 	 */
 	protected $textParserService;
-
-
-	/**
-	 * @param PostRepository $postRepository
-	 */
-	public function injectPostRepository(PostRepository $postRepository): void
-	{
-		$this->postRepository = $postRepository;
-	}
-
-
-
-	/**
-	 * @param TextParserService $textParserService
-	 */
-	public function injectTextParserService(TextParserService $textParserService): void
-	{
-		$this->textParserService = $textParserService;
-	}
 
     /**
      * Initialize arguments.

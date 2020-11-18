@@ -27,8 +27,6 @@ namespace Mittwald\Typo3Forum\ViewHelpers\User;
 use Mittwald\Typo3Forum\Domain\Model\User\AnonymousFrontendUser;
 use Mittwald\Typo3Forum\Domain\Model\User\FrontendUser;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
-use TYPO3\CMS\Core\Utility\PathUtility;
-use TYPO3\CMS\Extbase\SignalSlot\Dispatcher;
 use TYPO3\CMS\Fluid\ViewHelpers\CObjectViewHelper;
 
 /**
@@ -38,19 +36,10 @@ class AvatarUrlViewHelper extends CObjectViewHelper {
 
 	/**
 	 * An instance of the Extbase Signal-/Slot-Dispatcher.
-	 * @var Dispatcher
+	 * @var \TYPO3\CMS\Extbase\SignalSlot\Dispatcher
+	 * @inject
 	 */
 	protected $slots;
-
-
-
-	/**
-	 * @param Dispatcher $slots
-	 */
-	public function injectSlots(Dispatcher $slots): void
-	{
-		$this->slots = $slots;
-	}
 
 	/**
 	 *
@@ -76,7 +65,7 @@ class AvatarUrlViewHelper extends CObjectViewHelper {
 		}
 
 		if ($avatarFilename === NULL) {
-			$avatarFilename = PathUtility::stripPathSitePrefix(ExtensionManagementUtility::extPath('typo3_forum')) . 'Resources/Public/Images/Icons/AvatarEmpty.png';
+			$avatarFilename = ExtensionManagementUtility::siteRelPath('typo3_forum') . 'Resources/Public/Images/Icons/AvatarEmpty.png';
 		}
 		return $avatarFilename;
 	}

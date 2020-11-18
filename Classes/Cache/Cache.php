@@ -25,7 +25,6 @@ namespace Mittwald\Typo3Forum\Cache;
  *                                                                      */
 
 use TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException;
-use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\SingletonInterface;
 
 /**
@@ -42,7 +41,7 @@ class Cache implements SingletonInterface {
 	const CACHE_NAME = 'typo3forum_main';
 
 	/**
-	 * @var FrontendInterface
+	 * @var \TYPO3\CMS\Core\Cache\Frontend\FrontendInterface
 	 */
 	protected $cacheInstance = NULL;
 
@@ -53,17 +52,9 @@ class Cache implements SingletonInterface {
 
 	/**
 	 * @var \TYPO3\CMS\Core\Cache\CacheManager
+	 * @inject
 	 */
 	protected $cacheManager;
-
-
-	/**
-	 * @param \TYPO3\CMS\Core\Cache\CacheManager $cacheManager
-	 */
-	public function injectCacheManager(\TYPO3\CMS\Core\Cache\CacheManager $cacheManager): void
-	{
-		$this->cacheManager = $cacheManager;
-	}
 
 	/**
 	 *

@@ -27,8 +27,7 @@ namespace Mittwald\Typo3Forum\ViewHelpers\Authentication;
 
 use Mittwald\Typo3Forum\Domain\Model\AccessibleInterface;
 use Mittwald\Typo3Forum\Domain\Model\Forum\Access;
-use Mittwald\Typo3Forum\Domain\Repository\User\FrontendUserRepository;
-use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
+use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
  *
@@ -50,18 +49,10 @@ class IfAccessViewHelper extends AbstractViewHelper
     /**
      * The frontend user repository.
      *
-     * @var FrontendUserRepository
+     * @var \Mittwald\Typo3Forum\Domain\Repository\User\FrontendUserRepository
+     * @inject
      */
     protected $frontendUserRepository;
-
-
-	/**
-	 * @param FrontendUserRepository $frontendUserRepository
-	 */
-	public function injectFrontendUserRepository(FrontendUserRepository $frontendUserRepository): void
-	{
-		$this->frontendUserRepository = $frontendUserRepository;
-	}
 
     /**
      * initializeArguments.

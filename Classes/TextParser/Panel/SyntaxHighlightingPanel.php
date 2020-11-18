@@ -23,14 +23,13 @@ namespace Mittwald\Typo3Forum\TextParser\Panel;
  *  This copyright notice MUST APPEAR in all copies of the script!      *
  *                                                                      */
 
-use Mittwald\Typo3Forum\Domain\Repository\Format\SyntaxHighlightingRepository;
-
 class SyntaxHighlightingPanel extends \Mittwald\Typo3Forum\TextParser\Panel\AbstractPanel {
 
 	/**
 	 * TODO
 	 *
-	 * @var SyntaxHighlightingRepository
+	 * @var \Mittwald\Typo3Forum\Domain\Repository\Format\SyntaxHighlightingRepository
+	 * @inject
 	 */
 	protected $syntaxHighlightingRepository = NULL;
 
@@ -40,16 +39,6 @@ class SyntaxHighlightingPanel extends \Mittwald\Typo3Forum\TextParser\Panel\Abst
 	 * @var array<\Mittwald\Typo3Forum\Domain\Model\Format\SyntaxHighlighting>
 	 */
 	protected $syntaxHighlightings = NULL;
-
-
-
-	/**
-	 * @param SyntaxHighlightingRepository $syntaxHighlightingRepository
-	 */
-	public function injectSyntaxHighlightingRepository(SyntaxHighlightingRepository $syntaxHighlightingRepository): void
-	{
-		$this->syntaxHighlightingRepository = $syntaxHighlightingRepository;
-	}
 
 
 	public function initializeObject() {

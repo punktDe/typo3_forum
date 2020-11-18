@@ -30,16 +30,14 @@ namespace Mittwald\Typo3Forum\Domain\Model\User;
 class FrontendUserGroup extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUserGroup {
 
 	/**
-	 * Status whether all users of this group have moderation permission
-	 *
-	 * @var int
+	 * Read topics.
+	 * @var integer
 	 */
 	protected $userMod;
 
 	/**
-	 * Gets the status whether all users of this group have moderation permission
-	 *
-	 * @return int
+	 * Gets the post count of this user.
+	 * @return integer
 	 */
 	public function getUserMod() {
 		return (int) $this->userMod;

@@ -24,11 +24,9 @@ namespace Mittwald\Typo3Forum\Domain\Model\Forum;
  *  This copyright notice MUST APPEAR in all copies of the script!      *
  *                                                                      */
 
-use Mittwald\Typo3Forum\Configuration\ConfigurationBuilder;
 use Mittwald\Typo3Forum\Domain\Model\ConfigurableEntityTrait;
 use Mittwald\Typo3Forum\Domain\Model\ConfigurableInterface;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
-use TYPO3\CMS\Extbase\Annotation\ORM as ExtbaseORM;
 
 class Attachment extends AbstractEntity implements ConfigurableInterface {
 
@@ -36,7 +34,7 @@ class Attachment extends AbstractEntity implements ConfigurableInterface {
 	/**
 	 * The attachment file name.
 	 * @var \Mittwald\Typo3Forum\Domain\Model\Forum\Post
-	 * @ExtbaseORM\Lazy
+	 * @lazy
 	 */
 	protected $post;
 
@@ -65,17 +63,10 @@ class Attachment extends AbstractEntity implements ConfigurableInterface {
 	protected $downloadCount;
 
 	/**
-	 * @var ConfigurationBuilder
+	 * @var \Mittwald\Typo3Forum\Configuration\ConfigurationBuilder
+	 * @inject
 	 */
 	protected $configurationBuilder;
-
-	/**
-	 * @param ConfigurationBuilder $configurationBuilder
-	 */
-	public function injectConfigurationBuilder(ConfigurationBuilder $configurationBuilder): void
-	{
-		$this->configurationBuilder = $configurationBuilder;
-	}
 
 	/**
 	 * Gets the attachment's filename on file system.

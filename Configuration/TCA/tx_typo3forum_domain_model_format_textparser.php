@@ -1,5 +1,12 @@
 <?php
 
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr(
+	'tx_typo3forum_domain_model_format_textparser',
+	'EXT:typo3_forum/Resources/Private/Language/locallang_csh_tx_typo3forum_domain_model_format_textparser.xml'
+);
+
+$lllPath = 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_format_textparser.';
+
 return [
 	'ctrl' => [
 		'title' => 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_format_textparser',
@@ -7,7 +14,7 @@ return [
 		'type' => 'type',
 		'tstamp' => 'tstamp',
 		'crdate' => 'crdate',
-		'versioningWS' => TRUE,
+		'versioningWS' => true,
 		'origUid' => 't3_origuid',
 		'languageField' => 'sys_language_uid',
 		'transOrigPointerField' => 'l18n_parent',
@@ -30,30 +37,30 @@ return [
 		'Mittwald\Typo3Forum\Domain\Model\Format\SyntaxHighlighting' => ['showitem' => 'type,name,icon,language'],
 	],
 	'columns' => [
-		'sys_language_uid' => [
-			'exclude' => TRUE,
-			'label' => 'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.language',
-			'config' => [
-				'type' => 'select',
-				'renderType' => 'selectSingle',
-				'foreign_table' => 'sys_language',
-				'foreign_table_where' => 'ORDER BY sys_language.title',
-				'items' => [
-					['LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.allLanguages', -1],
-					['LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.default_value', 0]
-				],
-				'default' => 0,
-				'fieldWizard' => [
-					'selectIcons' => [
-						'disabled' => FALSE,
-					],
-				],
-			]
-		],
+        'sys_language_uid' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.language',
+            'config' => [
+                'type' => 'select',
+                'renderType' => 'selectSingle',
+                'foreign_table' => 'sys_language',
+                'foreign_table_where' => 'ORDER BY sys_language.title',
+                'items' => [
+                    ['LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.allLanguages', -1],
+                    ['LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.default_value', 0]
+                ],
+                'default' => 0,
+                'fieldWizard' => [
+                    'selectIcons' => [
+                        'disabled' => false,
+                    ],
+                ],
+            ]
+        ],
 		'l18n_parent' => [
 			'displayCond' => 'FIELD:sys_language_uid:>:0',
 			'exclude' => 1,
-			'label' => 'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.l18n_parent',
+			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.l18n_parent',
 			'config' => [
 				'type' => 'select',
 				'renderType' => 'selectSingle',
@@ -70,7 +77,7 @@ return [
 		],
 		't3ver_label' => [
 			'displayCond' => 'FIELD:t3ver_label:REQ:true',
-			'label' => 'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.versionLabel',
+			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.versionLabel',
 			'config' => [
 				'type' => 'none',
 				'cols' => 27
@@ -78,29 +85,29 @@ return [
 		],
 		'hidden' => [
 			'exclude' => 1,
-			'label' => 'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.hidden',
+			'label' => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
 			'config' => [
 				'type' => 'check'
 			],
 		],
 		'type' => [
 			'exclude' => 1,
-			'label' => 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_format_textparser.type',
+			'label' => $lllPath . 'type',
 			'config' => [
 				'type' => 'select',
 				'renderType' => 'selectSingle',
 				'items' => [
-					['LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_format_textparser.type.bbcode', 'Mittwald\Typo3Forum\Domain\Model\Format\BBCode'],
-					['LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_format_textparser.type.quote', 'Mittwald\Typo3Forum\Domain\Model\Format\QuoteBBCode'],
-					['LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_format_textparser.type.list', 'Mittwald\Typo3Forum\Domain\Model\Format\ListBBCode'],
-					['LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_format_textparser.type.smiley', 'Mittwald\Typo3Forum\Domain\Model\Format\Smiley'],
-					['LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_format_textparser.type.syntax', 'Mittwald\Typo3Forum\Domain\Model\Format\SyntaxHighlighting'],
+					[$lllPath . 'type.bbcode', 'Mittwald\Typo3Forum\Domain\Model\Format\BBCode'],
+					[$lllPath . 'type.quote', 'Mittwald\Typo3Forum\Domain\Model\Format\QuoteBBCode'],
+					[$lllPath . 'type.list', 'Mittwald\Typo3Forum\Domain\Model\Format\ListBBCode'],
+					[$lllPath . 'type.smiley', 'Mittwald\Typo3Forum\Domain\Model\Format\Smiley'],
+					[$lllPath . 'type.syntax', 'Mittwald\Typo3Forum\Domain\Model\Format\SyntaxHighlighting'],
 				],
 			],
 		],
 		'name' => [
 			'exclude' => 1,
-			'label' => 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_format_textparser.name',
+			'label' => $lllPath . 'name',
 			'config' => [
 				'type' => 'input',
 				'size' => 30,
@@ -109,7 +116,7 @@ return [
 		],
 		'icon_class' => [
 			'exclude' => 1,
-			'label' => 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_format_textparser.icon_class',
+			'label' => $lllPath . 'icon_class',
 			'config' => [
 				'type' => 'input',
 				'size' => 30,
@@ -118,7 +125,7 @@ return [
 		],
 		'bbcode_wrap' => [
 			'exclude' => 1,
-			'label' => 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_format_textparser.bbcode_wrap',
+			'label' => $lllPath . 'bbcode_wrap',
 			'config' => [
 				'type' => 'input',
 				'size' => 30,
@@ -127,7 +134,7 @@ return [
 		],
 		'regular_expression' => [
 			'exclude' => 1,
-			'label' => 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_format_textparser.regular_expression',
+			'label' => $lllPath . 'regular_expression',
 			'config' => [
 				'type' => 'input',
 				'size' => 30,
@@ -136,7 +143,7 @@ return [
 		],
 		'regular_expression_replacement' => [
 			'exclude' => 1,
-			'label' => 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_format_textparser.regular_expression_replacement',
+			'label' => $lllPath . 'regular_expression_replacement',
 			'config' => [
 				'type' => 'input',
 				'size' => 30,
@@ -145,7 +152,7 @@ return [
 		],
 		'smiley_shortcut' => [
 			'exclude' => 1,
-			'label' => 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_format_textparser.smiley_shortcut',
+			'label' => $lllPath . 'smiley_shortcut',
 			'config' => [
 				'type' => 'input',
 				'size' => 30,
@@ -154,7 +161,7 @@ return [
 		],
 		'language' => [
 			'exclude' => 1,
-			'label' => 'LLL:EXT:typo3_forum/Resources/Private/Language/locallang_db.xml:tx_typo3forum_domain_model_format_textparser.language',
+			'label' => $lllPath . 'language',
 			'config' => [
 				'type' => 'input',
 				'size' => 30,

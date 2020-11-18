@@ -26,12 +26,9 @@ namespace Mittwald\Typo3Forum\Controller;
 
 use Mittwald\Typo3Forum\Domain\Exception\AbstractException;
 use Mittwald\Typo3Forum\Domain\Model\User\FrontendUser;
-use Mittwald\Typo3Forum\Domain\Repository\User\FrontendUserRepository;
-use Mittwald\Typo3Forum\Service\Authentication\AuthenticationServiceInterface;
 use Mittwald\Typo3Forum\Utility\Localization;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
-use TYPO3\CMS\Extbase\SignalSlot\Dispatcher;
 
 abstract class AbstractController extends ActionController {
 
@@ -42,7 +39,8 @@ abstract class AbstractController extends ActionController {
 	/**
 	 * An authentication service. Handles the authentication mechanism.
 	 *
-	 * @var AuthenticationServiceInterface
+	 * @var \Mittwald\Typo3Forum\Service\Authentication\AuthenticationServiceInterface
+	 * @inject
 	 */
 	protected $authenticationService;
 
@@ -55,7 +53,8 @@ abstract class AbstractController extends ActionController {
 	protected $className;
 
 	/**
-	 * @var FrontendUserRepository
+	 * @var \Mittwald\Typo3Forum\Domain\Repository\User\FrontendUserRepository
+	 * @inject
 	 */
 	protected $frontendUserRepository;
 
@@ -70,7 +69,8 @@ abstract class AbstractController extends ActionController {
 	/**
 	 * The global SignalSlot-Dispatcher.
 	 *
-	 * @var Dispatcher
+	 * @var \TYPO3\CMS\Extbase\SignalSlot\Dispatcher
+	 * @inject
 	 */
 	protected $signalSlotDispatcher;
 
@@ -81,36 +81,6 @@ abstract class AbstractController extends ActionController {
 	 * @var integer
 	 */
 	protected $context = self::CONTEXT_WEB;
-
-
-
-	/**
-	 * @param AuthenticationServiceInterface $authenticationService
-	 */
-	public function injectAuthenticationService(AuthenticationServiceInterface $authenticationService): void
-	{
-		$this->authenticationService = $authenticationService;
-	}
-
-
-
-	/**
-	 * @param FrontendUserRepository $frontendUserRepository
-	 */
-	public function injectFrontendUserRepository(FrontendUserRepository $frontendUserRepository): void
-	{
-		$this->frontendUserRepository = $frontendUserRepository;
-	}
-
-
-
-	/**
-	 * @param Dispatcher $signalSlotDispatcher
-	 */
-	public function injectSignalSlotDispatcher(Dispatcher $signalSlotDispatcher): void
-	{
-		$this->signalSlotDispatcher = $signalSlotDispatcher;
-	}
 
 	/*
 	 * METHODS

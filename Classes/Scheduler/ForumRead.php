@@ -26,6 +26,7 @@ namespace Mittwald\Typo3Forum\Scheduler;
  *                                                                      */
 
 use Mittwald\Typo3Forum\Domain\Model\User\FrontendUser;
+use TYPO3\CMS\Scheduler\Task\AbstractTask;
 
 /**
  * Check for any user which forum is read and which not. Best way to ensure performance.
@@ -87,117 +88,92 @@ class ForumRead extends AbstractDatabaseTask
 
         $limit = 86400;
 
-		/*
-		 * In order to be able to select forums without topics (using a left join) currently its necessary to manually apply the restrictions in the join as
-		 * otherwise only forums with topic will be returned (due to topic.deleted=0 != topic.deleted=NULL)
-		 *
-		 * @link https://forge.typo3.org/issues/86385
-		 */
-        $forumQueryBuilder = $this->getDatabaseConnection('tx_typo3forum_domain_model_forum_topic');
-		$forumQueryBuilder->getRestrictions()->removeAll();
-		$result = $forumQueryBuilder
-			->select('forum.uid AS forum')
-			->addSelectLiteral(
-				$forumQueryBuilder->expr()->count('topic.uid', 'topic_amount')
-			)
-			->from('tx_typo3forum_domain_model_forum_forum', 'forum')
-			->leftJoin(
-				'forum',
-				'tx_typo3forum_domain_model_forum_topic',
-				'topic',
-				$forumQueryBuilder->expr()->andX(
-					$forumQueryBuilder->expr()->eq('forum.uid',
-						$forumQueryBuilder->quoteIdentifier('topic.forum')
-					),
-					$forumQueryBuilder->expr()->eq('topic.pid',
-						$forumQueryBuilder->createNamedParameter($this->getForumPid(), \PDO::PARAM_INT)
-					),
-					$forumQueryBuilder->expr()->eq('topic.deleted',
-						$forumQueryBuilder->createNamedParameter(0, \PDO::PARAM_INT)
-					),
-					$forumQueryBuilder->expr()->eq('topic.hidden',
-						$forumQueryBuilder->createNamedParameter(0, \PDO::PARAM_INT)
-					)
-				)
-			)
-			->where($forumQueryBuilder->expr()->eq('forum.pid',
-				$forumQueryBuilder->createNamedParameter($this->getForumPid(), \PDO::PARAM_INT))
-			)
-			->andWhere($forumQueryBuilder->expr()->eq('forum.deleted',
-				$forumQueryBuilder->createNamedParameter(0, \PDO::PARAM_INT))
-			)
-			->andWhere($forumQueryBuilder->expr()->eq('forum.hidden',
-				$forumQueryBuilder->createNamedParameter(0, \PDO::PARAM_INT))
-			)
-			->addGroupBy('forum.uid')
-			->execute();
+        $queryBuilder = $this->getDatabaseConnection('tx_typo3forum_domain_model_forum_topic');
+        $queryBuilder->from('tx_typo3forum_domain_model_forum_topic', 'topic');
+        $queryBuilder->select('topic.forum');
+        $queryBuilder->addSelectLiteral(
+            $queryBuilder->expr()->count('*', 'topic_amount')
+        );
+
+        $queryBuilder->andWhere(
+            $queryBuilder->expr()->eq('topic.pid',
+                $queryBuilder->createNamedParameter($this->getForumPid(), \PDO::PARAM_INT))
+        );
+
+        $queryBuilder->addGroupBy('topic.forum');
+        $result = $queryBuilder->execute();
+
 
         while ($forumRow = $result->fetch()) {
-            $topicQueryBuilder = $this->getDatabaseConnection('tx_typo3forum_domain_model_forum_topic');
-			$topics = $topicQueryBuilder
-				->select('topic.uid')
-				->from('tx_typo3forum_domain_model_forum_topic', 'topic')
-				->where($topicQueryBuilder->expr()->eq('topic.forum',
-					$topicQueryBuilder->createNamedParameter($forumRow['forum'], \PDO::PARAM_INT))
-				)
-				->execute()
-				->fetchAll(\PDO::FETCH_COLUMN);
+            $queryBuilder = $this->getDatabaseConnection('tx_typo3forum_domain_model_forum_topic');
+            $queryBuilder->from('tx_typo3forum_domain_model_forum_topic', 'topic');
+            $queryBuilder->select('topic.uid');
+            $queryBuilder->andWhere(
+                $queryBuilder->expr()->eq('topic.forum',
+                    $queryBuilder->createNamedParameter($forumRow['forum'], \PDO::PARAM_INT))
+            );
 
-            $userQueryBuilder = $this->getDatabaseConnection('fe_users');
-			$userQueryBuilder
-				->select('users.uid')
-				->from('fe_users', 'users');
+            $topicResult = $queryBuilder->execute();
 
-            if (!empty($topics)) {
-				$userQueryBuilder
-					->addSelectLiteral(
-						$userQueryBuilder->expr()->count('*', 'read_amount')
-					)
-					->leftJoin('users', 'tx_typo3forum_domain_model_user_readtopic', 'read',
-					$userQueryBuilder->expr()->andX()->addMultiple([
-							$userQueryBuilder->expr()->eq('read.uid_local', 'users.uid'),
-							$userQueryBuilder->expr()->in('read.uid_foreign', $topics)
-						]
-					)
-				);
-			}
+            $topics = [];
+            while ($topicRow = $topicResult->fetch()) {
+                $topics[] = $topicRow['uid'];
+            }
 
-			$userResult = $userQueryBuilder
-				->andWhere(
-					$userQueryBuilder->expr()->eq('users.tx_extbase_type',
-						$userQueryBuilder->createNamedParameter(FrontendUser::class, \PDO::PARAM_STR)),
-					$userQueryBuilder->expr()->eq('users.pid',
-						$userQueryBuilder->createNamedParameter($this->getUserPid(), \PDO::PARAM_INT)),
-					$userQueryBuilder->expr()->gt('users.lastlogin', (time() - $limit))
-				)
-				->addGroupBy('users.uid')
-				->execute();
+            $queryBuilder = $this->getDatabaseConnection('fe_users');
+            $queryBuilder->from('fe_users', 'users');
+            $queryBuilder->select('users.uid');
+            $queryBuilder->addSelectLiteral(
+                $queryBuilder->expr()->count('*', 'read_amount')
+            );
+            $queryBuilder->leftJoin('users', 'tx_typo3forum_domain_model_user_readtopic', 'read',
+                $queryBuilder->expr()->andX()->addMultiple([
+                        $queryBuilder->expr()->eq('read.uid_local', 'users.uid'),
+                        $queryBuilder->expr()->in('read.uid_foreign', $topics)
+                    ]
+                )
+            );
+
+            $queryBuilder->andWhere(
+                $queryBuilder->expr()->eq('users.tx_extbase_type',
+                    $queryBuilder->createNamedParameter(FrontendUser::class, \PDO::PARAM_STR)),
+                $queryBuilder->expr()->eq('users.pid',
+                    $queryBuilder->createNamedParameter($this->getUserPid(), \PDO::PARAM_INT)),
+                $queryBuilder->expr()->gt('users.lastLogin', (time() - $limit))
+            );
+
+            $queryBuilder->addGroupBy('users.uid');
+
+            $userResult = $queryBuilder->execute();
+
 
             while ($userRow = $userResult->fetch()) {
-                $deleteQueryBuilder = $this->getDatabaseConnection('tx_typo3forum_domain_model_user_readforum');
-				$deleteQueryBuilder->delete('tx_typo3forum_domain_model_user_readforum');
-				$deleteQueryBuilder->andWhere(
-					$deleteQueryBuilder->expr()->eq(
+                $queryBuilder = $this->getDatabaseConnection('tx_typo3forum_domain_model_user_readforum');
+                $queryBuilder->delete('tx_typo3forum_domain_model_user_readforum');
+                $queryBuilder->andWhere(
+                    $queryBuilder->expr()->eq(
                         'uid_local',
-						$deleteQueryBuilder->createNamedParameter($userRow['uid'], \PDO::PARAM_INT)
+                        $queryBuilder->createNamedParameter($userRow['uid'], \PDO::PARAM_INT)
                     ),
-					$deleteQueryBuilder->expr()->eq(
+                    $queryBuilder->expr()->eq(
                         'uid_foreign',
-						$deleteQueryBuilder->createNamedParameter($forumRow['forum'], \PDO::PARAM_INT)
+                        $queryBuilder->createNamedParameter($forumRow['forum'], \PDO::PARAM_INT)
                     )
                 );
 
-				$deleteQueryBuilder->execute();
+                $queryBuilder->execute();
 
-                if ($forumRow['topic_amount'] == 0 || $forumRow['topic_amount'] == $userRow['read_amount']) {
+
+                if ($forumRow['topic_amount'] == $userRow['read_amount']) {
                     $insert = [
                         'uid_local' => $userRow['uid'],
                         'uid_foreign' => $forumRow['forum'],
+
                     ];
 
-                    $insertQueryBuilder = $this->getDatabaseConnection('tx_typo3forum_domain_model_user_readforum');
-					$insertQueryBuilder->insert('tx_typo3forum_domain_model_user_readforum');
-					$insertQueryBuilder->values($insert)->execute();
+                    $queryBuilder = $this->getDatabaseConnection('tx_typo3forum_domain_model_user_readforum');
+                    $queryBuilder->insert('tx_typo3forum_domain_model_user_readforum');
+                    $queryBuilder->values($insert)->execute();
 
                 }
             }

@@ -23,7 +23,6 @@ namespace Mittwald\Typo3Forum\Service\Notification;
  *                                                                      *
  *  This copyright notice MUST APPEAR in all copies of the script!      *
  *                                                                      */
-
 use Mittwald\Typo3Forum\Domain\Model\Forum\Post;
 use Mittwald\Typo3Forum\Domain\Model\Forum\Topic;
 
@@ -37,19 +36,10 @@ final class SubscriptionListener {
 
 	/**
 	 * An instance of the notification service.
-	 * @var NotificationServiceInterface
+	 * @var \Mittwald\Typo3Forum\Service\Notification\NotificationServiceInterface
+	 * @inject
 	 */
 	protected $notificationService = NULL;
-
-
-
-	/**
-	 * @param NotificationServiceInterface $notificationService
-	 */
-	public function injectNotificationService(NotificationServiceInterface $notificationService): void
-	{
-		$this->notificationService = $notificationService;
-	}
 
 	/**
 	 * Is fired when a new post is created.
@@ -71,7 +61,7 @@ final class SubscriptionListener {
 	 */
 	public function onTopicCreated($topic) {
 		if ($topic instanceof Topic) {
-			$this->notificationService->notifySubscribers($topic->getForum(), $topic);
+
 		}
 	}
 }
